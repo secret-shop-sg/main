@@ -1,0 +1,32 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    align-items: center;
+  }
+  
+  .title {
+    font-size: x-large;
+    margin-right: 1vw;
+  }
+  
+  .search-bar {
+    flex: 1;
+    display: flex;
+    border: 1px solid lightgray;
+    border-radius: 20px;
+    overflow: hidden;
+    padding: 10px;
+  }
+  
+  .search-input {
+    border: none;
+    flex: 1;
+  }
+
+  .search-button {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    text-shadow: none;
+  }
