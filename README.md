@@ -7,7 +7,7 @@
 
 ## Collaborators
 
-1. Joshua
+1. [Joshua](github.com/tanjoshua)
 2. Marcus
 3. Richard
 
