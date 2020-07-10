@@ -3,7 +3,7 @@ import Header from "../components/Main/Header";
 
 const Main = (props) => {
   return (
-    <div>
+    <div style= {{width:"100%"}} >
       <Header />
     </div>
   );
