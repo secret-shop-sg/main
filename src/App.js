@@ -4,8 +4,13 @@ import Header from "./components/Main/Header";
 import { Provider } from "react-redux";
 import { combineReducers, createStore } from "redux";
 
+// import reducers
+import listingReducer from "./store/reducers/listingReducer";
+
 // combine reducers
-const rootReducer = combineReducers({});
+const rootReducer = combineReducers({
+  listings: listingReducer,
+});
 // create store
 const store = createStore(rootReducer);
 
