@@ -1,6 +1,7 @@
 import React from "react";
 import "./Header.css";
 import { FaSearch } from "react-icons/fa";
+import {Link} from 'react-router-dom';
 
 // header component
 const Header = () => {
@@ -8,7 +9,9 @@ const Header = () => {
   return (
     <header className="header">
       <div className="search-bar">
-        <div className="title">Link</div>
+        <Link to="/">
+          <div className="title">Link</div>
+        </Link>
         <div className="search-box">
           <input
             type="text"
@@ -16,7 +19,9 @@ const Header = () => {
             placeholder="Search for games"
           />
           <button className="search-button">
-            <FaSearch />
+            <Link to="/search">
+              <FaSearch />
+            </Link> 
           </button>
         </div>
       </div>
