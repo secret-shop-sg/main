@@ -4,7 +4,9 @@ import "./App.css";
 import { Provider } from "react-redux";
 import { combineReducers, createStore } from "redux";
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+
 import SearchResult from "./screens/SearchResult"
+import Error404 from "./screens/Error404"
 
 // import reducers
 import listingReducer from "./store/reducers/listingReducer";
@@ -23,7 +25,9 @@ function App() {
         <div className="App">
           <Switch>
             <Route exact path = "/" component ={Main} />
-            <Route exact path = "/search" component ={SearchResult} />
+            <Route path= "/search" component={SearchResult}/>
+            <Route component = {Error404} />
+            {/* Routes client to error404 page if path does not match any of the others*/}
           </Switch>
         </div>
       </Router>
