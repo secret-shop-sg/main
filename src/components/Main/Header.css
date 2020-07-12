@@ -7,6 +7,12 @@
   padding: 10vh 0vh;
 }
 
+.form{
+  display:flex;
+  width:100%;
+  align-items: center;
+}
+
 .search-bar {
   display: flex;
   flex-direction: row;
@@ -15,6 +21,8 @@
 }
 
 .title {
+  display: flex;
+  text-decoration: none;
   font-size: x-large;
   margin-right: 1vw;
   color: white;
@@ -41,4 +49,10 @@
   box-shadow: none;
   border: none;
   text-shadow: none;
+}
+
+a:-webkit-any-link {
+  /* Removes the default colour on anchor tages*/
+  text-decoration: none;
+  color: inherit;
 }

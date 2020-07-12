@@ -2,11 +2,14 @@ import React from 'react';
 import "./SearchListing.css";
 
 const SearchListing = props => {
+    const listing = props.listing;
+
     return(
         <div className= "listingTile">
-            <h2>{props.listing.title}</h2>
-            <img src ={props.listing.image} className= "listingImage" />
-            <p>Listed on: {props.listing.dateListed}</p>
+            <h2>{listing.title}</h2>
+            <img src ={listing.image} alt="listing" className= "listingImage"/>
+            <p>Platform supportted: {listing.platform}</p>
+            <p>Listed on: {listing.dateListed}</p>
         </div>
     )
 }

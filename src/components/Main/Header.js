@@ -17,8 +17,10 @@ const Header = () => {
   return (
     <header className="header">
       <div className="search-bar">
+      <form className = "form" onSubmit = {event => event.preventDefault}>
         <Link to="/">
           <div className="title">Link</div>
+         {/* To be replaced by logo */}
         </Link>
         <div className="search-box">
             <input
@@ -27,13 +29,14 @@ const Header = () => {
               placeholder="Search for games"
               onChange = {textChangeHandler}
             />
-            <Link to ={{pathname:"/search",search:`phrase=${enteredText}`}}>
+            <Link to ={{pathname:"/search",search:`phrase=${enteredText}`}} style={{ backgroundImage: "none" }}>
               <button type="submit" className="search-button">
                 <FaSearch />
               </button>
             </Link>
           </div>
-        </div>
+        </form>
+      </div>
     </header>
   );
 };

@@ -1,9 +1,13 @@
 import React from "react";
-import Header from "../components/Main/Header";
 import { useSelector } from "react-redux";
+import {Link} from "react-router-dom";
 
-import SearchListing from '../components/SearchResults/SearchListing'
+import Header from "../components/Main/Header";
+import SearchListing from '../components/SearchResults/SearchListing';
+import NoMatches from "../components/SearchResults/NoMatches";
 import Error404 from './Error404';
+
+import "./SearchResult.css"
 
 function searchAlgorithmn(searchphrase, listing) {
 
@@ -16,16 +20,16 @@ function searchAlgorithmn(searchphrase, listing) {
   if (wordsInListings.includes(searchphrase)){
     return listing;
   }
-  else return null
+  else return null;
 }
 
 const SearchResult = (props) => {
-  
+
   const allListings = useSelector((state) => state.listings.listings);
   let query = props.location.search;
   let listingsToDisplay = [];
 
-  if (query.slice(0,8)=="?phrase="){
+  if (query.slice(0,8)==="?phrase="){
     let searchphrase = query.substring(8);
     // searchphrase = what the user typed
 
@@ -35,18 +39,24 @@ const SearchResult = (props) => {
     return (
       <div style= {{width:"100%"}} >
         <Header />
-        <div className = "body">
-          <p> Showing search results for "{searchphrase}"</p>
-          {(listingsToDisplay.length==0)?
-          <p>No games found</p>
-          :listingsToDisplay.map(listing => <SearchListing key= {listing.listingId} listing={listing} />)}
+        <div className = "pageBody">
+          {(listingsToDisplay.length===0)?
+          <NoMatches searchphrase={searchphrase}/>
+          :listingsToDisplay.map(listing => 
+            <Link to= {{
+              pathname:"/listing",
+              search:`id=${listing.title}`}}>
+                { /*url = /listing/id?=(title of listing) */}
+                <SearchListing key= {listing.listingId} listing={listing} />
+            </Link>
+          )}
         </div>
       </div>
     );
 
   } 
 
-  else return <Error404 />
+  else return <Error404 />;
   
 };
 
