@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "../components/Main/Header";
-import dummyListings from '../data/dummyData';
+import { useSelector } from "react-redux";
+
 import SearchListing from '../components/SearchResults/SearchListing'
 import Error404 from './Error404';
 
@@ -40,6 +41,7 @@ const SearchResult = (props) => {
         </div>
       </div>
     );
+
   } 
 
   else return <Error404 />
