@@ -1,11 +1,12 @@
-import React from 'react'
+import React from 'react';
+import "./SearchListing.css";
 
 const SearchListing = props => {
     return(
-        <div>
+        <div className= "listingTile">
             <h2>{props.listing.title}</h2>
-            <p>{props.listing.owner}</p>
-            <p>{props.listing.platform}</p>
+            <img src ={props.listing.image} className= "listingImage" />
+            <p>Listed on: {props.listing.dateListed}</p>
         </div>
     )
 }
