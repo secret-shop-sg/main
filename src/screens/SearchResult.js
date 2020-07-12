@@ -20,6 +20,8 @@ function searchAlgorithmn(searchphrase, listing) {
 }
 
 const SearchResult = (props) => {
+  
+  const allListings = useSelector((state) => state.listings.listings);
   let query = props.location.search;
   let listingsToDisplay = [];
 
@@ -27,7 +29,7 @@ const SearchResult = (props) => {
     let searchphrase = query.substring(8);
     // searchphrase = what the user typed
 
-    listingsToDisplay = dummyListings.map(listing => searchAlgorithmn(searchphrase,listing));
+    listingsToDisplay = allListings.map(listing => searchAlgorithmn(searchphrase,listing));
     listingsToDisplay = listingsToDisplay.filter(listingToDisplay => listingToDisplay !== null );
 
     return (
