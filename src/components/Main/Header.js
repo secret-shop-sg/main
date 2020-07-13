@@ -5,7 +5,6 @@ import {Link} from 'react-router-dom';
 
 // header component
 const Header = () => {
-  // TODO: change to form
 
   const [enteredText, setEnteredText] = useState('');
   // enteredText represents what the user typed the search bar

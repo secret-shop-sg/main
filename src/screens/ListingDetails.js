@@ -7,6 +7,7 @@ const ListingDetails = props => {
   const listing = props.location.listing;
 
   return (
+<<<<<<< HEAD
     <div>
       <Header />
       <h1 id="listingtitle">{props.location.listing.title}</h1>
@@ -19,6 +20,9 @@ const ListingDetails = props => {
         <hr></hr>
         <p>Super Smash Bros. is a series of crossover fighting video games published by Nintendo, and primarily features characters from various Nintendo franchises. The series was created by Masahiro Sakurai, who has directed every game in the series.</p>
       </div>
+=======
+    <div> {props.location.listing.title}
+>>>>>>> c84b1f70fb5ede974d755653eaf4caaf7b283135
     </div>
   );
 };
