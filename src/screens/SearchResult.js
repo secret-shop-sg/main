@@ -39,17 +39,26 @@ const SearchResult = (props) => {
     return (
       <div style= {{width:"100%"}} >
         <Header />
-        <div className = "pageBody">
+        <div className = "searchResultsPageBody">
           {(listingsToDisplay.length===0)?
           <NoMatches searchphrase={searchphrase}/>
-          :listingsToDisplay.map(listing => 
+          :listingsToDisplay.map(listing => (
             <Link to= {{
               pathname:"/listing",
-              search:`id=${listing.title}`}}>
+              search:`id=${listing.title}`,
+              listing:listing}} key= {listing.listingId}>
                 { /*url = /listing/id?=(title of listing) */}
-                <SearchListing key= {listing.listingId} listing={listing} />
+                <SearchListing listing={listing} />
             </Link>
+          )
+           
           )}
+          {/* Todo: Add this section when backend is included (Alot easier with backend)
+          <hr />
+          <p style={{margin:"20px"}}>Check out some of our other listings on the same platform</p>
+          Call some API here
+          */}
+          
         </div>
       </div>
     );
