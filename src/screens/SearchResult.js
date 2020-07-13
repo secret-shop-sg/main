@@ -6,7 +6,6 @@ import Header from "../components/Main/Header";
 import SearchListing from '../components/SearchResults/SearchListing';
 import NoMatches from "../components/SearchResults/NoMatches";
 import Error404 from './Error404';
-
 import "./SearchResult.css"
 
 function searchAlgorithmn(searchphrase, listing) {
@@ -45,7 +44,7 @@ const SearchResult = (props) => {
           :listingsToDisplay.map(listing => 
             <Link to= {{
               pathname:"/listing",
-              search:`id=${listing.title}`}}>
+              search:`id=${listing.title}`,}}>
                 { /*url = /listing/id?=(title of listing) */}
                 <SearchListing key= {listing.listingId} listing={listing} />
             </Link>

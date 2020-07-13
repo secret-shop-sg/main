@@ -1,0 +1,56 @@
+#listingimage{
+    height: 500px;
+    width: 300px
+}
+
+.btn-like{
+    color: red;
+    background-color: white;
+    border: 2px solid red;
+    font-weight: bold;
+    margin-left: 100px;
+    padding: 5px 20px;
+    font-size: 30px;
+    border-radius:10px;
+}
+
+.btn-like:hover {
+    color:white;
+    background-color: red;
+    border-radius:10px;
+
+}
+
+.btn-like:focus{
+    color:white;
+    background-color: red;
+}
+.btn-cop{
+    color: green;
+    background-color: white;
+    border: 2px solid green;
+    font-weight: bold;
+    margin-left: 20px;
+    padding: 5px 20px;
+    font-size: 30px;
+    border-radius:10px;
+}
+
+.btn-cop:hover {
+    color:white;
+    background-color: green;
+    border-radius:10px;
+}
+
+.btn-cop:focus{
+    color:white;
+    background-color: green;
+    border-radius:10px;
+}
+
+.owner{
+    font-size: 30px
+}
+#listingtitle{
+    margin: 50px
+}

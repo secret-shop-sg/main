@@ -8,7 +8,7 @@ const SearchListing = props => {
         <div className= "listingTile">
             <h2>{listing.title}</h2>
             <img src ={listing.image} alt="listing" className= "listingImage"/>
-            <p>Platform supportted: {listing.platform}</p>
+            <p>Platform supported: {listing.platform}</p>
             <p>Listed on: {listing.dateListed}</p>
         </div>
     )
