@@ -48,9 +48,10 @@ background-color: #F5F5F5;
     font-size: 30px
 }
 #listingtitle{
-    margin: 20px;
     margin-left:50px;
     margin-bottom:5px;
+    width:70%;
+    margin-right:0;
 }
 #platform{
     margin-left: 50px;
@@ -71,4 +72,15 @@ background-color: #F5F5F5;
     font-size: 30px;
     border-radius:10px;
     outline:none;
+}
+.recommendationimgextend{
+    width:130px;
+    height:160px;
+}
+#img1{
+    width:100%;
+    height:100%;
+}
+.recommendationtitle{
+    padding-top:110px;
 }

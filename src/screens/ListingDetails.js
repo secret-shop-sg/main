@@ -35,10 +35,17 @@ const ListingDetails = props => {
       </div>
    
     <div className="container col-3 float-right">
-      <h2>Other Listings you might like</h2>
+      <h2>Other Listings</h2>
+      <hr></hr>
     </div>
-    <div id="recommendations" className="container col-3 float-right">
-      yo
+    <div id="reccomendationimg col-3 float-right">
+    <div className="container col-3 float-left recommendationimgextend">
+      <img id="img1" src="https://images.nintendolife.com/73b5ee31cad64/super-smash-bros-ultimate-cover.cover_large.jpg"/>
+    </div>
+    <div className="recommendationtitle">
+      <h4>Super Smash Bros</h4>
+      <p>Owned by <strong>Joshua</strong></p>
+    </div>
     </div>
     </div>
   );
