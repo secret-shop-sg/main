@@ -1,6 +1,10 @@
 #listingimage{
     height: 500px;
-    width: 300px
+    width: 350px;
+    margin-bottom: 20px;
+    margin-top: 30px;
+    margin-left: 30px;
+    border: 1px black solid;
 }
 
 .btn-like{
@@ -12,18 +16,10 @@
     padding: 5px 20px;
     font-size: 30px;
     border-radius:10px;
+    outline:none;
 }
-
-.btn-like:hover {
-    color:white;
-    background-color: red;
-    border-radius:10px;
-
-}
-
-.btn-like:focus{
-    color:white;
-    background-color: red;
+.btn-like:hover{
+background-color: #F5F5F5;
 }
 .btn-cop{
     color: green;
@@ -52,5 +48,27 @@
     font-size: 30px
 }
 #listingtitle{
-    margin: 50px
+    margin: 20px;
+    margin-left:50px;
+    margin-bottom:5px;
+}
+#platform{
+    margin-left: 50px;
+    margin-top: 10px;
+}
+.details{
+    margin:auto;
+    float:left;
+}
+
+.btn-liked{
+    color: white;
+    background-color: red;
+    border: 2px solid black;
+    font-weight: bold;
+    margin-left: 100px;
+    padding: 5px 20px;
+    font-size: 30px;
+    border-radius:10px;
+    outline:none;
 }
