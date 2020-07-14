@@ -48,14 +48,16 @@ background-color: #F5F5F5;
     font-size: 30px
 }
 #listingtitle{
-    margin-left:50px;
-    margin-bottom:5px;
-    width:70%;
+    margin-left: 50px;
+    margin-top: 10px;
     margin-right:0;
+    width:60%;
 }
 #platform{
     margin-left: 50px;
     margin-top: 10px;
+    margin-right:0;
+    width: 60%;
 }
 .details{
     margin:auto;
@@ -83,4 +85,8 @@ background-color: #F5F5F5;
 }
 .recommendationtitle{
     padding-top:110px;
+}
+#headerdiv{
+    width:60%;
+    margin-right:10px;
 }

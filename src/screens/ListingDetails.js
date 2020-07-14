@@ -19,8 +19,10 @@ const ListingDetails = props => {
   return (
     <div>
       <Header />
-      <h1 id="listingtitle">{props.location.listing.title}</h1>
+      <div id="headerdiv">
+      <h2 id="listingtitle">{props.location.listing.title}</h2>
       <h3 id="platform">For the {props.location.listing.platform}</h3>
+      </div>
       <div className="container col-3 float-left text-center">
       <img id="listingimage" src={props.location.listing.image} />
       </div>
