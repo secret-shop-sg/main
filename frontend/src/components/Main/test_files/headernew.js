@@ -4,8 +4,9 @@ import {Link} from 'react-router-dom';
 import "./Bootstrap.css";
 import "./Headernew.css";
 import {Modal} from "react-responsive-modal";
-import Login from './test_files/login';
-import Signup from './test_files/signin';
+import Login from "./login";
+import Signup from "./signin";
+
 
 const Headernew = () =>{
     const [enteredText, setEnteredText] = useState('');

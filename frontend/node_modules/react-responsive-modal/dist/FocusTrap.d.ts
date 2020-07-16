@@ -1,0 +1,6 @@
+/// <reference types="react" />
+interface FocusTrapProps {
+    container?: React.RefObject<HTMLElement> | null;
+}
+export declare const FocusTrap: ({ container }: FocusTrapProps) => null;
+export {};

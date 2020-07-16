@@ -4,7 +4,7 @@
   flex-direction: column;
   align-items: center;
   background-color: #85bb65;
-  padding: 10vh 0vh;
+  padding: 6vh 0vh;
 }
 
 .form{
@@ -55,4 +55,31 @@ a:-webkit-any-link {
   /* Removes the default colour on anchor tages*/
   text-decoration: none;
   color: inherit;
+}
+.userbuttons{
+  display: inline;
+  margin-left: 20px;
+  color: white;
+}
+#signup{
+  color:white;
+  font-size:20px;
+}
+#login{
+  color:white;
+  font-size:20px;
+}
+#userbuttonholder{
+  width:20%
+}
+
+#signup:hover{
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+}
+#login:hover{
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
 }
