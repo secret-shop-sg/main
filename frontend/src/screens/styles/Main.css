@@ -1,0 +1,11 @@
+.mainScreen {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.display {
+  width: 80%;
+  margin-top: 5rem;
+}
