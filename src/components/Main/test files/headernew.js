@@ -3,6 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import {Link} from 'react-router-dom';
 import "./Bootstrap.css";
 import "./Headernew.css";
+import {Modal} from "react-responsive-modal";
 
 const Headernew = () =>{
     const [enteredText, setEnteredText] = useState('');
@@ -11,8 +12,23 @@ const Headernew = () =>{
     const textChangeHandler = event => {
       setEnteredText(event.target.value);
     }
+    const [signin,setsignin]= useState(false);
+    const [login, setlogin] = useState(false);
   
+    function openmodalsign(){
+      setsignin(true)
+    }
+    function closemodalsign(){
+      setsignin(false)
+    }
+    function openmodallogin(){
+      setlogin(true)
+    }
+    function closemodallogin(){
+      setlogin(false)
+    }  
     return(
+      <div>
         <nav className="navbar navbar-expand-md navbar-green">
         <div id="maindiv" className="container">
         <Link to="/">
@@ -37,13 +53,20 @@ const Headernew = () =>{
         </ul>
         <div  id="userstuff" className="collapse navbar-collapse justify-content-end">
         <ul className="nav navbar-nav" id="userstuff">
-            <li className="nav-item"><a className="nav-link" href="#">Signup</a></li>
-            <li className="nav-item"><a className="nav-link" href="#">Login </a></li>
+            <li className="nav-item"><a className="nav-link" onClick={()=>{openmodalsign(); closemodallogin()}}>Signup</a></li>
+            <li className="nav-item"><a className="nav-link" onClick={()=>{openmodallogin(); closemodalsign()}}>Login </a></li>
         </ul>
         </div> 
     </div>
     </div>
     </nav>
+      <Modal open={login} close={!login} onClose={closemodallogin}>
+        <Login />
+     </Modal>
+     <Modal open={signin} close={!signin} onClose={closemodalsign}>
+        <Signup />
+     </Modal>
+     </div>
    );
 };
 

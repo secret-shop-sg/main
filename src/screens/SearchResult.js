@@ -7,7 +7,7 @@ import SearchListing from '../components/SearchResults/SearchListing';
 import NoMatches from "../components/SearchResults/NoMatches";
 import Error404 from './Error404';
 import "./SearchResult.css"
-import Headernew from "../components/Main/headernew"
+
 
 function searchAlgorithmn(searchphrase, listing) {
 

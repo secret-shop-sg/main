@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Header from "../components/Main/Header";
 import "./Bootstrap.css";
 import "./ListingDetails.css";
-import Headernew from "../components/Main/headernew"
+
 import{FaHeart} from "react-icons/fa";
 import{BsChatFill,BsHeartFill} from "react-icons/bs";
 const ListingDetails = props => {
