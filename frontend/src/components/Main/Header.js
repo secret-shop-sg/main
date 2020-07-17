@@ -1,8 +1,10 @@
 import React,{useState} from "react";
 import "./Header.css";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaUserAlt, FaUserPlus } from "react-icons/fa";
 import {Link} from 'react-router-dom';
-
+import {Modal} from "react-responsive-modal"
+import Login from "./test_files/login"
+import Signup from "./test_files/signup"
 // header component
 const Header = () => {
 
@@ -11,6 +13,18 @@ const Header = () => {
 
   const textChangeHandler = event => {
     setEnteredText(event.target.value);
+  }
+
+  const [loginForm, setLoginForm] = useState(false)
+
+  const loginFormHandler= () =>{
+    setLoginForm(!loginForm);
+  }
+
+  const [signupForm, setSignupForm] = useState(false);
+
+  const signupFormHandler= () =>{
+    setSignupForm(!signupForm);
   }
 
   return (
@@ -35,7 +49,55 @@ const Header = () => {
             </Link>
           </div>
         </form>
+        <div id="userbuttonholder">
+          <span 
+            className="userButtons"
+            id="login"
+            onClick={()=>{
+              if(signupForm){
+                loginFormHandler();
+                signupFormHandler()
+              }
+              else{
+                loginFormHandler()
+              }
+            }
+          }
+          >
+            <span>
+              <FaUserAlt size={18}/>
+            </span>
+            <span> </span>
+            <span>
+              Login
+            </span>
+          </span>
+          <span
+            id="signup"
+            className="userButtons"
+            onClick={()=>{
+              if(loginForm){
+                loginFormHandler();
+                signupFormHandler()
+              }
+              else{
+                signupFormHandler()
+              }
+            }
+          }
+          >
+            <span>
+              <FaUserPlus size={23}/>
+            </span>
+            <span> </span>
+            <span>
+              Signup
+            </span>
+          </span>          
+        </div>
       </div>
+      {loginForm ? <Login closeButtonHandler={loginFormHandler}/> : null}
+      {signupForm ? <Signup closeButtonHandler={signupFormHandler}/> : null}
     </header>
   );
 };

@@ -2,10 +2,16 @@ import React, { useState } from "react";
 import "../login.css";
 import "../../../constants/styles/Bootstrap.css";
 import { FaUserCircle } from "react-icons/fa";
-function Login() {
+function Login(props) {
   return (
     <div className="wrapper fadeInDown">
       <div id="formContent">
+        <div
+          className="closebutton"
+          onClick={props.closeButtonHandler}
+        >
+          X
+        </div>
         <div
           style={{ paddingTop: 10, paddingBottom: 10 }}
           className="fadeIn first"
