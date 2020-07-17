@@ -56,7 +56,7 @@ a:-webkit-any-link {
   text-decoration: none;
   color: inherit;
 }
-.userbuttons{
+.userButtons{
   display: inline;
   margin-left: 20px;
   color: white;
@@ -74,12 +74,10 @@ a:-webkit-any-link {
 }
 
 #signup:hover{
-  font-weight: bold;
   text-decoration: underline;
   cursor: pointer;
 }
 #login:hover{
-  font-weight: bold;
   text-decoration: underline;
   cursor: pointer;
 }

@@ -5,10 +5,10 @@ import SearchListing from "../components/SearchResults/SearchListing";
 import NoMatches from "../components/SearchResults/NoMatches";
 import "./styles/SearchResult.css";
 import Headernew from "../components/Main/headernew";
-import BACKENDADDRESS from "../constants/BackendAddress";
+import {useAPI} from "../utils/useAPI";
 
 const SearchResult = (props) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [sendRequest,isLoading] = useAPI();
   const [matchedListings, setMatchedListings] = useState();
   let query = props.location.search;
 
@@ -20,21 +20,11 @@ const SearchResult = (props) => {
   // TODO: configure for multiple words
 
   useEffect(() => {
-    setIsLoading(true);
   
     // call express api to get search results 
     const getListings = async () =>{
-      try{
-        
-        const response = await fetch(`${BACKENDADDRESS}/api/search/keyword/${filteredphrase}`);
-        const responseData = await response.json();
-        // returns an array of listings
-        setMatchedListings(responseData.matchedListings);
-      } catch (err) {
-        // Todo: Add Error Handling if API call fails
-        console.log(err);
-      }
-      setIsLoading(false);
+      const responseData = await sendRequest(`/api/search/keyword/${filteredphrase}`);
+      setMatchedListings(responseData.matchedListings);
     };
     getListings();
 

@@ -248,7 +248,8 @@ html {
   float:right;
   z-index: 99;
   position:relative;
-  margin-left:0px;
+  margin:10px 10px;
   background-color:white;
   color:red;
+  cursor:pointer;
 }
