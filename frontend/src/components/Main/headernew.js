@@ -5,7 +5,7 @@ import "../../constants/styles/Bootstrap.css";
 import "./Headernew.css";
 import { Modal } from "react-responsive-modal";
 import Login from "./test_files/login";
-import Signup from "./test_files/signin";
+import Signup from "./test_files/signup";
 
 const Headernew = () => {
   const [enteredText, setEnteredText] = useState("");

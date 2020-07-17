@@ -35,7 +35,6 @@ const ListingDetails = (props) => {
 
     getListing();
   }, [listingID]);
-
   const [liked, setliked] = useState(false);
 
   function likehandler() {
@@ -47,7 +46,7 @@ const ListingDetails = (props) => {
   return (
     <div>
       <Header />
-      {!isLoading && listingToDisplay && (
+      {!isLoading && listingToDisplay && similarListings && (
         <div>
           <div id="headerdiv">
             <h2 id="listingtitle">{listingToDisplay.title}</h2>
@@ -57,7 +56,7 @@ const ListingDetails = (props) => {
             <img id="listingimage" src={listingToDisplay.image} />
           </div>
           <div className="container col-6 details">
-            <p>
+            <p className="detailsi">
               <span className="owner">Owned by: {listingToDisplay.owner}</span>
               {!liked ? (
                 <span>
@@ -85,25 +84,29 @@ const ListingDetails = (props) => {
             <p>Listed on: {listingToDisplay.dateListed}</p>
             <p>{listingToDisplay.description}</p>
           </div>
-
-          <div className="container col-3 float-right">
-            <h2>Other Listings</h2>
-            <hr></hr>
-          </div>
-          <div id="reccomendationimg col-3 float-right">
-            <div className="container col-3 float-left recommendationimgextend">
-              <img
-                id="img1"
-                src="https://images.nintendolife.com/73b5ee31cad64/super-smash-bros-ultimate-cover.cover_large.jpg"
-              />
+            <div className="container col-3 float-right">
+              <h2>Other Listings</h2>
+              <hr></hr>
             </div>
-            <div className="recommendationtitle">
-              <h4>Super Smash Bros</h4>
-              <p>
-                Owned by <strong>Joshua</strong>
-              </p>
-            </div>
-          </div>
+            {(similarListings.length == 0 ) ? null : 
+              similarListings.map(listing =>(
+                <div id="recommendationimg" key={listing.listingId}>
+                  <div className="container col-3 float-left recommendationimgextend">
+                    <img
+                      className="imgsuggested"
+                      src={listing.image}
+                    />
+                  </div>
+                  <div>
+                    <h4 className="recommendationtitle">{listing.title}</h4>
+                    <p>
+                      Owned by <strong id="owner">{listing.owner}</strong>
+                    </p>
+                  </div>
+                </div>
+                )
+                )
+          }
         </div>
       )}
     </div>
