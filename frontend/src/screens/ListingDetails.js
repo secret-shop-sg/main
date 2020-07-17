@@ -47,7 +47,7 @@ const ListingDetails = (props) => {
   return (
     <div>
       <Header />
-      {!isLoading && listingToDisplay && (
+      {!isLoading && listingToDisplay && similarListings(
         <div>
           <div id="headerdiv">
             <h2 id="listingtitle">{listingToDisplay.title}</h2>
@@ -85,7 +85,6 @@ const ListingDetails = (props) => {
             <p>Listed on: {listingToDisplay.dateListed}</p>
             <p>{listingToDisplay.description}</p>
           </div>
-
           <div className="container col-3 float-right">
             <h2>Other Listings</h2>
             <hr></hr>
