@@ -3,8 +3,13 @@ const searchController = require("../controllers/search-controller")
 
 const router = express.Router();
 
+// search whatever the user types
 router.get('/keyword/:searchphrase',searchController.returnSearches);
 
-//router.get('/category/:searchphrase') to search by category
+// search all listings of a specific gaming platform
+router.get('/category/platform/:platformName',searchController.returnSpecifiedPlatform);
+
+// search all listings of a specific game name/ title
+router.get('/category/title/:titleName',searchController.returnSpecifiedTitle);
 
 module.exports = router;

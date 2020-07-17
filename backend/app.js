@@ -21,7 +21,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// api requests from searches
+// api requests for searches
 app.use('/api/search',searchRoutes);
 
 app.use('/api/listing',listingRoutes);

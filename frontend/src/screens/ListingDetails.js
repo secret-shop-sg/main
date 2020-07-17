@@ -8,8 +8,12 @@ import{BsChatFill,BsHeartFill} from "react-icons/bs";
 
 const ListingDetails = props => {
   const listingID = props.location.search.substring(1);
+  // isLoading == true when browser is waiting for api
   const [isLoading,setIsLoading] = useState(false);
+  // listingToDisplay = Main listing
   const [listingToDisplay, setListingToDisplay] = useState();
+  // similarListings = An array of max 3 listings on the same platform as main listing
+  const [similarListings, setSimilarListings] = useState();
   
   useEffect(()=>{
     setIsLoading(true);
@@ -19,6 +23,7 @@ const ListingDetails = props => {
         const response = await fetch(`${BACKENDADDRESS}/api/listing/${listingID}`)
         const responseData = await response.json();
         setListingToDisplay(responseData.listingToDisplay);
+        setSimilarListings(responseData.similarListings);
       }
       catch(err){
         console.log(err);

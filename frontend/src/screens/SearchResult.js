@@ -13,9 +13,11 @@ const SearchResult = props => {
   const [matchedListings,setMatchedListings] = useState();
   let query = props.location.search;
 
-  let searchphrase = query.substring(9);
   // searchphrase = what the user typed
-  searchphrase = searchphrase.toLowerCase().replace(/(<([^>]+)>)/ig,"")
+  const searchphrase = query.substring(9);
+  const filteredphrase = searchphrase.toLowerCase().replace(/(<([^>]+)>)/ig,"").replace(" ","-");
+  
+  // fix multiple api requests whenever searchphrase changes
   // TODO: configure for multiple words
 
   useEffect(()=>{
@@ -25,7 +27,7 @@ const SearchResult = props => {
     const getListings = async () =>{
       try{
         
-        const response = await fetch(`${BACKENDADDRESS}/api/search/keyword/${searchphrase}`);
+        const response = await fetch(`${BACKENDADDRESS}/api/search/keyword/${filteredphrase}`);
         const responseData = await response.json();
         // returns an array of listings
         setMatchedListings(responseData.matchedListings);
@@ -38,7 +40,7 @@ const SearchResult = props => {
     }
     getListings();
 
-  },[searchphrase]);
+  },[filteredphrase]);
 
     return (
       <div style= {{width:"100%"}} >
