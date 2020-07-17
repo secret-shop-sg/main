@@ -18,9 +18,10 @@ const getListing = (req,res,next) => {
     // similarListings = 3 random listings on the same platform 
     let similarListings = [];
     
-    while (similarListings.length<3){
+    while (similarListings.length<3 && otherListings.length >0){
         const randomNum = Math.floor(Math.random()*otherListings.length);
-        similarListings.push(otherListings.splice(randomNum,1));
+        const [randomListing] = otherListings.splice(randomNum,1);
+        similarListings.push(randomListing);
     }
 
     // remove empty listings if there are < 3 games on the same platform
