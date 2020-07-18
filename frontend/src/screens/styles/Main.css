@@ -6,6 +6,10 @@
 }
 
 .display {
-  width: 80%;
+  width: 90%;
+  margin-top: 5rem;
+}
+
+.listings {
   margin-top: 5rem;
 }
