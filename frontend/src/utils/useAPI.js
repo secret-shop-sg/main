@@ -7,7 +7,7 @@ export const useAPI = () => {
 
     // useCallback prevents API from being called multiple times when other components render
     const sendRequest = useCallback(
-        async (url, method = "GET", body = null, headers ={}) => {
+        async (url, method = "GET", body = null, headers ={"Content-Type":"application/json"}) => {
             setIsLoading(true);
             
             // create an abortController object which can be used to cancel request later on

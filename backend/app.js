@@ -2,6 +2,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const searchRoutes = require("./routes/search-routes");
 const listingRoutes = require("./routes/listing-routes");
+//const userRoutes = require("./routes/user-routes");
 
 const app = express();
 
@@ -21,12 +22,14 @@ app.use((req, res, next) => {
     next();
 });
 
-// api requests for searches
+// api requests for searches/filters
 app.use('/api/search',searchRoutes);
 
+// api requests for listings
 app.use('/api/listing',listingRoutes);
 
-//app.use('/api/user');
+// api requests for user info/ login/signup
+//app.use('/api/user', userRoutes);
 
 // if api calls a wrong address
 app.use((req,res,next)=>{
