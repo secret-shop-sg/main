@@ -20,7 +20,7 @@ const SearchResult = (props) => {
     .replace(" ", "-");
 
   // fix multiple api requests whenever searchphrase changes
-  // TODO: configure for multiple words
+  // TODO: configure for multiple words /
 
   useEffect(() => {
     // call express api to get search results
