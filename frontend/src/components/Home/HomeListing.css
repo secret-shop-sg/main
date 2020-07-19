@@ -1,0 +1,21 @@
+.listing {
+  width: 100%;
+  margin: 5px 0px;
+  display: flex;
+  flex-direction: row;
+}
+
+.contents {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.details {
+  display: flex;
+  flex-direction: row;
+}
+
+.game-img {
+  object-fit: cover;
+  width: 10rem;
+}

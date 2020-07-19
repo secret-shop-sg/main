@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
+
 import { useAPI } from "../utils/useAPI";
 
 import Header from "../components/Main/Header";
@@ -15,10 +15,8 @@ const Main = (props) => {
   useEffect(() => {
     // async function to get listings
     const getListings = async () => {
-      const listingsFromServer = await sendRequest(
-        `/api/search/keyword/switch`
-      );
-      setListings(listingsFromServer.matchedListings);
+      const listingsFromServer = await sendRequest(`/api/listing/recent`);
+      setListings(listingsFromServer.mostRecentListings);
     };
 
     // call async function
@@ -32,21 +30,13 @@ const Main = (props) => {
       return <div>Loading</div>;
     } else {
       return listings.map((listing) => (
-        <div>
-          <Link
-            to={{
-              pathname: `/listing/${listing.title}`,
-              search: `${listing.listingId}`,
-            }}
-            key={listing.listingId}
-          >
-            <HomeListing
-              title={listing.title}
-              description={listing.description}
-              image={listing.image}
-            />
-          </Link>
-        </div>
+        <HomeListing
+          title={listing.title}
+          description={listing.description}
+          image={listing.image}
+          id={listing.listingId}
+          platform={listing.platform}
+        />
       ));
     }
   }, [listings]);
