@@ -9,7 +9,7 @@ import PlaystationLogo from "../../constants/icons/playstation.svg";
 
 const Platforms = (props) => {
   return (
-    <div className="container">
+    <div className="btn-group container" role="group">
       <Link
         className="btn btn-light icon-btn"
         to={{ pathname: "/search", search: `keyword=xbox` }}
