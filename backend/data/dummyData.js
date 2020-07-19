@@ -155,7 +155,7 @@ const DUMMYLISTINGS = [
     image: "https://image.smythstoys.com/original/desktop/603882.jpg",
     dateListed: new Date("July 17, 2020 08:24"),
     description:
-      "Really want to get Animal Crossing as a present for my friend. Prices and trades are flexible",
+      "Really want to get Animal Crossing for my nephew. Prices and trades are flexible",
     owner: "Chan Ming",
     ownerID: 8,
     location: "Singapore",
@@ -174,7 +174,7 @@ const DUMMYLISTINGS = [
       "https://cdn.shopify.com/s/files/1/2540/2134/products/PS4_resident_evil_3_remake_1024x1024.jpg?v=1579065515",
     dateListed: new Date("July 17, 2020 08:27"),
     description:
-      "Really want to get Animal Crossing as a present for my friend. Prices and trades are flexible",
+      "Really want to get Animal Crossing for my nephew. Prices and trades are flexible",
     owner: "Chan Ming",
     ownerID: 8,
     location: "Singapore",
