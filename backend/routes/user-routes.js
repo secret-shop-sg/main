@@ -4,11 +4,9 @@ const { check } = require("express-validator");
 
 const router = express.Router();
 
-router.post(
-  "/signup",
-  check("title").not().isEmpty(),
-  userController.addNewUser
-);
+router.post("/signup", userController.addNewUser);
+
+//router.post("/login", userController.login);
 
 router.get("/id/:userID", userController.getUser);
 

@@ -1,32 +1,48 @@
 const allListings = require("../data/dummyData");
 const searchAlgorithmns = require("../utils/searchAlgorithmns");
 
-const returnSearches = (req,res,next) => {
+const getSearches = (req, res, next) => {
+  /*
   const searchphrase = req.params.searchphrase.split("-");
   // split searchphrase into an array of words
 
   let matchedListings = allListings.filter(listing=>searchAlgorithmns.searchGeneral(searchphrase,listing));
   
-  res.json({matchedListings});
-}
+  res.json({matchedListings}); */
 
-const returnSpecifiedPlatform = (req,res,next) => {
-  const platform = req.params.platformName;
+  let matchedListings;
+  // checks if matchedListings contains data yet
+  const getListingsToUse = (matchedListings) => {
+    if (matchedListings) {
+      return matchedListings;
+    } else return allListings;
+  };
 
-  let matchedListings = allListings.filter(listing=>searchAlgorithmns.searchCategory(listing,"platform",platform));
+  const queries = req.query;
+  if (queries.phrase) {
+    const searchphrase = queries.phrase.toLowerCase().split("-");
+    const listingsToUse = getListingsToUse(matchedListings);
+    matchedListings = listingsToUse.filter((listing) =>
+      searchAlgorithmns.searchGeneral(searchphrase, listing)
+    );
+  }
+  if (queries.platform) {
+    const platform = queries.platform;
+    const listingsToUse = getListingsToUse(matchedListings);
+    matchedListings = listingsToUse.filter((listing) =>
+      searchAlgorithmns.searchCategory(listing, "platform", platform)
+    );
+  }
+  if (queries.title) {
+    const title = queries.title;
+    const listingsToUse = getListingsToUse(matchedListings);
+    matchedListings = listingsToUse.filter((listing) =>
+      searchAlgorithmns.searchCategory(listing, "title", title)
+    );
+  }
+  // should throw error if queries has any other params
 
-  res.json({matchedListings});
-}
+  res.json({ matchedListings });
+};
 
-const returnSpecifiedTitle = (req,res,next) => {
-  const titleName = req.params.titleName;
-
-  let matchedListings = allListings.filter(listing => searchAlgorithmns.searchCategory(listing,"title",titleName))
-
-  res.json({matchedListings});
-  
-}
-
-exports.returnSearches = returnSearches;
-exports.returnSpecifiedPlatform = returnSpecifiedPlatform;
-exports.returnSpecifiedTitle = returnSpecifiedTitle;
+exports.getSearches = getSearches;

@@ -21,7 +21,10 @@ const addNewUser = (req, res, next) => {
 
   // add createdPlace to mongoDB here
   res.status(201).json({ createdUser });
-  // chain .json() if need to attach other data
+};
+
+const login = (req, res, next) => {
+  const { email, password } = req.body;
 };
 
 const getUser = (req, res, next) => {
@@ -32,3 +35,4 @@ const getUser = (req, res, next) => {
 
 exports.addNewUser = addNewUser;
 exports.getUser = getUser;
+exports.login = login;
