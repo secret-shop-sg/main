@@ -37,6 +37,7 @@ export const useAPI = () => {
         return responseData;
       } catch (err) {
         // eventually build other ways of handling error
+        // Todo: Route 500 to a page that says theres error with our servers (mongoDB or node)
         alert(err.message);
       }
     },

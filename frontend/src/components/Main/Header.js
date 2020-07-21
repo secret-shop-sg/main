@@ -11,7 +11,10 @@ const Header = () => {
   // enteredText represents what the user typed the search bar
 
   const textChangeHandler = (event) => {
-    setEnteredText(event.target.value);
+    // filters away symbols and changes spaces into -
+    setEnteredText(
+      event.target.value.replace(/(<([^>]+)>)=/gi, "").replace(" ", "-")
+    );
   };
 
   const [loginForm, setLoginForm] = useState(false);
@@ -42,7 +45,10 @@ const Header = () => {
               onChange={textChangeHandler}
             />
             <Link
-              to={{ pathname: "/search", search: `keyword=${enteredText}` }}
+              to={{
+                pathname: "/search",
+                search: `phrase=${enteredText}`,
+              }}
               style={{ backgroundImage: "none" }}
             >
               <button type="submit" className="search-button">

@@ -13,17 +13,41 @@ function searchGeneral(searchphrase, listing) {
   return null;
 }
 
-function searchCategory(listing, category, value) {
-  if (category == "platform") {
-    if (listing.platform.replace(" ", "-") === value) {
+// used for filters
+function searchFilters(listing, category, values) {
+  if (category === "platform") {
+    if (values.includes(listing.platform.replace(" ", "-"))) {
       return listing;
     }
-  } else if (category == "title") {
-    if (listing.title.replace(" ", "-") === value) {
+  }
+  if (category === "listingtype") {
+    let isTrading = false;
+    let isRenting = false;
+    let isSelling = false;
+
+    for (value of values) {
+      switch (value) {
+        case "Trade":
+          isTrading = true;
+          break;
+        case "Rent":
+          isRenting = true;
+          break;
+        case "Buy":
+          isSelling = true;
+          break;
+      }
+    }
+
+    if (
+      (isTrading && listing.isTrading) ||
+      (isRenting && listing.isRenting) ||
+      (isSelling && listing.isSelling)
+    ) {
       return listing;
     }
   }
 }
 
 exports.searchGeneral = searchGeneral;
-exports.searchCategory = searchCategory;
+exports.searchFilters = searchFilters;

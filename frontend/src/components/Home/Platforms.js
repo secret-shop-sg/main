@@ -12,21 +12,21 @@ const Platforms = (props) => {
     <div className="btn-group container" role="group">
       <Link
         className="btn btn-light icon-btn"
-        to={{ pathname: "/search", search: `keyword=xbox` }}
+        to={{ pathname: "/search", search: `platform=Xbox-One` }}
       >
         <img src={XboxLogo} height="100" alt="Xbox" />
       </Link>
 
       <Link
         className="btn btn-light icon-btn"
-        to={{ pathname: "/search", search: `keyword=playstation` }}
+        to={{ pathname: "/search", search: `platform=Playstation-4` }}
       >
         <img src={PlaystationLogo} height="100" alt="Playstation" />
       </Link>
 
       <Link
         className="btn btn-light icon-btn"
-        to={{ pathname: "/search", search: `keyword=switch` }}
+        to={{ pathname: "/search", search: `platform=Nintendo-Switch` }}
       >
         <img src={SwitchLogo} alt="Switch" height="100" />
       </Link>

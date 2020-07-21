@@ -4,44 +4,57 @@ import Header from "../components/Main/Header";
 import SearchListing from "../components/SearchResults/SearchListing";
 import NoMatches from "../components/SearchResults/NoMatches";
 import "./styles/SearchResult.css";
-import Headernew from "../components/Main/headernew";
 import { useAPI } from "../utils/useAPI";
+import ListingsFilter from "../components/SearchResults/ListingsFilter";
 
 const SearchResult = (props) => {
   const [sendRequest, isLoading] = useAPI();
   const [matchedListings, setMatchedListings] = useState();
-  let query = props.location.search;
+  let query = props.location.search.slice(1);
 
-  // searchphrase = what the user typed
-  const searchphrase = query.substring(9);
-  const filteredphrase = searchphrase
-    .toLowerCase()
-    .replace(/(<([^>]+)>)/gi, "")
-    .replace(" ", "-");
+  // function to calculate API endpoint based on URL
+  const constructAPIpath = (query) => {
+    let apiPath = "";
+    // returns -1 when no more "="
+    while (query.indexOf("=") !== -1) {
+      const filterType = query.substring(0, query.indexOf("="));
+      apiPath = apiPath + filterType + "=";
+      query = query.substring(query.indexOf("=") + 1);
 
-  // fix multiple api requests whenever searchphrase changes
-  // TODO: configure for multiple words /
+      if (query.indexOf("&") !== -1) {
+        const filterValue = query.substring(0, query.indexOf("&"));
+        apiPath = apiPath + filterValue + "&";
+        query = query.substring(query.indexOf("&") + 1);
+      } else {
+        apiPath = apiPath + query;
+        break;
+      }
+    }
+    return apiPath;
+  };
+
+  const apiPath = constructAPIpath(query);
 
   useEffect(() => {
     // call express api to get search results
     const getListings = async () => {
-      const responseData = await sendRequest(
-        `/api/search/keyword/${filteredphrase}`
-      );
+      const responseData = await sendRequest(`/api/search?${apiPath}`);
       setMatchedListings(responseData.matchedListings);
     };
     getListings();
-  }, [filteredphrase]);
+  }, [apiPath, sendRequest]);
 
   return (
     <div style={{ width: "100%" }}>
       <Header />
+      <ListingsFilter filterLabel="platform" />
+      <ListingsFilter filterLabel="listingtype" />
       {/* components in the div below only loads after data has been retrieved from API */}
       {!isLoading && matchedListings && (
         <div className="searchResultsPageBody">
           {matchedListings.length === 0 ? (
             // No matches for what the user found
-            <NoMatches searchphrase={searchphrase} />
+            <NoMatches query={query} />
           ) : (
             matchedListings.map((listing) => (
               <Link
