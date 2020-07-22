@@ -1,4 +1,5 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
+import { Redirect } from "react-router-dom";
 import BACKENDADDRESS from "../constants/BackendAddress";
 
 export const useAPI = () => {
@@ -37,7 +38,9 @@ export const useAPI = () => {
         return responseData;
       } catch (err) {
         // eventually build other ways of handling error
-        // Todo: Route 500 to a page that says theres error with our servers (mongoDB or node)
+        if (err.code === 404) {
+          return <Redirect to="/error/404" />;
+        }
         alert(err.message);
       }
     },
