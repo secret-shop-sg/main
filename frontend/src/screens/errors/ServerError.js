@@ -5,7 +5,7 @@ const ServerError = () => {
     <div>
       <h1>Error 500</h1>
       <p>
-        Oh no. There seems to be some errors with our servers! Check back again
+        Oh no! There seems to be some errors with our servers! Check back again
         in a moment
       </p>
     </div>
