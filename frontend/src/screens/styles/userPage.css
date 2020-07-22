@@ -1,0 +1,56 @@
+.profilepicture{
+    height:150px;
+    width:150px;
+    border-radius: 75px;
+    margin-top:2%;
+    margin-bottom: 1%;
+    border: 1px black solid;
+}
+.userdetails{  
+}
+.name{
+    font-size: 3rem;
+}
+.username{
+    font-size:1.5rem;
+}
+.user{
+    margin: 1% 3%;
+    width:25%;
+    float: left;
+}
+.rating{
+    font-size: 1.2rem;
+}
+.stars{
+    color:green
+}
+.verification{
+    color: rgb(44, 66, 141)
+}
+.userbody{
+    text-align: justify;
+}
+.followers{
+    margin-right:25%;
+}
+.followerfollowing{
+    margin-top: 30px;
+    color:lightslategray; 
+    font-size:1.1rem
+}
+.follow{
+    color:black;
+    background-color: white;
+    border:black 1px solid;
+    width:110px
+}
+.follow:hover{
+    background-color: gainsboro;
+}
+.followed{
+    color:white;
+    background-color: green;
+    border:1px black solid;
+    width:110px
+}

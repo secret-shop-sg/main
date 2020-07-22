@@ -5,7 +5,8 @@ import "../../../constants/styles/Bootstrap.css";
 import "./Headernew.css";
 import { Modal } from "react-responsive-modal";
 import Login from "./login";
-import Signup from "./signin";
+import Signup from "./signup";
+
 
 const Headernew = () => {
   const [enteredText, setEnteredText] = useState("");
@@ -29,6 +30,7 @@ const Headernew = () => {
   function closemodallogin() {
     setlogin(false);
   }
+
   return (
     <div>
       <nav className="navbar navbar-expand-md navbar-green">
@@ -89,10 +91,10 @@ const Headernew = () => {
               <ul className="nav navbar-nav" id="userstuff">
                 <li className="nav-item">
                   <a
-                    className="nav-link"
+                    className="button-default"
                     onClick={() => {
-                      openmodalsign();
-                      closemodallogin();
+                      openmodallogin();
+                      closemodalsign();
                     }}
                   >
                     Signup

@@ -3,7 +3,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #85bb65;
+  background: rgb(34,193,195);
+  background: linear-gradient(0deg, rgba(34,193,195,1) 4%, rgba(55,198,14,1) 69%);
   padding: 6vh 0vh;
 }
 
@@ -80,4 +81,22 @@ a:-webkit-any-link {
 #login:hover{
   text-decoration: underline;
   cursor: pointer;
+}
+
+#chat{
+  display: inline-block;
+  color: white;
+  margin-right: 10px
+}
+#profile{
+  display:inline-block;
+  color:white;
+  margin-right:20px;
+}
+#loggedInIcons{
+  flex-direction: column-reverse ;
+  width: 200px;
+  margin-left:100px;
+  margin-right:10px;
+  justify-self: flex-end;
 }

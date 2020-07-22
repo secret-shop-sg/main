@@ -1,13 +1,14 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import "./Header.css";
-import { FaSearch, FaUserAlt, FaUserPlus } from "react-icons/fa";
-import {Link} from 'react-router-dom';
-import {Modal} from "react-responsive-modal"
-import Login from "./test_files/login"
-import Signup from "./test_files/signup"
+import { FaSearch, FaUserCircle } from "react-icons/fa";
+import { BsChatFill } from "react-icons/bs";
+import { Link } from 'react-router-dom';
+import Login from "./test_files/login";
+import Signup from "./test_files/signup";
+import UserButtons from "./userButtons";
 // header component
 const Header = () => {
-
+  const [loggedIn, setLoggedIn] = useState(false);
   const [enteredText, setEnteredText] = useState('');
   // enteredText represents what the user typed the search bar
 
@@ -17,87 +18,55 @@ const Header = () => {
 
   const [loginForm, setLoginForm] = useState(false)
 
-  const loginFormHandler= () =>{
+  const loginFormHandler = () => {
     setLoginForm(!loginForm);
   }
 
   const [signupForm, setSignupForm] = useState(false);
 
-  const signupFormHandler= () =>{
+  const signupFormHandler = () => {
     setSignupForm(!signupForm);
+  }
+
+  const loginHeaderHandler = () => {
+    setLoggedIn(true);
   }
 
   return (
     <header className="header">
       <div className="search-bar">
-      <form className = "form" onSubmit = {event => event.preventDefault}>
-        <Link to="/">
-          <div className="title">Link</div>
-         {/* To be replaced by logo */}
-        </Link>
-        <div className="search-box">
+        <form className="form" onSubmit={event => event.preventDefault}>
+          <Link to="/">
+            <div className="title">Link</div>
+            {/* To be replaced by logo */}
+          </Link>
+          <div className="search-box">
             <input
               type="text"
               className="search-input"
               placeholder="Search for games"
-              onChange = {textChangeHandler}
+              onChange={textChangeHandler}
             />
-            <Link to ={{pathname:"/search",search:`keyword=${enteredText}`}} style={{ backgroundImage: "none" }}>
+            <Link to={{ pathname: "/search", search: `keyword=${enteredText}` }} style={{ backgroundImage: "none" }}>
               <button type="submit" className="search-button">
                 <FaSearch />
               </button>
             </Link>
           </div>
         </form>
-        <div id="userbuttonholder">
-          <span 
-            className="userButtons"
-            id="login"
-            onClick={()=>{
-              if(signupForm){
-                loginFormHandler();
-                signupFormHandler()
-              }
-              else{
-                loginFormHandler()
-              }
-            }
-          }
-          >
-            <span>
-              <FaUserAlt size={18}/>
-            </span>
-            <span> </span>
-            <span>
-              Login
-            </span>
-          </span>
-          <span
-            id="signup"
-            className="userButtons"
-            onClick={()=>{
-              if(loginForm){
-                loginFormHandler();
-                signupFormHandler()
-              }
-              else{
-                signupFormHandler()
-              }
-            }
-          }
-          >
-            <span>
-              <FaUserPlus size={23}/>
-            </span>
-            <span> </span>
-            <span>
-              Signup
-            </span>
-          </span>          
-        </div>
+        {!loggedIn ?
+          <UserButtons
+            signupForm={signupForm}
+            signupFormHandler={signupFormHandler}
+            loginForm={loginForm}
+            loginFormHandler={loginFormHandler} /> :
+          <span id="loggedInIcons">
+            <span id="chat"><BsChatFill size={25} /></span>
+            <span id="profile"><FaUserCircle size={25} /></span>
+          </span>}
+        {loginForm ? <Login closeButtonHandler={loginFormHandler} /> : null}
+        {signupForm ? <Signup closeButtonHandler={signupFormHandler} /> : null}
       </div>
-      {loginForm ? <Login closeButtonHandler={loginFormHandler}/> : null}
-      {signupForm ? <Signup closeButtonHandler={signupFormHandler}/> : null}
     </header>
   );
 };

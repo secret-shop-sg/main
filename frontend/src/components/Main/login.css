@@ -175,43 +175,43 @@ html {
     -moz-animation-fill-mode:forwards;
     animation-fill-mode:forwards;
   
-    -webkit-animation-duration:1s;
-    -moz-animation-duration:1s;
-    animation-duration:1s;
+    -webkit-animation-duration:0.5s;
+    -moz-animation-duration:0.5s;
+    animation-duration:0.5s;
   }
   
   .fadeIn.first {
-    -webkit-animation-delay: 0.4s;
-    -moz-animation-delay: 0.4s;
-    animation-delay: 0.4s;
+    -webkit-animation-delay: 0.1s;
+    -moz-animation-delay: 0.1s;
+    animation-delay: 0.1s;
   }
   
   .fadeIn.second {
     -webkit-animation-delay: 0.6s;
-    -moz-animation-delay: 0.6s;
-    animation-delay: 0.6s;
+    -moz-animation-delay: 0.15s;
+    animation-delay: 0.15s;
   }
   
   .fadeIn.third {
-    -webkit-animation-delay: 0.8s;
-    -moz-animation-delay: 0.8s;
-    animation-delay: 0.8s;
+    -webkit-animation-delay: 0.2s;
+    -moz-animation-delay: 0.2s;
+    animation-delay: 0.2s;
   }
   
   .fadeIn.fourth {
-    -webkit-animation-delay: 1s;
-    -moz-animation-delay: 1s;
-    animation-delay: 1s;
+    -webkit-animation-delay: 0.25s;
+    -moz-animation-delay: 0.25s;
+    animation-delay: 0.25s;
   }
   .fadeIn.fifth {
-    -webkit-animation-delay: 1.2s;
-    -moz-animation-delay: 1.2s;
-    animation-delay: 1.2s;
+    -webkit-animation-delay: 0.3s;
+    -moz-animation-delay: 0.3s;
+    animation-delay: 0.3s;
   }
   .fadeIn.sixth {
-    -webkit-animation-delay: 1.3s;
-    -moz-animation-delay: 1.3s;
-    animation-delay: 1.3s;
+    -webkit-animation-delay: 0.35s;
+    -moz-animation-delay: 0.35s;
+    animation-delay: 0.35s;
   }
   /* Simple CSS3 Fade-in Animation */
   .underlineHover:after {
@@ -252,4 +252,32 @@ html {
   background-color:white;
   color:red;
   cursor:pointer;
+}
+#loginoverlay {
+  position: absolute; /* Sit on top of the page content */
+  display: block; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 50px;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+  padding-left:35%;
+}
+#signupoverlay {
+  position: absolute; /* Sit on top of the page content */
+  display: block; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 50px;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+  padding-left:35%;
 }

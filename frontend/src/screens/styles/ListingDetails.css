@@ -84,7 +84,7 @@ background-color: #F5F5F5;
     height:100%;
 }
 .recommendationtitle{
-    padding-top:110px;
+    padding-top:20px;
 }
 #headerdiv{
     width:60%;
@@ -94,13 +94,7 @@ background-color: #F5F5F5;
     text-decoration: underline;
     cursor:pointer;
 }
-.recommendationtitle{
-    padding-top:100px
-}
-.recommendationtitle:hover{
-    text-decoration: underline;
-    cursor:pointer;
-}
+
 #recommendationimg:hover{
     cursor: pointer;
 }
