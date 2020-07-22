@@ -6,6 +6,14 @@
 }
 
 .display {
-  width: 80%;
+  width: 90%;
   margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.listings {
+  margin-top: 5rem;
+  width: 100%;
 }

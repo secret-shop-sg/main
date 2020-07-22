@@ -16,9 +16,8 @@ const ListingDetails = (props) => {
   const [similarListings, setSimilarListings] = useState();
 
   useEffect(() => {
-
     const getListing = async () => {
-      const responseData = await sendRequest(`/api/listing/${listingID}`)
+      const responseData = await sendRequest(`/api/listing/id/${listingID}`);
       setListingToDisplay(responseData.listingToDisplay);
       setSimilarListings(responseData.similarListings);
     };
@@ -29,7 +28,7 @@ const ListingDetails = (props) => {
   const [liked, setliked] = useState(false);
 
   function likehandler() {
-    setliked(!liked)
+    setliked(!liked);
   }
 
   return (
@@ -48,7 +47,14 @@ const ListingDetails = (props) => {
             <p className="detailsi">
               <span className="owner">Owned by: {listingToDisplay.owner}</span>
               <span>
+<<<<<<< HEAD
                 <button onClick={likehandler} className={liked ? "btn-liked" : "btn-like"}>
+=======
+                <button
+                  onClick={likehandler}
+                  className={liked ? "btn-liked" : "btn-like"}
+                >
+>>>>>>> 314a3882ee08f0bdbe47dd67ad8b45e2038855cc
                   <BsHeartFill />
                   <span> </span>Like!
                 </button>
@@ -68,6 +74,7 @@ const ListingDetails = (props) => {
             <h2>Other Listings</h2>
             <hr></hr>
           </div>
+<<<<<<< HEAD
           {(similarListings.length === 0) ? null :
             similarListings.map(listing => (
               <div id="recommendationimg" key={listing.listingId}>
@@ -91,6 +98,37 @@ const ListingDetails = (props) => {
             )
             )
           }
+=======
+          {similarListings.length === 0
+            ? null
+            : similarListings.map((listing) => (
+                <div id="recommendationimg" key={listing.listingId}>
+                  <div className="container col-3 float-left recommendationimgextend">
+                    <Link
+                      to={{
+                        pathname: `/listing/${listing.title}`,
+                        search: `${listing.listingId}`,
+                      }}
+                    >
+                      <img className="imgsuggested" src={listing.image} />
+                    </Link>
+                  </div>
+                  <div>
+                    <Link
+                      to={{
+                        pathname: `/listing/${listing.title}`,
+                        search: `${listing.listingId}`,
+                      }}
+                    >
+                      <h4 className="recommendationtitle">{listing.title}</h4>
+                    </Link>
+                    <p>
+                      Owned by <strong id="owner">{listing.owner}</strong>
+                    </p>
+                  </div>
+                </div>
+              ))}
+>>>>>>> 314a3882ee08f0bdbe47dd67ad8b45e2038855cc
         </div>
       )}
     </div>
