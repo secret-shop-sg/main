@@ -96,10 +96,10 @@ const DUMMYLISTINGS = [
   },
   {
     listingId: 6,
-    title: "Kirby's Return to Dream Land",
-    platform: "Wii",
+    title: "Ghost of Tsushima",
+    platform: "PlayStation 4",
     image:
-      "https://upload.wikimedia.org/wikipedia/en/thumb/d/d4/Kirbys_return_to_dreamland_boxart.jpg/220px-Kirbys_return_to_dreamland_boxart.jpg",
+      "https://images.pushsquare.com/58c3c6b2fa46a/ghost-of-tsushima-cover.cover_small.jpg",
     dateListed: new Date("July 3, 2020 19:02"),
     description: "",
     owner: "Jimmy",

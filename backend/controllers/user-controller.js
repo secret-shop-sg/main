@@ -10,7 +10,7 @@ const addNewUser = (req, res, next) => {
     const error = new Error(
       "There is a registered account with this email address. Would you like to log in instead?"
     );
-    error.code = 401;
+    error.status = 401;
     return next(error);
   }
 

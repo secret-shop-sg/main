@@ -32,10 +32,25 @@ app.use("/api/user", userRoutes);
 
 // if api calls a wrong address
 app.use((req, res, next) => {
-  const error = new Error("Page not found. Check if your API endpoint is valid");
-  error.code = 404;
+  const error = new Error(
+    "API endpoint not valid. Note that it is case sensitive"
+  );
+  error.status = 400;
 
-  throw error;
+  return next(error);
+});
+
+// custom error handler if any middleware threw an error
+app.use((error, req, res, next) => {
+  if (res.headerSent) {
+    // calls express' default error handler if res has already been sent
+    return next(error);
+  }
+  res.status(error.status || 500);
+  res.json({
+    message: error.message || "An unknown error has occured on the server",
+    status: error.status || 500,
+  });
 });
 
 app.listen(5000);

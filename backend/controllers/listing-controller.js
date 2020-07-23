@@ -11,26 +11,27 @@ const getListing = (req, res, next) => {
   const listingToDisplay = allListings.find(
     (listing) => listing.listingId.toString() === listingID
   );
-  const selectedPlatform = listingToDisplay.platform;
-  // find all other games on the same platform
-  const otherListings = allListings.filter(
-    (listing) =>
-      listing.listingId.toString() !== listingID &&
-      listing.platform === selectedPlatform
-  );
-  // similarListings = 3 random listings on the same platform
-  let similarListings = [];
+  if (listingToDisplay) {
+    const selectedPlatform = listingToDisplay.platform;
+    // find all other games on the same platform
+    const otherListings = allListings.filter(
+      (listing) =>
+        listing.listingId.toString() !== listingID &&
+        listing.platform === selectedPlatform
+    );
+    // similarListings = 3 random listings on the same platform
+    let similarListings = [];
 
-  while (similarListings.length < 3 && otherListings.length > 0) {
-    const randomNum = Math.floor(Math.random() * otherListings.length);
-    const [randomListing] = otherListings.splice(randomNum, 1);
-    similarListings.push(randomListing);
-  }
+    while (similarListings.length < 3 && otherListings.length > 0) {
+      const randomNum = Math.floor(Math.random() * otherListings.length);
+      const [randomListing] = otherListings.splice(randomNum, 1);
+      similarListings.push(randomListing);
+    }
 
-  // remove empty listings if there are < 3 games on the same platform
-  similarListings = similarListings.filter((listing) => listing.length != 0);
-
-  res.json({ listingToDisplay, similarListings });
+    // remove empty listings if there are < 3 games on the same platform
+    similarListings = similarListings.filter((listing) => listing.length != 0);
+    res.json({ listingToDisplay, similarListings });
+  } else res.json({ listingToDisplay });
 };
 
 const addListing = (req, res, next) => {
