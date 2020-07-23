@@ -6,6 +6,7 @@ import PageNotFound from "./screens/errors/PageNotFound";
 import ListingDetails from "./screens/ListingDetails";
 import Main from "./screens/Main";
 import ServerError from "./screens/errors/ServerError";
+import UserPage from "./screens/UserPage"
 
 const RoutingTable = () => {
     return (

@@ -1,10 +1,34 @@
-#listingimage{
+.listingimage{
     height: 500px;
-    width: 350px;
-    margin-bottom: 20px;
-    margin-top: 30px;
-    margin-left: 30px;
+    width: 80%;
     border: 1px black solid;
+}
+.TitlePlatformImage{
+    width:25%;
+    margin-top:2%;
+    margin-left: 3%;
+    margin-right:0.5%;
+    display: inline-block;
+    float:left;
+}
+.listingdetails{
+    width: 45%;
+    display: inline-block;
+    float: left;
+    margin-top: 5% ;
+}
+.datelisted{
+    opacity: 0.7;
+}
+.similarlistings{
+    float:left;
+    width:22%;
+    margin-left:2%;
+    margin-top: 2%;
+}
+.similarlistingholder{
+    width:100%;
+    margin-bottom:3%;
 }
 
 .btn-like{
@@ -17,6 +41,21 @@
     font-size: 20px;
     border-radius:10px;
     outline:none;
+    float:right;
+    margin-top: 2%;
+}
+.btn-liked{
+    color: white;
+    background-color: red;
+    border: 2px solid black;
+    font-weight: bold;
+    margin-left: 20px;
+    padding: 5px 20px;
+    font-size: 20px;
+    border-radius:10px;
+    outline:none;
+    float:right;
+    margin-top: 2%;
 }
 .btn-like:hover{
 background-color: #F5F5F5;
@@ -30,6 +69,8 @@ background-color: #F5F5F5;
     padding: 5px 20px;
     font-size: 20px;
     border-radius:10px;
+    float: right;
+    margin-top: 2%;
 }
 
 .btn-cop:hover {
@@ -44,68 +85,40 @@ background-color: #F5F5F5;
     border-radius:10px;
 }
 
-.owner{
-    font-size: 25px
-}
-#listingtitle{
-    margin-left: 50px;
-    margin-top: 10px;
-    margin-right:0;
-    width:60%;
-}
-#platform{
-    margin-left: 50px;
-    margin-top: 10px;
-    margin-right:0;
-    width: 60%;
-}
-.details{
-    margin:auto;
-    float:left;
-}
-
-.btn-liked{
-    color: white;
-    background-color: red;
-    border: 2px solid black;
-    font-weight: bold;
-    margin-left: 20px;
-    padding: 5px 20px;
-    font-size: 20px;
-    border-radius:10px;
-    outline:none;
-}
-.recommendationimgextend{
-    width:130px;
-    height:160px;
-}
 .imgsuggested{
+    height:100%;
+    width: 100%;
+}
+.userpicture{
+    width:70px;
+    height:70px;
+    border-radius: 35px;
+    border: 1px solid black;
+    margin-right: 2%;
+}
+.similarlistingimageholder{
+    width:25%;
+    height:20%;
+    margin-right: 2%;
+    display: inline-block;
+}
+.similarlistingimage{
     width:100%;
     height:100%;
 }
-.recommendationtitle{
-    padding-top:20px;
-}
-#headerdiv{
-    width:60%;
-    margin-right:10px;
-}
-#owner:hover{
-    text-decoration: underline;
-    cursor:pointer;
+
+.similarlistingdetailholder{
+    width:70%;
+    float:right;
 }
 
-#recommendationimg:hover{
-    cursor: pointer;
+.similarlistinguserdp{
+    width:30px;
+    height:30px;
+    border-radius: 15px;
+    float:left;
+    margin-right: 3%;
 }
-.detailsi{
-    padding-top:20px
+.similarlistingdescription{
+    color:gray;
 }
-hr {
-    border: 0;
-    clear:both;
-    display:block;
-    width: 96%;               
-    background-color:#FFFF00;
-    height: 1px;
-  }

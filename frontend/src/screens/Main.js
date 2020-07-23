@@ -1,15 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
-
 import { useAPI } from "../utils/useAPI";
-
 import Header from "../components/Main/Header";
 import Platforms from "../components/Home/Platforms";
 import "./styles/Main.css";
-<<<<<<< HEAD
-import Headernew from "../components/Main/test_files/headernew.js"
-=======
 import HomeListing from "../components/Home/HomeListing";
->>>>>>> 314a3882ee08f0bdbe47dd67ad8b45e2038855cc
 
 const Main = (props) => {
   const [sendRequest, isLoading] = useAPI();

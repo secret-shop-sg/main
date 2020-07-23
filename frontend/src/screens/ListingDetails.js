@@ -35,100 +35,79 @@ const ListingDetails = (props) => {
     <div>
       <Header />
       {!isLoading && listingToDisplay && similarListings && (
-        <div>
-          <div id="headerdiv">
-            <h2 id="listingtitle">{listingToDisplay.title}</h2>
-            <h3 id="platform">For the {listingToDisplay.platform}</h3>
+        <div className="listingwrapper">
+          <div className="TitlePlatformImage">
+            <h2>{listingToDisplay.title}</h2>
+            <h5>For the {listingToDisplay.platform}</h5>
+            <img className="listingimage" src={listingToDisplay.image} />
           </div>
-          <div className="container col-12 col-md-3 float-left text-center">
-            <img id="listingimage" src={listingToDisplay.image} />
-          </div>
-          <div className="container col-6 details">
-            <p className="detailsi">
-              <span className="owner">Owned by: {listingToDisplay.owner}</span>
-              <span>
-<<<<<<< HEAD
-                <button onClick={likehandler} className={liked ? "btn-liked" : "btn-like"}>
-=======
-                <button
-                  onClick={likehandler}
-                  className={liked ? "btn-liked" : "btn-like"}
-                >
->>>>>>> 314a3882ee08f0bdbe47dd67ad8b45e2038855cc
-                  <BsHeartFill />
-                  <span> </span>Like!
+          <div className="listingdetails">
+            <span>
+              <img className="userpicture" src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/kermit-the-frog-attends-the-2017-drama-league-benefit-gala-news-photo-1568466133.jpg" />
+            </span>
+            <Link
+              to={{
+                pathname: `/user`
+              }}
+            >
+              <span>{listingToDisplay.owner}</span>
+            </Link>
+            <span> | </span>
+            <span>Rating</span>
+            <span>
+              <button className="btn-cop">
+                <BsChatFill />
+                <span> </span>Make an Offer!
                 </button>
-              </span>
-              <span>
-                <button className="btn-cop">
-                  <BsChatFill />
-                  <span> </span>Make an Offer!
+            </span>
+            <span>
+              <button
+                onClick={likehandler}
+                className={liked ? "btn-liked" : "btn-like"}
+              >
+                <BsHeartFill />
+                <span> </span>Like!
                 </button>
-              </span>
-            </p>
+            </span>
             <hr></hr>
-            <p>Listed on: {listingToDisplay.dateListed}</p>
-            <p>{listingToDisplay.description}</p>
+            <p className="datelisted">Listed on {listingToDisplay.dateListed}</p>
+            <div><p>{listingToDisplay.description}</p></div>
           </div>
-          <div className="container col-3 float-right">
-            <h2>Other Listings</h2>
+          <div className="similarlistings">
+            <h2>Similar Listings</h2>
             <hr></hr>
-          </div>
-<<<<<<< HEAD
-          {(similarListings.length === 0) ? null :
-            similarListings.map(listing => (
-              <div id="recommendationimg" key={listing.listingId}>
-                <div className="container col-3 float-left recommendationimgextend">
-                  <Link to={{ pathname: `/listing/${listing.title}`, search: `${listing.listingId}` }} >
-                    <img
-                      className="imgsuggested"
-                      src={listing.image}
-                    />
-                  </Link>
-                </div>
-                <div>
-                  <Link to={{ pathname: `/listing/${listing.title}`, search: `${listing.listingId}` }} >
-                    <h4 className="recommendationtitle">{listing.title}</h4>
-                  </Link>
-                  <p>
-                    Owned by <strong id="owner">{listing.owner}</strong>
-                  </p>
-                </div>
-              </div>
-            )
-            )
-          }
-=======
-          {similarListings.length === 0
-            ? null
-            : similarListings.map((listing) => (
-                <div id="recommendationimg" key={listing.listingId}>
-                  <div className="container col-3 float-left recommendationimgextend">
-                    <Link
-                      to={{
-                        pathname: `/listing/${listing.title}`,
-                        search: `${listing.listingId}`,
-                      }}
-                    >
-                      <img className="imgsuggested" src={listing.image} />
-                    </Link>
+            {similarListings.length === 0
+              ? null
+              : similarListings.map((listing) => (
+                <React.Fragment>
+                  <div className="similarlistingholder" key={listing.listingid}>
+                    <div className="similarlistingimageholder">
+                      <Link
+                        to={{
+                          pathname: `/listing/${listing.title}`,
+                          search: `${listing.listingId}`,
+                        }}>
+                        <img className="similarlistingimage" src={listing.image} />
+                      </Link>
+                    </div>
+                    <div className="similarlistingdetailholder">
+                      <Link
+                        to={{
+                          pathname: `/listing/${listing.title}`,
+                          search: `${listing.listingId}`,
+                        }}
+                      >
+                        <h5>{listing.title}</h5>
+                      </Link>
+                      <img className="similarlistinguserdp" src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/kermit-the-frog-attends-the-2017-drama-league-benefit-gala-news-photo-1568466133.jpg" />
+                      <p>{listing.owner} | Rating</p>
+                      <p className="similarlistingdescription">{listing.description}</p>
+                    </div>
                   </div>
-                  <div>
-                    <Link
-                      to={{
-                        pathname: `/listing/${listing.title}`,
-                        search: `${listing.listingId}`,
-                      }}
-                    >
-                      <h4 className="recommendationtitle">{listing.title}</h4>
-                    </Link>
-                    <p>
-                      Owned by <strong id="owner">{listing.owner}</strong>
-                    </p>
-                  </div>
-                </div>
+                  <hr />
+                </React.Fragment>
               ))}
->>>>>>> 314a3882ee08f0bdbe47dd67ad8b45e2038855cc
+          </div>
         </div>
       )}
     </div>

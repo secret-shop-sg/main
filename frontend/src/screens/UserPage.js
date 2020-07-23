@@ -4,6 +4,7 @@ import Header from "../components/Main/Header"
 import "./styles/userPage.css"
 import { BsStarFill } from "react-icons/bs"
 import { GoVerified } from "react-icons/go"
+import ListBox from "../components/Main/userListBox"
 const UserPage = () => {
     const [following, setFollowing] = useState(false)
     function clickedfollow() {
@@ -18,6 +19,7 @@ const UserPage = () => {
                     <h2 className="name">Super Cool Seller<span className="verification"> <GoVerified size={25} /></span></h2>
                     <p className="username">
                         @supercoolseller
+                        <span>  </span>
                         <span>
                             {!following ? <button className="follow" onClick={clickedfollow}>Follow!</button> :
                                 <button className="followed" onClick={clickedfollow}>Followed!</button>}
@@ -48,8 +50,8 @@ const UserPage = () => {
                     </p>
                 </div>
             </div>
-            <div>
-                yo
+            <div className="userlistings">
+                <ListBox />
             </div>
         </div>
     )
