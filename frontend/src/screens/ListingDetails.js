@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Header from "../components/Main/Header";
 import "../constants/styles/Bootstrap.css";
 import "./styles/ListingDetails.css";
-import Headernew from "../components/Main/headernew";
 import { BsChatFill, BsHeartFill } from "react-icons/bs";
 import { useAPI } from "../utils/useAPI";
 import ListingDoesNotExist from "../components/ListingDetails/ListingDoesNotExist";
