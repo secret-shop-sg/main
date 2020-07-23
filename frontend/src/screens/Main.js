@@ -16,7 +16,9 @@ const Main = (props) => {
     // async function to get listings
     const getListings = async () => {
       const listingsFromServer = await sendRequest(`/api/listing/recent`);
-      setListings(listingsFromServer.mostRecentListings);
+      if (listingsFromServer) {
+        setListings(listingsFromServer.mostRecentListings);
+      }
     };
 
     // call async function

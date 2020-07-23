@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import "./ListingsFilter.css";
 
 // eventually connect to DB?
@@ -77,22 +77,31 @@ const getNewURL = (filterLabel, label, isChecked) => {
   let newPath = window.location.pathname; // /search
   let query = window.location.search; // ?platform=Nintendo-Switch
 
+  const remove = (string, index, charsToDelete) => {
+    return string.substring(0, index) + string.substring(index + charsToDelete);
+  };
+
   if (isChecked) {
     // if checkbox is currently checked, it should remove its label from the url
     const index = query.indexOf(label);
-    query = query.replace(label, "");
+    query = remove(query, index, label.length);
 
     if (query.charAt(index) === "%") {
       // if there are other checkboxes checked in its filter
-      query = query.substring(0, index) + query.substring(index + 1);
+      query = remove(query, index, 1);
     } else if (query.charAt(index - 1) === "%") {
-      query = query.substring(0, index - 1) + query.substring(index);
+      query = remove(query, index - 1, 1);
     } else if (query.charAt(index - 1) === "=") {
       // if it is the only checked checkbox in its filter
       const filterIndex = query.indexOf(filterLabel + "=");
-      query =
-        query.substring(0, filterIndex) +
-        query.substring(filterIndex + filterLabel.length);
+      query = remove(query, filterIndex, filterLabel.length + 1);
+      if (!query.filterIndex) {
+        if (query.charAt(filterIndex) === "&") {
+          query = remove(query, filterIndex, 1);
+        } else if (query.charAt(filterIndex - 1) === "&") {
+          query = remove(query, filterIndex - 1, 1);
+        }
+      }
     }
 
     newPath = newPath + query;
@@ -120,24 +129,30 @@ const getNewURL = (filterLabel, label, isChecked) => {
         newPath = query + "&" + filterLabel + "=" + label;
       }
     }
-
-    // another checkbox from another filter is checked
   }
   return newPath;
 };
 
 const Checkbox = (props) => {
+  const history = useHistory();
   const newURL = getNewURL(
     props.filterLabel,
     props.label.replace(" ", "-"),
     props.isChecked
   );
 
+  const onClickHandler = (event) => {
+    history.replace(newURL);
+    event.preventDefault();
+  };
+
   return (
     <div>
-      <Link to={newURL}>
-        <input type="checkbox" checked={props.isChecked} readOnly />
-      </Link>
+      <input
+        type="checkbox"
+        checked={props.isChecked}
+        onChange={onClickHandler}
+      />
       <span>{props.label}</span>
     </div>
   );

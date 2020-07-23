@@ -39,7 +39,9 @@ const SearchResult = (props) => {
     // call express api to get search results
     const getListings = async () => {
       const responseData = await sendRequest(`/api/search?${apiPath}`);
-      setMatchedListings(responseData.matchedListings);
+      if (responseData) {
+        setMatchedListings(responseData.matchedListings);
+      }
     };
     getListings();
   }, [apiPath, sendRequest]);

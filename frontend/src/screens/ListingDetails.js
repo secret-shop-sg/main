@@ -6,6 +6,7 @@ import "./styles/ListingDetails.css";
 import Headernew from "../components/Main/headernew";
 import { BsChatFill, BsHeartFill } from "react-icons/bs";
 import { useAPI } from "../utils/useAPI";
+import ListingDoesNotExist from "../components/ListingDetails/ListingDoesNotExist";
 
 const ListingDetails = (props) => {
   const listingID = props.location.search.substring(1);
@@ -19,10 +20,11 @@ const ListingDetails = (props) => {
   useEffect(() => {
     const getListing = async () => {
       const responseData = await sendRequest(`/api/listing/id/${listingID}`);
-      setListingToDisplay(responseData.listingToDisplay);
-      setSimilarListings(responseData.similarListings);
+      if (responseData) {
+        setListingToDisplay(responseData.listingToDisplay);
+        setSimilarListings(responseData.similarListings);
+      }
     };
-
     getListing();
   }, [listingID]);
 
@@ -35,6 +37,7 @@ const ListingDetails = (props) => {
   return (
     <div>
       <Header />
+      {!isLoading && !listingToDisplay && <ListingDoesNotExist />}
       {!isLoading && listingToDisplay && similarListings && (
         <div>
           <div id="headerdiv">
