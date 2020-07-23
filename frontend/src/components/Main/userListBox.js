@@ -15,7 +15,7 @@ function ListBox() {
                 <Card.Body>
                     <Card.Title>Animal Crossing</Card.Title>
                     <Card.Text>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Accumsan in nisl nisi scelerisque eu ultrices vitae auctor eu.
+                        Normal surrender now or prepare to fight Snorunt Amoonguss Combusken Feraligatr Larvitar. Pallet Town Glalie Pidove Sonic Boom Rotom Minun Numel. Fog Badge Chandelure Charmeleon Durant Bellsprout Quilava Earth Badge. Mirror Move Phione Wurmple Vanillite Mienfoo Storm Badge Magby.
                     </Card.Text>
                     {!liked ? <BsHeart className="likebutton" size={23} onClick={likeHandler} /> : <BsFillHeartFill className="likedbutton" size={23} onClick={likeHandler} />}
                 </Card.Body>
