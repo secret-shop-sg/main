@@ -4,6 +4,9 @@ import { NavLink } from "react-router-dom";
 import "../../constants/styles/Bootstrap.css";
 import "./HomeListing.css";
 
+// bootstrap components
+import Badge from "react-bootstrap/Badge";
+
 import XboxLogo from "../../constants/icons/xbox.svg";
 import SwitchLogo from "../../constants/icons/switch.svg";
 import PlaystationLogo from "../../constants/icons/playstation.svg";
@@ -41,6 +44,23 @@ const HomeListing = (props) => {
         >
           <h2 className="card-title">{props.title}</h2>
         </NavLink>
+        <div className="badges">
+          {props.isTrading && (
+            <Badge variant="primary" className="type-indicator">
+              Trade
+            </Badge>
+          )}
+          {props.isRenting && (
+            <Badge variant="secondary" className="type-indicator">
+              Rent
+            </Badge>
+          )}
+          {props.isSelling && (
+            <Badge variant="success" className="type-indicator">
+              Sell
+            </Badge>
+          )}
+        </div>
         <div>{props.description}</div>
       </div>
       <div>{setPlatform()}</div>

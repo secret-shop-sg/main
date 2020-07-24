@@ -19,3 +19,12 @@
   object-fit: cover;
   width: 10rem;
 }
+
+.badges {
+  display: flex;
+  flex-direction: row;
+}
+
+.type-indicator {
+  margin: 0rem 0rem;
+}
