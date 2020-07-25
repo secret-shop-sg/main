@@ -1,11 +1,11 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import "../../constants/styles/Bootstrap.css";
 import "./HomeListing.css";
 
 // bootstrap components
 import Badge from "react-bootstrap/Badge";
+import Card from "react-bootstrap/Card";
 
 import XboxLogo from "../../constants/icons/xbox.svg";
 import SwitchLogo from "../../constants/icons/switch.svg";
@@ -24,7 +24,7 @@ const HomeListing = (props) => {
   };
 
   return (
-    <div className="card listing">
+    <Card className="listing">
       <div>
         <NavLink
           to={{
@@ -35,14 +35,14 @@ const HomeListing = (props) => {
           <img className="game-img" alt="name of game" src={props.image} />
         </NavLink>
       </div>
-      <div className="card-body">
+      <Card.Body>
         <NavLink
           to={{
             pathname: `/listing/${props.title}`,
             search: `${props.id}`,
           }}
         >
-          <h2 className="card-title">{props.title}</h2>
+          <Card.Title>{props.title}</Card.Title>
         </NavLink>
         <div className="badges">
           {props.isTrading && (
@@ -62,9 +62,9 @@ const HomeListing = (props) => {
           )}
         </div>
         <div>{props.description}</div>
-      </div>
+      </Card.Body>
       <div>{setPlatform()}</div>
-    </div>
+    </Card>
   );
 };
 
