@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import "./Platforms.css";
 
@@ -11,23 +11,32 @@ import SwitchLogo from "../../constants/icons/switch.svg";
 import PlaystationLogo from "../../constants/icons/playstation.svg";
 
 const Platforms = (props) => {
+  let history = useHistory();
+
+  // functions for button press
+  const onXboxPress = () => {
+    history.push({ pathname: "/search", search: `platform=Xbox-One` });
+  };
+
+  const onPsPress = () => {
+    history.push({ pathname: "/search", search: `platform=PlayStation-4` });
+  };
+
+  const onSwitchPress = () => {
+    history.push({ pathname: "/search", search: `platform=Nintendo-Switch` });
+  };
+
   return (
     <ButtonGroup className="container">
-      <Button variant="light" className="icon-btn">
-        <Link to={{ pathname: "/search", search: `platform=Xbox-One` }}>
-          <img src={XboxLogo} height="100" alt="Xbox" />
-        </Link>
+      <Button variant="light" className="icon-btn" onClick={onXboxPress}>
+        <img src={XboxLogo} height="100" alt="Xbox" />
       </Button>
-      <Button variant="light" className="icon-btn">
-        <Link to={{ pathname: "/search", search: `platform=Playstation-4` }}>
-          <img src={PlaystationLogo} height="100" alt="Playstation" />
-        </Link>
+      <Button variant="light" className="icon-btn" onClick={onPsPress}>
+        <img src={PlaystationLogo} height="100" alt="Playstation" />
       </Button>
 
-      <Button variant="light" className="icon-btn">
-        <Link to={{ pathname: "/search", search: `platform=Nintendo-Switch` }}>
-          <img src={SwitchLogo} alt="Switch" height="100" />
-        </Link>
+      <Button variant="light" className="icon-btn" onClick={onSwitchPress}>
+        <img src={SwitchLogo} alt="Switch" height="100" />
       </Button>
     </ButtonGroup>
   );
