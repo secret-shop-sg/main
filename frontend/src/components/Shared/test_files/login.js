@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect, useReducer } from "react";
 import "../login.css";
 import "../../../constants/styles/Bootstrap.css";
+import { useAPI } from "../../../utils/useAPI";
 import { FaUserCircle } from "react-icons/fa";
 
 // reducer for login data
@@ -26,6 +27,7 @@ const formReducer = (state, action) => {
 
 function Login(props) {
   // use reducer for login data
+  const [sendRequest, isLoading] = useAPI();
   const [formState, dispatchForm] = useReducer(formReducer, {
     inputValues: {
       username: "",
@@ -63,6 +65,21 @@ function Login(props) {
       document.removeEventListener("keydown", escFunction, false);
     };
   }, []);
+
+  const onSubmitHandler = async (event) => {
+    event.preventDefault();
+    const responseData = await sendRequest("/api/user/login", "POST", {
+      // change the fields below to the actual fields
+      username: "Billy",
+      password: "test",
+    });
+
+    // responseData returns the user's userID
+    if (responseData.userID) {
+      alert("Login successful");
+    }
+  };
+
   return (
     <div className="wrapper">
       <div id="formContent">
@@ -72,7 +89,7 @@ function Login(props) {
         <div style={{ paddingTop: 10, paddingBottom: 10 }} className="fadeIn">
           <FaUserCircle size={61} />
         </div>
-        <form>
+        <form onSubmit={onSubmitHandler}>
           <input
             type="text"
             id="username"

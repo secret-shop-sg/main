@@ -118,25 +118,22 @@ function Signup(props) {
       console.log("isValid:", isValid);
     }
   };
-  /*
 
   const onSubmitHandler = async (event) => {
+    event.preventDefault();
     // Todo: add some validation
-    const responseData = await sendRequest(
-      "/api/user/signup",
-      "POST",
-      {username:,
-        email: ,
-        password: ,
-      }
-    );
+    const responseData = await sendRequest("/api/user/signup", "POST", {
+      // change the fields below to the actual fields after validation
+      username: "Billy",
+      email: "Jean@gmail.com",
+      password: "test",
+    });
 
-    if (responseData){
-      // responseData returns the user's userID
-      console.log(responseData.userID)
+    // responseData returns the user's userID
+    if (responseData.userID) {
+      alert("Sign up successful");
     }
   };
-  */
 
   return (
     <div className="wrapper">
@@ -150,7 +147,7 @@ function Signup(props) {
         >
           <FaUserCircle size={61} />
         </div>
-        <form onSubmit>
+        <form onSubmit={onSubmitHandler}>
           <input
             type="text"
             id="username"
