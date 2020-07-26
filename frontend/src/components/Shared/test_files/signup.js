@@ -130,8 +130,11 @@ function Signup(props) {
     });
 
     // responseData returns the user's userID
-    if (responseData.userID) {
-      alert("Sign up successful");
+    if (responseData) {
+      if (responseData.userID) {
+        // Todo: Stored the userID in redux
+        alert("Sign up successful");
+      }
     }
   };
 
