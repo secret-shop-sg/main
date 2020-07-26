@@ -56,7 +56,7 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    "mongodb+srv://admin:8cfrMF1Y6UCM5nc0@linkdb.f9q9h.mongodb.net/users?retryWrites=true&w=majority",
+    "mongodb+srv://admin:8cfrM1Y6UCM5nc0@linkdb.f9q9h.mongodb.net/users?retryWrites=true&w=majority",
     { useNewUrlParser: true, useCreateIndex: true }
   )
   .then(() => app.listen(5000))
