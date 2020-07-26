@@ -1,10 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import "../login.css";
 import "../../../constants/styles/Bootstrap.css";
 import { FaUserCircle } from "react-icons/fa";
 function Signup(props) {
+  const escFunction = useCallback((event) => {
+    if (event.keyCode === 27) {
+      props.signupFormHandler()
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("keydown", escFunction, false);
+
+    return () => {
+      document.removeEventListener("keydown", escFunction, false);
+    };
+  }, []);
   return (
-    <div className="wrapper fadeInDown">
+    <div className="wrapper">
       <div id="formContent">
         <div
           className="closebutton"
@@ -22,34 +35,34 @@ function Signup(props) {
           <input
             type="text"
             id="textthing"
-            className="fadeIn second input"
+            className="fadeIn input"
             name="login"
             placeholder="username"
           />
           <input
-            type="text"
+            type="email"
             id="textthing"
-            className="fadeIn third input"
+            className="fadeIn input"
             name="login"
             placeholder="email"
           />
           <input
-            type="text"
+            type="password"
             id="textthing"
-            className="fadeIn fourth input"
+            className="fadeIn input"
             name="login"
             placeholder="password"
           />
           <input
-            type="text"
+            type="password"
             id="textthing"
-            className="fadeIn fifth input"
+            className="fadeIn input"
             name="login"
             placeholder="confirm password"
           />
           <input
             type="submit"
-            className="fadeIn sixth input"
+            className="fadeIn      input"
             value="Create Account"
           />
         </form>

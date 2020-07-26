@@ -2,10 +2,15 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 
 const ClientSideErrorsPage = (props) => {
-  const error = props.location.state.current || {
-    message: "The page you are requesting for could not be found",
-    status: 404,
-  };
+  let error;
+  if (props.location.state) {
+    error = props.location.state.current;
+  } else
+    error = {
+      message: "The page you are requesting for could not be found",
+      status: 404,
+    };
+
   const history = useHistory();
   const onClickHandler = () => {
     history.push("/");

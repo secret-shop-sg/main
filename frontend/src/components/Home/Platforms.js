@@ -19,7 +19,7 @@ const Platforms = (props) => {
 
       <Link
         className="btn btn-light icon-btn"
-        to={{ pathname: "/search", search: `platform=Playstation-4` }}
+        to={{ pathname: "/search", search: `platform=PlayStation-4` }}
       >
         <img src={PlaystationLogo} height="100" alt="Playstation" />
       </Link>

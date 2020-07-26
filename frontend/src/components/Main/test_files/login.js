@@ -1,10 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import "../login.css";
 import "../../../constants/styles/Bootstrap.css";
 import { FaUserCircle } from "react-icons/fa";
 function Login(props) {
+  const escFunction = useCallback((event) => {
+    if (event.keyCode === 27) {
+      props.loginFormHandler()
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("keydown", escFunction, false);
+
+    return () => {
+      document.removeEventListener("keydown", escFunction, false);
+    };
+  }, []);
   return (
-    <div className="wrapper fadeInDown">
+    <div className="wrapper">
       <div id="formContent">
         <div
           className="closebutton"
@@ -14,7 +27,7 @@ function Login(props) {
         </div>
         <div
           style={{ paddingTop: 10, paddingBottom: 10 }}
-          className="fadeIn first"
+          className="fadeIn"
         >
           <FaUserCircle size={61} />
         </div>
@@ -22,18 +35,18 @@ function Login(props) {
           <input
             type="text"
             id="textthing"
-            className="fadeIn second input"
+            className="fadeIn input"
             name="login"
             placeholder="username"
           />
           <input
-            type="text"
+            type="password"
             id="textthing"
-            className="fadeIn third input"
+            className="fadeIn input"
             name="login"
             placeholder="password"
           />
-          <input type="submit" className="fadeIn fourth input" value="Log In" />
+          <input type="submit" className="fadeIn input" value="Log In" />
         </form>
 
         <div id="formFooter">

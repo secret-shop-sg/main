@@ -96,8 +96,8 @@ const Header = () => {
           </span>
         </div>
       </div>
-      {loginForm ? <Login closeButtonHandler={loginFormHandler} /> : null}
-      {signupForm ? <Signup closeButtonHandler={signupFormHandler} /> : null}
+      {loginForm ? <Login closeButtonHandler={loginFormHandler} loginFormHandler={loginFormHandler} /> : null}
+      {signupForm ? <Signup closeButtonHandler={signupFormHandler} signupFormHandler={signupFormHandler} /> : null}
     </header>
   );
 };
