@@ -38,6 +38,9 @@ const Main = (props) => {
           image={listing.image}
           id={listing.listingId}
           platform={listing.platform}
+          isTrading={listing.isTrading}
+          isRenting={listing.isRenting}
+          isSelling={listing.isSelling}
         />
       ));
     }

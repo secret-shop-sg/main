@@ -5,6 +5,11 @@
   flex-direction: row;
 }
 
+.title {
+  cursor: pointer;
+  color: black;
+}
+
 .contents {
   width: 100%;
   display: flex;
@@ -18,4 +23,14 @@
 .game-img {
   object-fit: cover;
   width: 10rem;
+  cursor: pointer;
+}
+
+.badges {
+  display: flex;
+  flex-direction: row;
+}
+
+.type-indicator {
+  margin: 0rem 0rem;
 }

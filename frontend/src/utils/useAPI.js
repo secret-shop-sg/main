@@ -12,8 +12,8 @@ export const useAPI = () => {
   const sendRequest = useCallback(
     async (
       url,
-      method = "GET",
       body = null,
+      method = "GET",
       headers = { "Content-Type": "application/json" }
     ) => {
       setIsLoading(true);
