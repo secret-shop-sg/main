@@ -36,6 +36,18 @@ const formReducer = (state, action) => {
         inputValidities: updatedValidities,
         formIsValid: formIsValid,
       };
+    case "CHECK_ACCEPTED":
+      // update accepted
+      const updatedAccepted = {
+        ...state.inputAccepted,
+        [action.input]: action.value,
+      };
+
+      // return updated state
+      return {
+        ...state,
+        inputAccepted: updatedAccepted,
+      };
     default:
       return state;
   }
@@ -43,7 +55,6 @@ const formReducer = (state, action) => {
 
 function Signup(props) {
   const [sendRequest, isLoading] = useAPI();
-  const [isValid, setIsValid] = useState();
   // use reducer for signup data
   const [formState, dispatchForm] = useReducer(formReducer, {
     inputValues: {
@@ -60,7 +71,10 @@ function Signup(props) {
       confirmedPassword: false,
     },
     formIsValid: false,
-    // TODO: input validities
+    inputAccepted: {
+      username: false,
+      email: false,
+    },
   });
 
   // input handler for all fields
@@ -72,7 +86,7 @@ function Signup(props) {
     } else {
       isValid = true;
     }
-    // add more validity check - switch case?
+    // add more validity checks - switch case?
 
     // dispatch to reducer
     dispatchForm({
@@ -97,28 +111,43 @@ function Signup(props) {
     };
   }, []);
 
+  // input is unfocused - check if value is accepted
   const onBlurHandler = async (event) => {
     const value = event.target.value;
-    const id = event.target.id;
+    const inputIdentifier = event.target.id;
     let responseData;
 
     // do some other validation for username below?
-    if (id === "username") {
-      responseData = await sendRequest("/api/user/validate/username", "POST", {
-        username: value,
-      });
-    } else if (id === "email") {
-      responseData = await sendRequest("/api/user/validate/email", "POST", {
-        email: value,
-      });
+    switch (inputIdentifier) {
+      case "username":
+        responseData = await sendRequest(
+          "/api/user/validate/username",
+          "POST",
+          {
+            username: value,
+          }
+        );
+      case "email":
+        responseData = await sendRequest("/api/user/validate/email", "POST", {
+          email: value,
+        });
+      default:
+        break;
     }
 
+    // handle response
     if (responseData) {
-      setIsValid(responseData.isValid);
-      console.log("isValid:", isValid);
+      // dispatch results to reducer
+      dispatchForm({
+        type: "CHECK_ACCEPTED",
+        value: responseData.isValid,
+        input: inputIdentifier,
+      });
+      console.log("isValid:", responseData.isValid);
     }
   };
 
+  // submit button pressed
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     // Todo: add some validation
