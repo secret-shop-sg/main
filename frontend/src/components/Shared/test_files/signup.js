@@ -13,12 +13,28 @@ const formReducer = (state, action) => {
         ...state.inputValues,
         [action.input]: action.value,
       };
-      // TODO: validities
+
+      // update field validity
+      const updatedValidities = {
+        ...state.inputValidities,
+        [action.input]: action.isValid,
+      };
+
+      // check if all fields are valid
+      let formIsValid = true;
+      for (const key in updatedValidities) {
+        if (!updatedValidities[key]) {
+          formIsValid = false;
+          break;
+        }
+      }
 
       // return updated state
       return {
         ...state,
         inputValues: updatedValues,
+        inputValidities: updatedValidities,
+        formIsValid: formIsValid,
       };
     default:
       return state;
@@ -37,22 +53,33 @@ function Signup(props) {
       confirmedPassword: "",
       // TODO: check if handling password securely
     },
+    inputValidities: {
+      username: false,
+      email: false,
+      password: false,
+      confirmedPassword: false,
+    },
+    formIsValid: false,
     // TODO: input validities
   });
 
   // input handler for all fields
   const inputChangeHandler = (inputIdentifier, value) => {
-    // isValid for third parameter
-
-    // test
-    console.log(value);
+    // check if valid
+    let isValid;
+    if (value.length === 0) {
+      isValid = false;
+    } else {
+      isValid = true;
+    }
+    // add more validity check - switch case?
 
     // dispatch to reducer
     dispatchForm({
       type: "UPDATE",
       value: value,
       input: inputIdentifier,
-      // TODO: add validity here as another value
+      isValid: isValid,
     });
   };
 
