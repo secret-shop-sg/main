@@ -1,38 +1,85 @@
-const allUsers = require("../data/userData");
+const User = require("../models/users");
+const DatabaseError = require("../models/databaseError");
 
-const addNewUser = (req, res, next) => {
-  const { username, email, location, inventory } = req.body;
+const addNewUser = async (req, res, next) => {
+  const { username, email, password } = req.body;
 
-  // returns undefined if not found
-  const existingUser = allUsers.find((user) => user.email === email);
-  // checks that no other email addresses
-  if (existingUser) {
-    const error = new Error(
-      "There is a registered account with this email address. Would you like to log in instead?"
-    );
-    error.status = 401;
-    return next(error);
+  const newUser = new User({
+    username,
+    email,
+    password,
+  });
+
+  try {
+    await newUser.save();
+  } catch (err) {
+    return next(new DatabaseError(err.message));
   }
 
-  // assigns new id = userID of last user +1
-  const newID = allUsers[allUsers.length - 1].userID + 1;
-
-  const createdUser = { username, userID: newID, email, location, inventory };
-
-  // add createdPlace to mongoDB here
-  res.status(201).json({ createdUser });
+  res.status(201).json({ userID: newUser.id });
 };
 
-const login = (req, res, next) => {
-  const { email, password } = req.body;
+// function to validate email and username
+const validateField = async (req, res, next) => {
+  const [field] = Object.keys(req.body);
+  let existingUser;
+  let isValid;
+
+  try {
+    if (field === "email") {
+      existingUser = await User.findOne({ email: req.body[field] });
+    } else if (field === "username") {
+      existingUser = await User.findOne({ username: req.body[field] });
+    }
+  } catch (err) {
+    return next(new DatabaseError(err.message));
+  }
+
+  if (existingUser) {
+    isValid = false;
+  } else isValid = true;
+
+  res.json({ isValid });
 };
 
-const getUser = (req, res, next) => {
+const login = async (req, res, next) => {
+  const { username, password } = req.body;
+  let existingUser;
+  let validCredentials;
+  let userID;
+
+  try {
+    existingUser = await User.findOne({ username });
+  } catch (err) {
+    return next(new DatabaseError(err.message));
+  }
+
+  if (!existingUser || existingUser.password !== password) {
+    validCredentials = false;
+  } else {
+    userID = existingUser.id;
+    validCredentials = true;
+  }
+
+  res.json({ validCredentials, userID });
+};
+
+const getUser = async (req, res, next) => {
   const userID = req.params.userID;
-  const matchedUser = allUsers.find((user) => user.userID == userID);
+  let matchedUser;
+
+  if (userID.match(/^[0-9a-fA-F]{24}$/)) {
+    try {
+      matchedUser = await User.findById(userID);
+    } catch (err) {
+      return next(new DatabaseError(err.message));
+    }
+  }
+
   res.json({ matchedUser });
 };
 
 exports.addNewUser = addNewUser;
 exports.getUser = getUser;
+exports.validateField = validateField;
 exports.login = login;

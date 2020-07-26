@@ -1,7 +1,5 @@
 // Page includes different methods of checking for errors
 
-const { query } = require("express-validator");
-
 const checkFilterLabelError = (inputs, filterValues) => {
   for (input of inputs) {
     input = input.replace("-", " ");

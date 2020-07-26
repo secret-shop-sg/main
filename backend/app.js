@@ -3,6 +3,7 @@ const express = require("express");
 const searchRoutes = require("./routes/search-routes");
 const listingRoutes = require("./routes/listing-routes");
 const userRoutes = require("./routes/user-routes");
+const mongoose = require("mongoose");
 
 const app = express();
 
@@ -53,4 +54,12 @@ app.use((error, req, res, next) => {
   });
 });
 
-app.listen(5000);
+mongoose
+  .connect(
+    "mongodb+srv://admin:8cfrMF1Y6UCM5nc0@linkdb.f9q9h.mongodb.net/users?retryWrites=true&w=majority",
+    { useNewUrlParser: true, useCreateIndex: true }
+  )
+  .then(() => app.listen(5000))
+  .catch((err) => {
+    console.log(err);
+  });
