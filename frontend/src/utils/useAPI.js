@@ -18,6 +18,10 @@ export const useAPI = () => {
     ) => {
       setIsLoading(true);
 
+      if (body) {
+        body = JSON.stringify(body);
+      }
+
       // create an abortController object which can be used to cancel request later on
       const httpAbortController = new AbortController();
       activeRequests.current.push(httpAbortController);

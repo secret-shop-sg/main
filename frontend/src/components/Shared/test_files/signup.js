@@ -77,21 +77,13 @@ function Signup(props) {
 
     // do some other validation for username below?
     if (id === "username") {
-      responseData = await sendRequest(
-        "/api/user/validate/username",
-        "POST",
-        JSON.stringify({
-          username: value,
-        })
-      );
+      responseData = await sendRequest("/api/user/validate/username", "POST", {
+        username: value,
+      });
     } else if (id === "email") {
-      responseData = await sendRequest(
-        "/api/user/validate/email",
-        "POST",
-        JSON.stringify({
-          email: value,
-        })
-      );
+      responseData = await sendRequest("/api/user/validate/email", "POST", {
+        email: value,
+      });
     }
 
     if (responseData) {
@@ -99,6 +91,25 @@ function Signup(props) {
       console.log("isValid:", isValid);
     }
   };
+  /*
+
+  const onSubmitHandler = async (event) => {
+    // Todo: add some validation
+    const responseData = await sendRequest(
+      "/api/user/signup",
+      "POST",
+      {username:,
+        email: ,
+        password: ,
+      }
+    );
+
+    if (responseData){
+      // responseData returns the user's userID
+      console.log(responseData.userID)
+    }
+  };
+  */
 
   return (
     <div className="wrapper">
@@ -112,7 +123,7 @@ function Signup(props) {
         >
           <FaUserCircle size={61} />
         </div>
-        <form>
+        <form onSubmit>
           <input
             type="text"
             id="username"
