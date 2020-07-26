@@ -72,14 +72,31 @@ function Signup(props) {
 
   const onBlurHandler = async (event) => {
     const value = event.target.value;
-    const responseData = await sendRequest("/api/user/validate/username", {
-      username: value,
-    });
-    // responseData returns a isValid property which represents whether the field is valid.
-    // to test invalid emails (alr exists) use Jake Smith or Jon Smith
-    // all other strings return true for now
+    const id = event.target.id;
+    let responseData;
+
+    // do some other validation for username below?
+    if (id === "username") {
+      responseData = await sendRequest(
+        "/api/user/validate/username",
+        "POST",
+        JSON.stringify({
+          username: value,
+        })
+      );
+    } else if (id === "email") {
+      responseData = await sendRequest(
+        "/api/user/validate/email",
+        "POST",
+        JSON.stringify({
+          email: value,
+        })
+      );
+    }
+
     if (responseData) {
       setIsValid(responseData.isValid);
+      console.log("isValid:", isValid);
     }
   };
 
@@ -112,6 +129,7 @@ function Signup(props) {
             name="login"
             placeholder="email"
             onChange={(e) => inputChangeHandler(e.target.id, e.target.value)}
+            onBlur={onBlurHandler}
           />
           <input
             type="password"
