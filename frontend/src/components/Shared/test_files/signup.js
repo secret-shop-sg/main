@@ -6,9 +6,6 @@ import { useAPI } from "../../../utils/useAPI";
 
 // reducer for signup data
 const formReducer = (state, action) => {
-  const [sendRequest, isLoading] = useAPI();
-  const [isValid, setIsValid] = useState();
-  
   switch (action.type) {
     case "UPDATE":
       // update field values
@@ -29,6 +26,8 @@ const formReducer = (state, action) => {
 };
 
 function Signup(props) {
+  const [sendRequest, isLoading] = useAPI();
+  const [isValid, setIsValid] = useState();
   // use reducer for signup data
   const [formState, dispatchForm] = useReducer(formReducer, {
     inputValues: {
@@ -71,14 +70,16 @@ function Signup(props) {
     };
   }, []);
 
-  const onBlurHandler = (event) => {
+  const onBlurHandler = async (event) => {
     const value = event.target.value;
-    const responseData = await sendRequest('/api/user/validate/username',{"username":value});
+    const responseData = await sendRequest("/api/user/validate/username", {
+      username: value,
+    });
     // responseData returns a isValid property which represents whether the field is valid.
     // to test invalid emails (alr exists) use Jake Smith or Jon Smith
     // all other strings return true for now
-    if (responseData){
-      setIsValid(isValid) = responseData.isValid;
+    if (responseData) {
+      setIsValid(responseData.isValid);
     }
   };
 

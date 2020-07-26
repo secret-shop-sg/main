@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Header from "../components/Main/Header";
+import Header from "../components/Shared/Header";
 import "../constants/styles/Bootstrap.css";
 import "./styles/ListingDetails.css";
 import { BsChatFill, BsHeartFill } from "react-icons/bs";
@@ -46,11 +46,14 @@ const ListingDetails = (props) => {
           </div>
           <div className="listingdetails">
             <span>
-              <img className="userpicture" src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/kermit-the-frog-attends-the-2017-drama-league-benefit-gala-news-photo-1568466133.jpg" />
+              <img
+                className="userpicture"
+                src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/kermit-the-frog-attends-the-2017-drama-league-benefit-gala-news-photo-1568466133.jpg"
+              />
             </span>
             <Link
               to={{
-                pathname: `/user`
+                pathname: `/user`,
               }}
             >
               <span>{listingToDisplay.owner}</span>
@@ -61,7 +64,7 @@ const ListingDetails = (props) => {
               <button className="btn-cop">
                 <BsChatFill />
                 <span> </span>Make an Offer!
-                </button>
+              </button>
             </span>
             <span>
               <button
@@ -70,11 +73,15 @@ const ListingDetails = (props) => {
               >
                 <BsHeartFill />
                 <span> </span>Like!
-                </button>
+              </button>
             </span>
             <hr></hr>
-            <p className="datelisted">Listed on {listingToDisplay.dateListed}</p>
-            <div><p>{listingToDisplay.description}</p></div>
+            <p className="datelisted">
+              Listed on {listingToDisplay.dateListed}
+            </p>
+            <div>
+              <p>{listingToDisplay.description}</p>
+            </div>
           </div>
           <div className="similarlistings">
             <h2>Similar Listings</h2>
@@ -82,34 +89,46 @@ const ListingDetails = (props) => {
             {similarListings.length === 0
               ? null
               : similarListings.map((listing) => (
-                <React.Fragment>
-                  <div className="similarlistingholder" key={listing.listingid}>
-                    <div className="similarlistingimageholder">
-                      <Link
-                        to={{
-                          pathname: `/listing/${listing.title}`,
-                          search: `${listing.listingId}`,
-                        }}>
-                        <img className="similarlistingimage" src={listing.image} />
-                      </Link>
+                  <React.Fragment>
+                    <div
+                      className="similarlistingholder"
+                      key={listing.listingid}
+                    >
+                      <div className="similarlistingimageholder">
+                        <Link
+                          to={{
+                            pathname: `/listing/${listing.title}`,
+                            search: `${listing.listingId}`,
+                          }}
+                        >
+                          <img
+                            className="similarlistingimage"
+                            src={listing.image}
+                          />
+                        </Link>
+                      </div>
+                      <div className="similarlistingdetailholder">
+                        <Link
+                          to={{
+                            pathname: `/listing/${listing.title}`,
+                            search: `${listing.listingId}`,
+                          }}
+                        >
+                          <h5>{listing.title}</h5>
+                        </Link>
+                        <img
+                          className="similarlistinguserdp"
+                          src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/kermit-the-frog-attends-the-2017-drama-league-benefit-gala-news-photo-1568466133.jpg"
+                        />
+                        <p>{listing.owner} | Rating</p>
+                        <p className="similarlistingdescription">
+                          {listing.description}
+                        </p>
+                      </div>
                     </div>
-                    <div className="similarlistingdetailholder">
-                      <Link
-                        to={{
-                          pathname: `/listing/${listing.title}`,
-                          search: `${listing.listingId}`,
-                        }}
-                      >
-                        <h5>{listing.title}</h5>
-                      </Link>
-                      <img className="similarlistinguserdp" src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/kermit-the-frog-attends-the-2017-drama-league-benefit-gala-news-photo-1568466133.jpg" />
-                      <p>{listing.owner} | Rating</p>
-                      <p className="similarlistingdescription">{listing.description}</p>
-                    </div>
-                  </div>
-                  <hr />
-                </React.Fragment>
-              ))}
+                    <hr />
+                  </React.Fragment>
+                ))}
           </div>
         </div>
       )}

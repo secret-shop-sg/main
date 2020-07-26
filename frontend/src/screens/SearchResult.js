@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Header from "../components/Main/Header";
+import Header from "../components/Shared/Header";
 import SearchListing from "../components/SearchResults/SearchListing";
 import NoMatches from "../components/SearchResults/NoMatches";
 import "./styles/SearchResult.css";
