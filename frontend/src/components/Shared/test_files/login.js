@@ -76,9 +76,13 @@ function Login(props) {
 
     // responseData returns the user's userID
     if (responseData) {
-      if (responseData.userID) {
+      if (!responseData.validCredentials) {
+        // means either username or password is wrong
+      } else {
+        // const userID = responseData.userID
+        // if validCredials === true, responseData also returns a userID u can store in redux
         // Todo: Stored the userID in redux
-        alert("Sign up successful");
+        alert("Log in successful");
       }
     }
   };
