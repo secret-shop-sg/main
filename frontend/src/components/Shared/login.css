@@ -120,6 +120,12 @@ a {
   color: #cccccc;
 }
 
+.validated-input {
+  border: 0px;
+  background-color: transparent;
+  text-align: center;
+}
+
 /* ANIMATIONS */
 
 /* Simple CSS3 Fade-in-down Animation */
