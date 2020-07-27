@@ -130,10 +130,12 @@ function Signup(props) {
             username: value,
           }
         );
+        break;
       case "email":
         responseData = await sendRequest("/api/user/validate/email", "POST", {
           email: value,
         });
+        break;
       default:
         break;
     }

@@ -26,22 +26,27 @@ const validateField = async (req, res, next) => {
   const [field] = Object.keys(req.body);
   let existingUser;
   let isValid;
+  let hasLoaded;
 
   try {
     if (field === "email") {
       existingUser = await User.findOne({ email: req.body[field] });
+      hasLoaded = true;
     } else if (field === "username") {
       existingUser = await User.findOne({ username: req.body[field] });
+      hasLoaded = true;
     }
   } catch (err) {
     return next(new DatabaseError(err.message));
   }
 
-  if (existingUser) {
-    isValid = false;
-  } else isValid = true;
+  if (hasLoaded) {
+    if (existingUser) {
+      isValid = false;
+    } else isValid = true;
 
-  res.json({ isValid });
+    res.json({ isValid });
+  }
 };
 
 const login = async (req, res, next) => {
