@@ -4,6 +4,9 @@ import "../../../constants/styles/Bootstrap.css";
 import { FaUserCircle } from "react-icons/fa";
 import { useAPI } from "../../../utils/useAPI";
 
+// icons
+import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
+
 // reducer for signup data
 const formReducer = (state, action) => {
   switch (action.type) {
@@ -180,24 +183,38 @@ function Signup(props) {
           <FaUserCircle size={61} />
         </div>
         <form onSubmit={onSubmitHandler}>
-          <input
-            type="text"
-            id="username"
-            className="fadeIn input textthing"
-            name="login"
-            placeholder="username"
-            onChange={(e) => inputChangeHandler(e.target.id, e.target.value)}
-            onBlur={onBlurHandler}
-          />
-          <input
-            type="email"
-            id="email"
-            className="fadeIn input textthing"
-            name="login"
-            placeholder="email"
-            onChange={(e) => inputChangeHandler(e.target.id, e.target.value)}
-            onBlur={onBlurHandler}
-          />
+          <div className="fadeIn input textthing">
+            <input
+              type="text"
+              id="username"
+              className="validated-input"
+              name="login"
+              placeholder="username"
+              onChange={(e) => inputChangeHandler(e.target.id, e.target.value)}
+              onBlur={onBlurHandler}
+            />
+            {formState.inputAccepted.username &&
+              formState.inputValues.username && <AiOutlineCheckCircle />}
+            {!formState.inputAccepted.username &&
+              formState.inputValues.username && <AiOutlineCloseCircle />}
+          </div>
+          <div className="fadeIn input textthing">
+            <input
+              type="email"
+              id="email"
+              className="validated-input"
+              name="login"
+              placeholder="email"
+              onChange={(e) => inputChangeHandler(e.target.id, e.target.value)}
+              onBlur={onBlurHandler}
+            />
+            {formState.inputAccepted.email && formState.inputValues.email && (
+              <AiOutlineCheckCircle />
+            )}
+            {!formState.inputAccepted.email && formState.inputValues.email && (
+              <AiOutlineCloseCircle />
+            )}
+          </div>
           <input
             type="password"
             id="password"
@@ -216,7 +233,7 @@ function Signup(props) {
           />
           <input
             type="submit"
-            className="fadeIn      input"
+            className="fadeIn input"
             value="Create Account"
           />
         </form>
