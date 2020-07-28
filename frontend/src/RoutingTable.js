@@ -6,6 +6,7 @@ import ListingDetails from "./screens/ListingDetails";
 import Main from "./screens/Main";
 import UserPage from "../src/screens/UserPage";
 import ServerError from "./screens/errors/ServerSideErrorPage";
+import CreateListing from "../src/screens/CreateListing";
 
 const RoutingTable = () => {
   return (
@@ -16,6 +17,7 @@ const RoutingTable = () => {
         <Route path="/listing" component={ListingDetails} />
         <Route path="/user" component={UserPage} />
         <Route exact path="/error/500" component={ServerError} />
+        <Route path="/create" component={CreateListing} />
         <Route component={ClientSideErrorsPage} />
         {/* Routes client to ClientSideErrorsPage page if path does not match any of the others*/}
       </Switch>
