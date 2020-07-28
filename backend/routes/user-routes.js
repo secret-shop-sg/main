@@ -1,6 +1,5 @@
 const express = require("express");
 const userController = require("../controllers/user-controller");
-//const { check } = require("express-validator");
 
 const router = express.Router();
 
@@ -13,5 +12,7 @@ router.get("/id/:userID", userController.getUser);
 router.post("/validate/email", userController.validateField);
 
 router.post("/validate/username", userController.validateField);
+
+router.patch("/update/:userID", userController.updateProfile);
 
 module.exports = router;

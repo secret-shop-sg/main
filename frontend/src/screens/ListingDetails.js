@@ -25,7 +25,7 @@ const ListingDetails = (props) => {
       }
     };
     getListing();
-  }, [listingID]);
+  }, [listingID, sendRequest]);
 
   const [liked, setliked] = useState(false);
 
@@ -42,12 +42,17 @@ const ListingDetails = (props) => {
           <div className="TitlePlatformImage">
             <h2>{listingToDisplay.title}</h2>
             <h5>For the {listingToDisplay.platform}</h5>
-            <img className="listingimage" src={listingToDisplay.image} />
+            <img
+              className="listingimage"
+              src={listingToDisplay.image}
+              alt={"image of " + listingToDisplay.title}
+            />
           </div>
           <div className="listingdetails">
             <span>
               <img
                 className="userpicture"
+                alt="user"
                 src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/kermit-the-frog-attends-the-2017-drama-league-benefit-gala-news-photo-1568466133.jpg"
               />
             </span>
@@ -89,46 +94,47 @@ const ListingDetails = (props) => {
             {similarListings.length === 0
               ? null
               : similarListings.map((listing) => (
-                  <React.Fragment>
-                    <div
-                      className="similarlistingholder"
-                      key={listing.listingid}
-                    >
-                      <div className="similarlistingimageholder">
-                        <Link
-                          to={{
-                            pathname: `/listing/${listing.title}`,
-                            search: `${listing.listingId}`,
-                          }}
-                        >
-                          <img
-                            className="similarlistingimage"
-                            src={listing.image}
-                          />
-                        </Link>
-                      </div>
-                      <div className="similarlistingdetailholder">
-                        <Link
-                          to={{
-                            pathname: `/listing/${listing.title}`,
-                            search: `${listing.listingId}`,
-                          }}
-                        >
-                          <h5>{listing.title}</h5>
-                        </Link>
+                <React.Fragment>
+                  <div
+                    className="similarlistingholder"
+                    key={listing.listingid}
+                  >
+                    <div className="similarlistingimageholder">
+                      <Link
+                        to={{
+                          pathname: `/listing/${listing.title}`,
+                          search: `${listing.listingId}`,
+                        }}
+                      >
                         <img
-                          className="similarlistinguserdp"
-                          src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/kermit-the-frog-attends-the-2017-drama-league-benefit-gala-news-photo-1568466133.jpg"
+                          className="similarlistingimage"
+                          src={listing.image}
+                          alt="similar listing"
                         />
-                        <p>{listing.owner} | Rating</p>
-                        <p className="similarlistingdescription">
-                          {listing.description}
-                        </p>
-                      </div>
+                      </Link>
                     </div>
-                    <hr />
-                  </React.Fragment>
-                ))}
+                    <div className="similarlistingdetailholder">
+                      <Link
+                        to={{
+                          pathname: `/listing/${listing.title}`,
+                          search: `${listing.listingId}`,
+                        }}
+                      >
+                        <h5>{listing.title}</h5>
+                      </Link>
+                      <img
+                        className="similarlistinguserdp"
+                        src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/kermit-the-frog-attends-the-2017-drama-league-benefit-gala-news-photo-1568466133.jpg"
+                      />
+                      <p>{listing.owner} | Rating</p>
+                      <p className="similarlistingdescription">
+                        {listing.description}
+                      </p>
+                    </div>
+                  </div>
+                  <hr />
+                </React.Fragment>
+              ))}
           </div>
         </div>
       )}

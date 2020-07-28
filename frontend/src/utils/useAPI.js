@@ -36,7 +36,7 @@ export const useAPI = () => {
 
         // response.ok = response with status code of 200+ = no errors
         // By default responses with error status codes do not throw errors
-        if (!response.ok) {
+        if (!response.ok || !responseData) {
           let err = new Error(responseData.message || response.statusText);
           err.status = responseData.status || response.status;
           throw err;
@@ -51,7 +51,7 @@ export const useAPI = () => {
         } else history.replace("/error/500", error);
       }
     },
-    []
+    [history]
   );
 
   useEffect(() => {

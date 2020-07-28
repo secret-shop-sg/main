@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import Header from "../components/Shared/Header";
 import { GrGallery } from "react-icons/gr";
 import "./styles/CreateListing.css";
@@ -26,13 +25,17 @@ function CreateListing() {
 
                     </textarea>
                     <hr></hr>
-                    <h2> Your Conditions</h2>
-                    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-                    <label for="vehicle1"> I have a bike</label><br />
-                    <input type="checkbox" id="vehicle2" name="vehicle2" value="Car" />
-                    <label for="vehicle2"> I have a car</label><br />
-                    <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat" />
-                    <label for="vehicle3"> I have a boat</label><br /><br />
+                    <div className="conditions" >
+                        <h2> Your Conditions</h2>
+                        <input type="checkbox" id="sell" name="sell" value="Sell" />
+                        <label for="sell">Sell for: $ <span>  </span><input type="text"></input></label><br />
+                        <hr></hr>
+                        <input type="checkbox" id="rent" name="rent" value="Rent" />
+                        <label for="rent">Rent for: $ <span> </span><input type="text"></input> /day</label><br />
+                        <hr></hr>
+                        <input type="checkbox" id="trade" name="trade" value="Trade" />
+                        <label for="trade">Trade for: <input type="text"></input></label><br /><br />
+                    </div>
                 </form>
             </div>
         </div>

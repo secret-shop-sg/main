@@ -1,7 +1,7 @@
 const allListings = require("../data/dummyData");
 const searchAlgorithmns = require("../utils/searchAlgorithmns");
 const Filters = require("../constants/Filters");
-const ErrorHandlers = require("../utils/ErrorHandlers");
+const errorHandlers = require("../utils/errorHandlers");
 
 const getSearches = (req, res, next) => {
   let matchedListings;
@@ -16,14 +16,14 @@ const getSearches = (req, res, next) => {
   };
 
   const queries = req.query;
-  ErrorHandlers.checkEmptyParamsError(queries);
-  ErrorHandlers.checkFilterLabelError(
+  errorHandlers.checkEmptyParamsError(queries);
+  errorHandlers.checkFilterLabelError(
     Object.keys(queries),
     Filters.FILTER_LABELS
   );
 
   if (queries.phrase) {
-    ErrorHandlers.checkRepeatedParamsError(queries.phrase);
+    errorHandlers.checkRepeatedParamsError(queries.phrase);
     const searchphrase = queries.phrase.toLowerCase().split("-");
     const listingsToUse = getListingsToUse(matchedListings);
     matchedListings = listingsToUse.filter((listing) =>
@@ -32,10 +32,10 @@ const getSearches = (req, res, next) => {
   }
   // handles filters for different game platforms
   if (queries.platform) {
-    ErrorHandlers.checkRepeatedParamsError(queries.platform);
+    errorHandlers.checkRepeatedParamsError(queries.platform);
     // platforms is an array representing the different platforms selected by the user in the checkbox on the frontend
     const platforms = queries.platform.split("%");
-    ErrorHandlers.checkFilterLabelError(
+    errorHandlers.checkFilterLabelError(
       Object.values(platforms),
       Filters.PLATFORMS_SUPPORTED
     );
@@ -46,10 +46,10 @@ const getSearches = (req, res, next) => {
   }
   // handles filters for different listing types
   if (queries.listingtype) {
-    ErrorHandlers.checkRepeatedParamsError(queries.platform);
+    errorHandlers.checkRepeatedParamsError(queries.platform);
     // listingTypes is an array representing the different platforms selected by the user in the checkbox on the frontend
     const listingTypes = queries.listingtype.split("%");
-    ErrorHandlers.checkFilterLabelError(listingTypes, Filters.LISTING_TYPES);
+    errorHandlers.checkFilterLabelError(listingTypes, Filters.LISTING_TYPES);
     const listingsToUse = getListingsToUse(matchedListings);
     matchedListings = listingsToUse.filter((listing) =>
       searchAlgorithmns.searchFilters(listing, "listingtype", listingTypes)
