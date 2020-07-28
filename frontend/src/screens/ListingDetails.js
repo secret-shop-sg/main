@@ -25,7 +25,7 @@ const ListingDetails = (props) => {
       }
     };
     getListing();
-  }, [listingID]);
+  }, [listingID, sendRequest]);
 
   const [liked, setliked] = useState(false);
 
@@ -42,7 +42,11 @@ const ListingDetails = (props) => {
           <div className="TitlePlatformImage">
             <h2>{listingToDisplay.title}</h2>
             <h5>For the {listingToDisplay.platform}</h5>
-            <img className="listingimage" src={listingToDisplay.image} />
+            <img
+              className="listingimage"
+              src={listingToDisplay.image}
+              alt={"image of " + listingToDisplay.title}
+            />
           </div>
           <div className="listingdetails">
             <span>

@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
   inventory: [[String, String, String]],
   // inventory format -> Game name, game platform, url. First 2 need to be sent by user, last one determined by express
   wishlist: [[String, String, String]],
+  description: String,
   listings: [{ type: mongoose.Types.ObjectId, ref: "Listings" }],
 });
 

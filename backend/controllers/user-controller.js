@@ -89,26 +89,22 @@ const getUser = async (req, res, next) => {
     } catch (err) {
       return next(new DatabaseError(err.message));
     }
+
+    if (matchedUser.inventory) {
+      matchedUser.inventory = utilFunctions.addImageURL(matchedUser.inventory);
+    }
+
+    if (matchedUser.wishlist) {
+      matchedUser.wishlist = utilFunctions.addImageURL(matchedUser.wishlist);
+    }
   }
-
-  let { inventory, wishlist } = matchedUser;
-
-  if (inventory) {
-    inventory = utilFunctions.addImageURL(inventory);
-  }
-
-  if (wishlist) {
-    wishlist = utilFunctions.addImageURL(wishlist);
-  }
-
-  matchedUser.wishlist = wishlist;
-  matchedUser.inventory = inventory;
 
   res.json({ matchedUser });
 };
 
 const updateProfile = async (req, res, next) => {
-  const { inventory, wishlist, location, userID } = req.body;
+  const userID = req.params.userID;
+  const { inventory, wishlist, location } = req.body;
   let matchedUser;
 
   try {

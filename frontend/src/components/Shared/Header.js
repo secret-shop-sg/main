@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import "./Header.css";
 import { FaSearch, FaUserAlt, FaUserPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { Modal } from "react-responsive-modal";
-import Login from "./test_files/login";
-import Signup from "./test_files/signup";
+import Login from "./login";
+import Signup from "./signup";
 // header component
 const Header = () => {
   const [enteredText, setEnteredText] = useState("");
@@ -96,8 +95,18 @@ const Header = () => {
           </span>
         </div>
       </div>
-      {loginForm ? <Login closeButtonHandler={loginFormHandler} loginFormHandler={loginFormHandler} /> : null}
-      {signupForm ? <Signup closeButtonHandler={signupFormHandler} signupFormHandler={signupFormHandler} /> : null}
+      {loginForm ? (
+        <Login
+          closeButtonHandler={loginFormHandler}
+          loginFormHandler={loginFormHandler}
+        />
+      ) : null}
+      {signupForm ? (
+        <Signup
+          closeButtonHandler={signupFormHandler}
+          signupFormHandler={signupFormHandler}
+        />
+      ) : null}
     </header>
   );
 };

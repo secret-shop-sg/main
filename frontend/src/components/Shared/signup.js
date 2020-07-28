@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect, useReducer } from "react";
-import "../login.css";
-import "../../../constants/styles/Bootstrap.css";
+import "./login.css";
+import "../../constants/styles/Bootstrap.css";
 import { FaUserCircle } from "react-icons/fa";
-import { useAPI } from "../../../utils/useAPI";
+import { useAPI } from "../../utils/useAPI";
 
 // icons
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";

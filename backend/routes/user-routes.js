@@ -13,6 +13,6 @@ router.post("/validate/email", userController.validateField);
 
 router.post("/validate/username", userController.validateField);
 
-router.patch("/updateProfile", userController.updateProfile);
+router.patch("/update/:userID", userController.updateProfile);
 
 module.exports = router;

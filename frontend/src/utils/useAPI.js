@@ -51,7 +51,7 @@ export const useAPI = () => {
         } else history.replace("/error/500", error);
       }
     },
-    []
+    [history]
   );
 
   useEffect(() => {

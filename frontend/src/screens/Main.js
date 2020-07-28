@@ -23,7 +23,7 @@ const Main = (props) => {
 
     // call async function
     getListings();
-  }, []);
+  }, [sendRequest]);
 
   // function to display listings
   const displayListings = useCallback(() => {
@@ -44,7 +44,7 @@ const Main = (props) => {
         />
       ));
     }
-  }, [listings]);
+  }, [listings, isLoading]);
 
   return (
     <div className="mainScreen">
