@@ -8,7 +8,7 @@ router.get("/id/:listingID", listingController.getListing);
 
 router.get("/recent", listingController.getMostRecentListings);
 
-//router.post("/",listingController.addListing);
+router.post("/add", listingController.addListing);
 
 //router.patch("/",listingController.changeListing);
 

@@ -13,10 +13,10 @@ const userSchema = new mongoose.Schema({
   // inventory format -> Game name, game platform, url. First 2 need to be sent by user, last one determined by express
   wishlist: [[String, String, String]],
   description: String,
-  listings: [{ type: mongoose.Types.ObjectId, ref: "Listings" }],
+  listings: [{ type: mongoose.Types.ObjectId, ref: "Listing" }],
 });
 
-// ensures that all fields marked with unique must be unique in database
+// throws error if fields marked as unique are not unique
 userSchema.plugin(uniqueValidator);
 
 // collection will be named 'users' by default

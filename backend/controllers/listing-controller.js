@@ -1,7 +1,10 @@
 const allListings = require("../data/dummyData");
+const Listing = require("../models/listings");
+const User = require("../models/users");
+const mongoose = require("mongoose");
+const DatabaseError = require("../models/databaseError");
 
 // To be eventually added
-// const newListing
 // const updateListing
 // const deleteLising
 
@@ -34,9 +37,60 @@ const getListing = (req, res, next) => {
   } else res.json({ listingToDisplay });
 };
 
-const addListing = (req, res, next) => {
-  const {} = req.body;
-  res.status(201).json();
+const addListing = async (req, res, next) => {
+  // optional parameters should be passed as null
+  const {
+    hasItem,
+    description,
+    ownerID,
+    owner,
+    wantsItem,
+    sellingPrice,
+    rentalPrice,
+  } = req.body;
+
+  const dateListed = new Date();
+  let user;
+
+  // new listing to be pushed to db
+  const newListing = Listing({
+    hasItem,
+    description,
+    ownerID,
+    owner,
+    wantsItem,
+    sellingPrice,
+    rentalPrice,
+    dateListed,
+  });
+
+  // finds the owner of listing to add listing to his data
+  try {
+    user = await User.findById(ownerID);
+  } catch (err) {
+    return next(new DatabaseError(err.message));
+  }
+
+  // preventive measure in case ownerID is wrong.
+  // Should not happen because you have to be logged in to post listings
+  if (!user) {
+    const error = new Error("Cannot find user with the provided ID");
+    error.status = 404;
+    return next(error);
+  }
+
+  try {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    await newListing.save({ session });
+    user.listings.push(newListing);
+    await user.save({ session });
+    await session.commitTransaction();
+  } catch (err) {
+    return next(new DatabaseError(err.message));
+  }
+
+  res.status(201).json(newListing.id);
 };
 
 const getMostRecentListings = (req, res, next) => {
@@ -82,4 +136,5 @@ const getMostRecentListings = (req, res, next) => {
 };
 
 exports.getListing = getListing;
+exports.addListing = addListing;
 exports.getMostRecentListings = getMostRecentListings;

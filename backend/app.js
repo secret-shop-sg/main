@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const searchRoutes = require("./routes/search-routes");
 const listingRoutes = require("./routes/listing-routes");
 const userRoutes = require("./routes/user-routes");
+const gameRoutes = require("./routes/game-routes");
 
 const app = express();
 
@@ -32,6 +33,9 @@ app.use("/api/listing", listingRoutes);
 
 // api requests for user info/ login/signup
 app.use("/api/user", userRoutes);
+
+// api requests for images of games
+app.use("/api/game", gameRoutes);
 
 // if api calls a wrong address
 app.use((req, res, next) => {
