@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import Header from "../components/Shared/Header";
-import SearchListing from "../components/SearchResults/SearchListing";
 import NoMatches from "../components/SearchResults/NoMatches";
 import "./styles/SearchResult.css";
 import { useAPI } from "../utils/useAPI";
 import ListingsFilter from "../components/SearchResults/ListingsFilter";
+import HomeListing from "../components/Home/HomeListing";
 
 const SearchResult = (props) => {
   const [sendRequest, isLoading] = useAPI();
@@ -47,37 +46,39 @@ const SearchResult = (props) => {
   }, [apiPath, sendRequest]);
 
   return (
-    <div style={{ width: "100%" }}>
+    <div className="screen">
       <Header />
-      <ListingsFilter filterLabel="platform" />
-      <ListingsFilter filterLabel="listingtype" />
-      {/* components in the div below only loads after data has been retrieved from API */}
-      {!isLoading && matchedListings && (
-        <div className="searchResultsPageBody">
-          {matchedListings.length === 0 ? (
-            // No matches for what the user found
-            <NoMatches query={query} />
-          ) : (
-            matchedListings.map((listing) => (
-              <Link
-                to={{
-                  pathname: `/listing/${listing.title}`,
-                  search: `${listing.listingId}`,
-                }}
-                key={listing.listingId}
-              >
-                {/*url = /listing/?(title of listing) */}
-                <SearchListing listing={listing} />
-              </Link>
-            ))
-          )}
-          {/* Todo: Add this section when backend is included (Alot easier with backend)
+      <div>
+        <ListingsFilter filterLabel="platform" />
+        <ListingsFilter filterLabel="listingtype" />
+      </div>
+      <div className="display">
+        {/* components in the div below only loads after data has been retrieved from API */}
+        {!isLoading && matchedListings && matchedListings.length === 0 && (
+          <NoMatches query={query} />
+        )}
+        {!isLoading && matchedListings && matchedListings.length > 0 && (
+          <div className="results-display">
+            {matchedListings.map((listing) => (
+              <HomeListing
+                title={listing.title}
+                description={listing.description}
+                image={listing.image}
+                id={listing.listingId}
+                platform={listing.platform}
+                isTrading={listing.isTrading}
+                isRenting={listing.isRenting}
+                isSelling={listing.isSelling}
+              />
+            ))}
+          </div>
+        )}
+        {/* Todo: Add this section when backend is included (Alot easier with backend)
           <hr />
           <p style={{margin:"20px"}}>Check out some of our other listings on the same platform</p>
           Call some API here
           */}
-        </div>
-      )}
+      </div>
     </div>
   );
 };
