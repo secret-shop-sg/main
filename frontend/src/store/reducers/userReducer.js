@@ -24,3 +24,10 @@ const userReducer = (state = intialState, action) => {
 };
 
 export default userReducer;
+
+/*
+// HOW TO GET USER ID
+import { useSelector } from "react-redux";
+const id = useSelector((state) => state.user.userId);
+// if not logged in, id will be null
+*/
