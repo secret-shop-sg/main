@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "../components/Shared/Header";
 import { GrGallery } from "react-icons/gr";
+import { GoPlus } from "react-icons/go";
 import "./styles/CreateListing.css";
 function CreateListing() {
     return (
@@ -16,12 +17,12 @@ function CreateListing() {
                     <input
                         type="text"
                         id="title"
-                        className="input"
+                        className="listinginput"
                         name="title"
                         placeholder="eg. SSBU for Trade; Animal Crossing for Rent; Kirby Star Allies for sale"
                     />
                     <p className="inputHeader2">Description</p>
-                    <textarea placeholder="eg. Near Mint, date bought etc." className="input" name="description" rows="4" cols="50">
+                    <textarea placeholder="eg. Near Mint, date bought etc." className="listinginput" name="description" rows="4" cols="50">
 
                     </textarea>
                     <hr></hr>
@@ -34,7 +35,7 @@ function CreateListing() {
                         <label for="rent">Rent for: $ <span> </span><input type="text"></input> /day</label><br />
                         <hr></hr>
                         <input type="checkbox" id="trade" name="trade" value="Trade" />
-                        <label for="trade">Trade for: <input type="text"></input></label><br /><br />
+                        <label for="trade">Trade for: <input type="text"></input><GoPlus /></label><br /><br />
                     </div>
                 </form>
             </div>

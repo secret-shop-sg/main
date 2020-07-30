@@ -23,7 +23,7 @@
     margin-top:2%;
     font-size: 1.2rem;
 }
-.input{
+.listinginput{
     margin-left:5px;
     width:50%;
     padding:1%;
@@ -36,10 +36,10 @@
     font-size:1.2rem;
     margin-bottom:20px;
 }
-.input:hover{
+.listinginput:hover{
 background-color: lightgray ;
 }
-.input:active{
+.listinginput:active{
     -moz-transform: scale(0.95);
     -webkit-transform: scale(0.95);
     -o-transform: scale(0.95);
