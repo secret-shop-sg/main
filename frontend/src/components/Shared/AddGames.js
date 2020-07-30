@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { BACKEND_ADDRESS, PLATFORMS_SUPPORTED } from "../constants/Details";
-import { useAPI } from "../utils/useAPI";
+import { BACKEND_ADDRESS, PLATFORMS_SUPPORTED } from "../../constants/Details";
+import { useAPI } from "../../utils/useAPI";
 import "./AddGames.css";
 
 const AddGames = (props) => {
-  // todo: add image onclick event that setstate using function passed to it as props. then tracks image so it wont appear in search area
   const initialPath = "/api/game";
   const [sendRequest, isLoading] = useAPI();
   const [matchedGames, setMatchedGames] = useState();
   const [apiPath, setApiPath] = useState();
   const [dropDownOptions] = useState(["All"].concat(PLATFORMS_SUPPORTED));
   const [query, setQuery] = useState({ title: null, platform: null });
-  const [selectedGames, setSelectedGames] = useState([]);
+  const selectedGamesID = props.selectedGame.map((game) => game.id);
 
+  // get games from mongodb
   useEffect(() => {
     const getListing = async () => {
       const responseData = await sendRequest(apiPath);
@@ -27,6 +27,7 @@ const AddGames = (props) => {
     }
   }, [sendRequest, apiPath]);
 
+  // contructs the api path when user types in search bar and/or clicks on the dorp down option
   useEffect(() => {
     if (query.title && query.platform) {
       setApiPath(
@@ -59,8 +60,14 @@ const AddGames = (props) => {
     }
   };
 
+  // changes the state of its parent component so selected image is displayed
   const onClickGame = (event) => {
-    setSelectedGames(selectedGames.concat(event.target.id));
+    props.setSelectedGame([
+      {
+        id: event.target.id,
+        imageURL: event.target.src,
+      },
+    ]);
   };
 
   return (
@@ -82,7 +89,7 @@ const AddGames = (props) => {
         matchedGames &&
         matchedGames.map(
           (matchedGame, index) =>
-            !selectedGames.includes(matchedGame._id) && (
+            !selectedGamesID.includes(matchedGame._id) && (
               <div className="matched-game-div" key={index}>
                 <img
                   src={BACKEND_ADDRESS + matchedGame.imageURL}

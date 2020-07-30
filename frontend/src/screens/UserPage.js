@@ -90,11 +90,34 @@ const UserPage = () => {
               </p>
             </div>
           </div>
+          <div className="inventory">
+            <h3>{userdetails.username}'s Inventory</h3>
+            <div className="scrollMenu" >
+              <img className="inventoryImg" src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg" />
+              <img className="inventoryImg" src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg" />
+              <img className="inventoryImg" src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg" />
+              <img className="inventoryImg" src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg" />
+              <img className="inventoryImg" src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg" />
+              <img className="inventoryImg" src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg" />
+              <img className="inventoryImg" src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg" />
+              <img className="inventoryImg" src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg" />
+              <img className="inventoryImg" src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg" />
+              <img className="inventoryImg" src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg" />
+              <img className="inventoryImg" src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg" />
+              <img className="inventoryImg" src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg" />
+              <img className="inventoryImg" src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg" />
+              <img className="inventoryImg" src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg" />
+              <img className="inventoryImg" src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg" />
+              <img className="inventoryImg" src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg" />
+            </div>
+          </div>
           <div className="userlistings">
+            <h3 style={{ marginBottom: "2%" }}>{userdetails.username}'s Listings</h3>
             <ListBox />
           </div>
-        </div>)}
-    </div>
+        </div>)
+      }
+    </div >
   );
 };
 

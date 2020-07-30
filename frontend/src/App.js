@@ -1,31 +1,28 @@
 import React from "react";
-//import { Provider } from "react-redux";
-//import { combineReducers, createStore } from "redux";
+import { Provider } from "react-redux";
+import { combineReducers, createStore } from "redux";
 import "./App.css";
 import RoutingTable from "./RoutingTable";
 
 // import reducers
-//import listingReducer from "./store/reducers/listingReducer";
+import userReducer from "./store/reducers/userReducer";
 
 // combine reducers
-/*
 const rootReducer = combineReducers({
-  listings: listingReducer,
+  user: userReducer,
 });
 
 // create store
 const store = createStore(rootReducer);
-*/
 
 function App() {
   return (
-    //<Provider store={store}>
-    <div>
-      <RoutingTable />
-      <div className="App"></div>
-    </div>
-      
-    //</Provider>
+    <Provider store={store}>
+      <div>
+        <RoutingTable />
+        <div className="App"></div>
+      </div>
+    </Provider>
   );
 }
 

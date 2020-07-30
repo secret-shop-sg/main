@@ -1,58 +1,62 @@
-.imageUploader{
-    border: 2px dashed gray;
-    width: 20%;
-    margin: 2% 3%;
-    height:200px;
-    text-align: center;
-    float: left;
+.imageUploader {
+  border: 2px dashed gray;
+  width: 20%;
+  margin: 2% 3%;
+  height: 200px;
+  text-align: center;
+  float: left;
 }
-#galleryimage{
-    margin-top: 30px;
-    color: lightgray;
+#galleryimage {
+  margin-top: 30px;
+  color: lightgray;
 }
-#uploadButton{
-    background-color: green;
-    color:white;
-    border:white 1px solid;
-    border-radius: 5px;
-    margin-top: 20px
-
+#uploadButton {
+  background-color: green;
+  color: white;
+  border: white 1px solid;
+  border-radius: 5px;
+  margin-top: 20px;
 }
-.inputHeader{
-    margin-left:5px;
-    margin-top:2%;
-    font-size: 1.2rem;
+.inputHeader {
+  margin-left: 5px;
+  margin-top: 2%;
+  font-size: 1.2rem;
 }
-.input{
-    margin-left:5px;
-    width:50%;
-    padding:1%;
-    padding-top: 0.5%;
-    padding-bottom: 0.5%;
-    text-align: left;
-    background-color: white;
-    color:black;
-    border: 1px solid lightgray;
-    font-size:1.2rem;
-    margin-bottom:20px;
+.listinginput {
+  margin-left: 5px;
+  width: 50%;
+  padding: 1%;
+  padding-top: 0.5%;
+  padding-bottom: 0.5%;
+  text-align: left;
+  background-color: white;
+  color: black;
+  border: 1px solid lightgray;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
 }
-.input:hover{
-background-color: lightgray ;
+.listinginput:hover {
+  background-color: lightgray;
 }
-.input:active{
-    -moz-transform: scale(0.95);
-    -webkit-transform: scale(0.95);
-    -o-transform: scale(0.95);
-    -ms-transform: scale(0.95);
-    transform: scale(0.95);
-}
-
-.inputHeader2{
-    margin-left:5px;
-    font-size: 1.2rem;
-    margin-top:0;
+.listinginput:active {
+  -moz-transform: scale(0.95);
+  -webkit-transform: scale(0.95);
+  -o-transform: scale(0.95);
+  -ms-transform: scale(0.95);
+  transform: scale(0.95);
 }
 
-.conditions{
-    margin-left: 3%
+.inputHeader2 {
+  margin-left: 5px;
+  font-size: 1.2rem;
+  margin-top: 0;
+}
+
+.conditions {
+  margin-left: 3%;
+}
+
+.selected-listing-game-image {
+  width: 150px;
+  height: 200px;
 }

@@ -5,10 +5,9 @@ import ClientSideErrorsPage from "./screens/errors/ClientSideErrorsPage";
 import ListingDetails from "./screens/ListingDetails";
 import Main from "./screens/Main";
 import UserPage from "./screens/UserPage";
-import ServerError from "./screens/errors/ServerSideErrorPage";
+import ServerSideErrorPage from "./screens/errors/ServerSideErrorPage";
 import CreateListing from "./screens/CreateListing";
-import AddGames from "./components/AddGames";
-
+import UpdateUser from "./screens/updateUserProfile";
 const RoutingTable = () => {
   return (
     <Router>
@@ -17,9 +16,9 @@ const RoutingTable = () => {
         <Route path="/search" component={SearchResult} />
         <Route path="/listing" component={ListingDetails} />
         <Route path="/user" component={UserPage} />
-        <Route exact path="/error/500" component={ServerError} />
+        <Route exact path="/error/500" component={ServerSideErrorPage} />
         <Route path="/create" component={CreateListing} />
-        <Route path="/test" component={AddGames} />
+        <Route path="/update" component={UpdateUser} />
         <Route component={ClientSideErrorsPage} />
         {/* Routes client to ClientSideErrorsPage page if path does not match any of the others*/}
       </Switch>
