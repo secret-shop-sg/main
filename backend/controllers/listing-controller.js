@@ -36,7 +36,47 @@ const getListing = (req, res, next) => {
     res.json({ listingToDisplay, similarListings });
   } else res.json({ listingToDisplay });
 };
+/*
 
+const getListing = async (req, res, next) => {
+  const listingID = req.params.listingID;
+  let listingToDisplay;
+  let similarListings;
+
+  try {
+    listingToDisplay = await Listing.findById(listingID);
+  } catch (err) {
+    return next(new DatabaseError(err.message));
+  }
+
+  if (listingToDisplay) {
+    try {
+
+      User.count().exec(function (err, count) {
+
+        // Get a random entry
+        var random = Math.floor(Math.random() * count)
+      
+        // Again query all users but only fetch one offset by our random #
+        User.findOne().skip(random).exec(
+          function (err, result) {
+            // Tada! random user
+            console.log(result) 
+          })
+      })
+
+      similarListings = await Listing.find({
+        platform: listingToDisplay.platform,
+      }).limit(3);
+    } catch (err) {
+      return next(new DatabaseError(err.message));
+    }
+  }
+
+  res.json({ listingToDisplay, similarListings });
+};
+
+*/
 const addListing = async (req, res, next) => {
   // optional parameters should be passed as null
   const {

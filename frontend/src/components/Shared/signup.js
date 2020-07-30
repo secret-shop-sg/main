@@ -57,7 +57,7 @@ const formReducer = (state, action) => {
 };
 
 function Signup(props) {
-  const [sendRequest, isLoading] = useAPI();
+  const [sendRequest] = useAPI();
   // use reducer for signup data
   const [formState, dispatchForm] = useReducer(formReducer, {
     inputValues: {
