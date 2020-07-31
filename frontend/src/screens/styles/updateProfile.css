@@ -1,29 +1,3 @@
-.pictureUpdater {
-  width: 20%;
-  height: 15%;
-  float: left;
-  margin: 2% 3%;
-}
-
-.currentPicture {
-  width: 100%;
-}
-
-.changePicture {
-  position: relative;
-  top: -10%;
-  left: 26%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  background-color: white;
-  color: black;
-  font-size: 16px;
-  padding: 1%;
-  border: 1px black solid;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
 .infoupdater {
   margin-left: 5px;
   width: 50%;

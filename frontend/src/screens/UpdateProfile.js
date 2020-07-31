@@ -4,6 +4,7 @@ import AddGames from "../components/Shared/AddGames";
 import { useAPI } from "../utils/useAPI";
 import "./styles/UpdateProfile.css";
 import { FiEdit2 } from "react-icons/fi";
+import ImageUpload from "../components/UpdateProfile/ImageUpload";
 // import { useSelector } from "react-redux";
 
 function UpdateProfile() {
@@ -61,19 +62,18 @@ function UpdateProfile() {
   const inputDescriptionChangeHandler = (inputIdentifier, value) => {
     setDescription(value);
   };
-  return (
-    <div>
-      <Header />
-      <div className="pictureUpdater">
-        <img
+
+  /*
+temp image: 
+<img
           className="currentPicture"
           src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/kermit-the-frog-attends-the-2017-drama-league-benefit-gala-news-photo-1568466133.jpg"
         />
-        <button className="changePicture">
-          <FiEdit2 />
-          Change Profile Picture
-        </button>
-      </div>
+  */
+  return (
+    <div>
+      <Header />
+      <ImageUpload />
       <div className="userInformation">
         <p className="inputHeader">Username</p>
         {!editUsername ? (

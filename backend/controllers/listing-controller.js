@@ -119,11 +119,20 @@ const addListing = async (req, res, next) => {
     return next(error);
   }
 
+  const ownedGames = user.inventory.map((game) => game.gameID);
+
   try {
     const session = await mongoose.startSession();
     session.startTransaction();
     await newListing.save({ session });
+    // save listing in user DB
     user.listings.push(newListing);
+
+    // if game in listing is not in inventory, add in inventory
+    if (!ownedGames.includes(hasItem.gameID)) {
+      user.inventory.push(hasItem);
+    }
+
     await user.save({ session });
     await session.commitTransaction();
   } catch (err) {
