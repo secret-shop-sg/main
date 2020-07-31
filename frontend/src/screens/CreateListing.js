@@ -1,12 +1,26 @@
 import React, { useState } from "react";
+import { useAPI } from "../utils/useAPI";
+import { useHistory } from "react-router-dom";
 import Header from "../components/Shared/Header";
 import AddGames from "../components/Shared/AddGames";
 import { GrGallery } from "react-icons/gr";
 import { GoPlus } from "react-icons/go";
-import { BACKEND_ADDRESS } from "../constants/Details";
+//import { useSelector } from "react-redux";
 import "./styles/CreateListing.css";
+
 function CreateListing() {
   const [listedGame, setListedGame] = useState([]);
+  const [sendRequest] = useAPI();
+  const [isChecked, setIsChecked] = useState(false);
+  const history = useHistory();
+
+  const ownerID = "5f1ed6a160fc2b0d9025117c";
+  const owner = "Billy";
+
+  /* uncomment after page completed
+  const ownerID = useSelector((state) => state.user.userId);
+  const owner = 
+  */
 
   const deselectGame = () => {
     setListedGame([]);
@@ -14,8 +28,30 @@ function CreateListing() {
 
   // function that triggers when user submits the form.
   // Todo: link to api when all data is available
-  const onSubmitHandler = (event) => {
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
+    const responseData = await sendRequest("/api/listing/add", "POST", {
+      // change the fields below to the actual fields
+      ownerID,
+      owner,
+      /*
+      description
+      wantsItem,
+      sellingPrice,
+      rentalPrice
+      */
+    });
+
+    // responseData returns the user's userID
+    if (responseData) {
+      if (responseData.listingID) {
+        //history.push("/listing")
+      }
+    }
+  };
+
+  const checkBoxHandler = () => {
+    setIsChecked(!isChecked);
   };
 
   return (
@@ -50,23 +86,23 @@ function CreateListing() {
           <hr />
           <div className="conditions">
             <h2> Your Conditions</h2>
-            <input type="checkbox" id="sell" name="sell" value="Sell" />
+            <input type="checkbox" onClick={checkBoxHandler} />
             <label>
-              Sell for: $ <span> </span>
-              <input type="text"></input>
+              Sell for: $
+              <input type="text" disabled={!isChecked} />
             </label>
             <br />
             <hr />
-            <input type="checkbox" id="rent" name="rent" value="Rent" />
+            <input type="checkbox" />
             <label>
-              Rent for: $ <span> </span>
-              <input type="text"></input> /day
+              Rent for: $
+              <input type="text" /> /day
             </label>
             <br />
             <hr />
-            <input type="checkbox" id="trade" name="trade" value="Trade" />
+            <input type="checkbox" />
             <label>
-              Trade for: <input type="text"></input>
+              Trade for: <input type="text" />
               <GoPlus />
             </label>
             <br />
@@ -77,7 +113,7 @@ function CreateListing() {
             <div>
               <img
                 className="selected-listing-game-image"
-                src={BACKEND_ADDRESS + listedGame[0].imageURL}
+                src={listedGame[0].imageURL}
                 alt={listedGame.title}
                 onClick={deselectGame}
               />
@@ -90,7 +126,7 @@ function CreateListing() {
               maxSelectionSize={1}
             />
           </div>
-          <input type="submit" onSubmit={onSubmitHandler} value="Add Listing" />
+          <input type="submit" value="Add Listing" />
         </form>
       </div>
     </div>

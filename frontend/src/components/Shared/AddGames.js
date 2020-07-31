@@ -20,6 +20,9 @@ const AddGames = (props) => {
       const responseData = await sendRequest(apiPath);
 
       if (responseData) {
+        responseData.matchedGames.forEach((game) => {
+          game.imageURL = BACKEND_ADDRESS + game.imageURL;
+        });
         setMatchedGames(responseData.matchedGames);
       }
     };
@@ -66,7 +69,7 @@ const AddGames = (props) => {
   const onClickGame = (matchedGame) => {
     if (props.maxSelectionSize === 1) {
       props.setSelectedGames([{ ...matchedGame }]);
-    } else if (props.maxSelectionSize < props.selectedGames.length) {
+    } else if (props.maxSelectionSize > props.selectedGames.length) {
       props.setSelectedGames(props.selectedGames.concat({ ...matchedGame }));
     }
   };
@@ -93,7 +96,7 @@ const AddGames = (props) => {
             !selectedGamesID.includes(matchedGame._id) && (
               <div className="matched-game-div" key={index}>
                 <img
-                  src={BACKEND_ADDRESS + matchedGame.imageURL}
+                  src={matchedGame.imageURL}
                   alt={matchedGame.title + " on" + matchedGame.platform}
                   className="matched-game-images"
                   onClick={() => onClickGame(matchedGame)}

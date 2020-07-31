@@ -1,17 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Shared/Header";
+import AddGames from "../components/Shared/AddGames";
+import { useAPI } from "../utils/useAPI";
 import "./styles/UpdateProfile.css";
 import { FiEdit2 } from "react-icons/fi";
+// import { useSelector } from "react-redux";
 
-function UpdateUser() {
+function UpdateProfile() {
   const [editUsername, setEditUsername] = useState(false);
   const [editPassword, setEditPassword] = useState(false);
-  const [currentUsername, setNewUsername] = useState("current username");
-  const [currentPassword, setNewPassword] = useState("bokuwasekkusudaisuki123");
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
+  const [inventory, setInventory] = useState([]);
   const [editDescription, setEditDescription] = useState(false);
-  const [currentDescription, setNewDescription] = useState(
-    "This is my descwiption. I seww stuwff fow the nintendo switch! OwO i wike games wike pokemon a wot! OwO smash bwos too ! OwO i hope to be abwe to buwy and seww games! OwO"
-  );
+  const [description, setDescription] = useState();
+  const [wishlist, setWishlist] = useState([]);
+  const [sendRequest] = useAPI();
+  // change to the following when this page is done
+  // const userID = useSelector((state) => state.user.userId);
+
+  const userID = "5f1c22e88ee3f6157ad84e41";
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const responseData = await sendRequest(`/api/user/id/${userID}`);
+      if (responseData) {
+        if (responseData.matchedUser) {
+          setUsername(responseData.matchedUser.username);
+          setPassword(responseData.matchedUser.password);
+          setDescription(responseData.matchedUser.description);
+        }
+      }
+    };
+    getUserData();
+  }, [userID]);
+
+  const deselectInventory = (index) => {
+    setInventory((inventory) => inventory.filter((_, i) => i !== index));
+  };
+
+  const deselectWishlist = (index) => {
+    setWishlist((wishlist) => wishlist.filter((_, i) => i !== index));
+  };
 
   function usernameHandler() {
     setEditUsername(!editUsername);
@@ -23,16 +53,13 @@ function UpdateUser() {
     setEditDescription(!editDescription);
   }
   const inputUsernameChangeHandler = (inputIdentifier, value) => {
-    console.log(value);
-    setNewUsername(value);
+    setUsername(value);
   };
   const inputPasswordChangeHandler = (inputIdentifier, value) => {
-    console.log(value);
-    setNewPassword(value);
+    setPassword(value);
   };
   const inputDescriptionChangeHandler = (inputIdentifier, value) => {
-    console.log(value);
-    setNewDescription(value);
+    setDescription(value);
   };
   return (
     <div>
@@ -51,8 +78,7 @@ function UpdateUser() {
         <p className="inputHeader">Username</p>
         {!editUsername ? (
           <div className="currentinfo">
-            <span>{currentUsername}</span>
-            <span> </span>
+            <span>{username}</span>
             <span>
               <FiEdit2 className="editIcon" onClick={usernameHandler} />
             </span>
@@ -80,8 +106,7 @@ function UpdateUser() {
         {!editPassword ? (
           <div className="currentinfo">
             <span className="secret">******</span>
-            <span>{currentPassword.substring(6)}</span>
-            <span> </span>
+            <span>{password}</span>
             <span>
               <FiEdit2 className="editIcon" onClick={passwordHandler} />
             </span>
@@ -114,12 +139,11 @@ function UpdateUser() {
             </span>
           </span>
         )}
-        <hr></hr>
+        <hr />
         <p className="inputHeader">Description</p>
         {!editDescription ? (
           <div className="currentinfo">
-            <span>{currentDescription}</span>
-            <span> </span>
+            <span>{description}</span>
             <span>
               <FiEdit2 className="editIcon" onClick={descriptionHandler} />
             </span>
@@ -142,9 +166,51 @@ function UpdateUser() {
             </span>
           </span>
         )}
+        <hr />
+        <p className="inputHeader">Inventory</p>
+        {inventory &&
+          inventory.map((game, index) => (
+            <div className="selected-inventory-games">
+              <img
+                className="selected-inventory-game-images"
+                src={game.imageURL}
+                key={index}
+                alt={game.title}
+                onClick={() => deselectInventory(index)}
+              />
+            </div>
+          ))}
+        <div>
+          <AddGames
+            setSelectedGames={setInventory}
+            selectedGames={inventory}
+            maxSelectionSize={3}
+          />
+        </div>
+        <hr />
+        <p className="inputHeader">Wishlist</p>
+        {wishlist &&
+          wishlist.map((game, index) => (
+            <div className="selected-inventory-games">
+              <img
+                className="selected-inventory-game-images"
+                src={game.imageURL}
+                key={index}
+                alt={game.title}
+                onClick={() => deselectWishlist(index)}
+              />
+            </div>
+          ))}
+        <div className="update-user-game-images-div">
+          <AddGames
+            setSelectedGames={setWishlist}
+            selectedGames={wishlist}
+            maxSelectionSize={3}
+          />
+        </div>
       </div>
     </div>
   );
 }
 
-export default UpdateUser;
+export default UpdateProfile;
