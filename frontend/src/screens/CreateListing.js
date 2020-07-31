@@ -3,13 +3,19 @@ import Header from "../components/Shared/Header";
 import AddGames from "../components/Shared/AddGames";
 import { GrGallery } from "react-icons/gr";
 import { GoPlus } from "react-icons/go";
+import { BACKEND_ADDRESS } from "../constants/Details";
 import "./styles/CreateListing.css";
 function CreateListing() {
-  const [listedGame, setListedGame] = useState([{ id: null, imageURL: null }]);
-  console.log(listedGame);
+  const [listedGame, setListedGame] = useState([]);
 
   const deselectGame = () => {
-    setListedGame([{ id: null, imageURL: null }]);
+    setListedGame([]);
+  };
+
+  // function that triggers when user submits the form.
+  // Todo: link to api when all data is available
+  const onSubmitHandler = (event) => {
+    event.preventDefault();
   };
 
   return (
@@ -67,17 +73,22 @@ function CreateListing() {
             <br />
           </div>
           <hr />
-          {listedGame[0].id && (
+          {listedGame[0] && (
             <div>
               <img
                 className="selected-listing-game-image"
-                src={listedGame[0].imageURL}
-                alt="Selected Game"
+                src={BACKEND_ADDRESS + listedGame[0].imageURL}
+                alt={listedGame.title}
                 onClick={deselectGame}
               />
             </div>
           )}
-          <AddGames setSelectedGame={setListedGame} selectedGame={listedGame} />
+          <AddGames
+            setSelectedGames={setListedGame}
+            selectedGames={listedGame}
+            maxSelectionSize={1}
+          />
+          <input type="submit" onSubmit={onSubmitHandler} value="Add Listing" />
         </form>
       </div>
     </div>

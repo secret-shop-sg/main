@@ -10,7 +10,9 @@ const AddGames = (props) => {
   const [apiPath, setApiPath] = useState();
   const [dropDownOptions] = useState(["All"].concat(PLATFORMS_SUPPORTED));
   const [query, setQuery] = useState({ title: null, platform: null });
-  const selectedGamesID = props.selectedGame.map((game) => game.id);
+
+  // list of all selectedGamesID so they would not be displayed
+  const selectedGamesID = props.selectedGames.map((game) => game._id);
 
   // get games from mongodb
   useEffect(() => {
@@ -27,7 +29,7 @@ const AddGames = (props) => {
     }
   }, [sendRequest, apiPath]);
 
-  // contructs the api path when user types in search bar and/or clicks on the dorp down option
+  // contructs the api path when user types in search bar and/or clicks on the drop down option
   useEffect(() => {
     if (query.title && query.platform) {
       setApiPath(
@@ -61,13 +63,12 @@ const AddGames = (props) => {
   };
 
   // changes the state of its parent component so selected image is displayed
-  const onClickGame = (event) => {
-    props.setSelectedGame([
-      {
-        id: event.target.id,
-        imageURL: event.target.src,
-      },
-    ]);
+  const onClickGame = (matchedGame) => {
+    if (props.maxSelectionSize === 1) {
+      props.setSelectedGames([{ ...matchedGame }]);
+    } else if (props.maxSelectionSize < props.selectedGames.length) {
+      props.setSelectedGames(props.selectedGames.concat({ ...matchedGame }));
+    }
   };
 
   return (
@@ -95,8 +96,7 @@ const AddGames = (props) => {
                   src={BACKEND_ADDRESS + matchedGame.imageURL}
                   alt={matchedGame.title + " on" + matchedGame.platform}
                   className="matched-game-images"
-                  onClick={onClickGame}
-                  id={matchedGame._id}
+                  onClick={() => onClickGame(matchedGame)}
                 />
               </div>
             )
