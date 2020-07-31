@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useReducer } from "react";
-import "./login.css";
+import "./Login.css";
 import "../../constants/styles/Bootstrap.css";
 import { FaUserCircle } from "react-icons/fa";
 import { useAPI } from "../../utils/useAPI";
@@ -156,11 +156,12 @@ function Signup(props) {
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     // Todo: add some validation
+    /*
     const responseData = await sendRequest("/api/user/signup", "POST", {
       // change the fields below to the actual fields after validation
-      username: "Billy",
-      email: "Jean@gmail.com",
-      password: "test",
+      username: formState.username,
+      email: formState.email,
+      password: formState.password,
     });
 
     // responseData returns the user's userID
@@ -170,6 +171,10 @@ function Signup(props) {
         alert("Sign up successful");
       }
     }
+    */
+    console.log(formState.username);
+    console.log(formState.email);
+    console.log(formState.password);
   };
 
   return (

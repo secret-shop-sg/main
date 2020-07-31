@@ -56,6 +56,10 @@
   margin-left: 3%;
 }
 
+.games-component-body {
+  width: 50%;
+}
+
 .selected-listing-game-image {
   width: 150px;
   height: 200px;

@@ -55,7 +55,7 @@ export const useAPI = () => {
   );
 
   useEffect(() => {
-    // cancel API request if parent component unmounts eg when you change page
+    // cancel API request if parent component unmounts when you change page
     return () => {
       activeRequests.current.forEach((request) => {
         request.abort();

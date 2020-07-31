@@ -83,11 +83,13 @@ function CreateListing() {
               />
             </div>
           )}
-          <AddGames
-            setSelectedGames={setListedGame}
-            selectedGames={listedGame}
-            maxSelectionSize={1}
-          />
+          <div className="games-component-body">
+            <AddGames
+              setSelectedGames={setListedGame}
+              selectedGames={listedGame}
+              maxSelectionSize={1}
+            />
+          </div>
           <input type="submit" onSubmit={onSubmitHandler} value="Add Listing" />
         </form>
       </div>

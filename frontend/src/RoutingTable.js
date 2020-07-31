@@ -7,7 +7,7 @@ import Main from "./screens/Main";
 import UserPage from "./screens/UserPage";
 import ServerSideErrorPage from "./screens/errors/ServerSideErrorPage";
 import CreateListing from "./screens/CreateListing";
-import UpdateUser from "./screens/updateUserProfile";
+import UpdateUser from "./screens/UpdateUserProfile";
 const RoutingTable = () => {
   return (
     <Router>

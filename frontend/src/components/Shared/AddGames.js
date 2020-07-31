@@ -72,7 +72,7 @@ const AddGames = (props) => {
   };
 
   return (
-    <div className="add-games-component">
+    <div>
       <div className="add-games-header">
         <div>
           <select onChange={dropDownHandler}>
