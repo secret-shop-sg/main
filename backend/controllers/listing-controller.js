@@ -130,7 +130,7 @@ const addListing = async (req, res, next) => {
     return next(new DatabaseError(err.message));
   }
 
-  res.status(201).json(newListing.id);
+  res.status(201).json({ listingID: newListing.id });
 };
 
 const getMostRecentListings = (req, res, next) => {
