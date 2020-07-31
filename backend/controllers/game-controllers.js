@@ -34,7 +34,7 @@ const getGames = async (req, res, next) => {
   }
 
   try {
-    matchedGames = await Game.find({ platform, title }, { _id: 0, __v: 0 });
+    matchedGames = await Game.find({ platform, title }, { __v: 0 });
   } catch (err) {
     return next(new DatabaseError(err.message));
   }

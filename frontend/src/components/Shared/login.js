@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useReducer } from "react";
-import "./login.css";
+import "./Login.css";
 import "../../constants/styles/Bootstrap.css";
 import { useAPI } from "../../utils/useAPI";
 import { FaUserCircle } from "react-icons/fa";
@@ -27,7 +27,7 @@ const formReducer = (state, action) => {
 
 function Login(props) {
   // use reducer for login data
-  const [sendRequest, isLoading] = useAPI();
+  const [sendRequest] = useAPI();
   const [formState, dispatchForm] = useReducer(formReducer, {
     inputValues: {
       username: "",

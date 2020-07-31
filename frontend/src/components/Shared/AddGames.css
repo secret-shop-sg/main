@@ -1,0 +1,12 @@
+.matched-game-div {
+  display: inline-block;
+  width: 120px;
+  height: 140px;
+  margin: 10px;
+}
+
+.matched-game-images {
+  width: 100%;
+  height: 100%;
+  box-sizing: block;
+}

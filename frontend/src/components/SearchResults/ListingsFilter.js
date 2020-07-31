@@ -1,11 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { PLATFORMS_SUPPORTED, LISTINGS_TYPE } from "../../constants/Details";
 import "./ListingsFilter.css";
-
-// eventually connect to DB?
-const platformsSupported = ["Xbox One", "PlayStation 4", "Nintendo Switch"];
-
-const listingsType = ["Trade", "Rent", "Buy"];
 
 // function that determines which checkbox should be checked based on url
 const getCheckBoxState = (filterLabel) => {
@@ -47,11 +43,11 @@ const ListingsFilter = (props) => {
   switch (props.filterLabel) {
     case "platform":
       title = "Platform";
-      elementLabels = platformsSupported;
+      elementLabels = PLATFORMS_SUPPORTED;
       break;
     case "listingtype":
       title = "Listing Type";
-      elementLabels = listingsType;
+      elementLabels = LISTINGS_TYPE;
       break;
     default:
       break;

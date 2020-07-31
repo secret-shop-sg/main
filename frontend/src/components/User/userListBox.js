@@ -20,19 +20,17 @@ function ListBox() {
           <Card.Text>
             Normal surrender now or prepare to fight Snorunt Amoonguss Combusken
             Feraligatr Larvitar. Pallet Town Glalie Pidove Sonic Boom Rotom
-            Minun Numel. Fog Badge Chandelure Charmeleon Durant Bellsprout
-            Quilava Earth Badge. Mirror Move Phione Wurmple Vanillite Mienfoo
-            Storm Badge Magby.
+            Minun Numel...
           </Card.Text>
           {!liked ? (
             <BsHeart className="likebutton" size={23} onClick={likeHandler} />
           ) : (
-            <BsFillHeartFill
-              className="likedbutton"
-              size={23}
-              onClick={likeHandler}
-            />
-          )}
+              <BsFillHeartFill
+                className="likedbutton"
+                size={23}
+                onClick={likeHandler}
+              />
+            )}
         </Card.Body>
       </Card>
     </div>

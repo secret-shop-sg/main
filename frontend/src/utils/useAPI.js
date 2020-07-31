@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import BACKENDADDRESS from "../constants/BackendAddress";
+import { BACKEND_ADDRESS } from "../constants/Details";
 import { useHistory } from "react-router-dom";
 
 export const useAPI = () => {
@@ -26,7 +26,7 @@ export const useAPI = () => {
       const httpAbortController = new AbortController();
       activeRequests.current.push(httpAbortController);
       try {
-        const response = await fetch((url = BACKENDADDRESS + url), {
+        const response = await fetch((url = BACKEND_ADDRESS + url), {
           method,
           body,
           headers,
@@ -55,7 +55,7 @@ export const useAPI = () => {
   );
 
   useEffect(() => {
-    // cancel API request if parent component unmounts eg when you change page
+    // cancel API request if parent component unmounts when you change page
     return () => {
       activeRequests.current.forEach((request) => {
         request.abort();

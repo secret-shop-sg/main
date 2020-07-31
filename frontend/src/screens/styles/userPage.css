@@ -63,3 +63,25 @@
     float:left;
     padding: 20px
 }
+.inventory{
+        width:60%;
+        margin-top: 3%;
+        border: 1px solid lightgray;
+        float:left;
+        padding: 20px;
+}
+.inventoryImg{
+    width: 100px;
+    height:150px;
+    
+}
+
+div.scrollMenu {
+    background-color: #333;
+    overflow: auto;
+    white-space: nowrap;
+  }
+  
+.userlistings{
+    padding-top: 2%
+}

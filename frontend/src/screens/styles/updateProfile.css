@@ -1,0 +1,63 @@
+.pictureUpdater{
+    width:20%;
+    height:15%;
+    float: left;
+    margin: 2% 3%;
+}
+
+.currentPicture{
+    width:100%;
+}
+
+.changePicture{
+    position: relative;
+    top: -10%;
+    left: 26%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    padding: 1%;
+    border: 1px black solid;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.infoupdater{
+    margin-left:5px;
+    width:50%;
+    padding:1%;
+    padding-top: 0.5%;
+    padding-bottom: 0.5%;
+    text-align: left;
+    background-color: white;
+    color:black;
+    border: 1px solid lightgray;
+    font-size:1.2rem;
+    margin-bottom:20px;
+}
+.infoupdater:hover{
+background-color: lightgray ;
+}
+.saveButton{
+    font-size: 1.2rem;
+    color:white;
+    background-color: green;
+}
+.currentinfo{
+    border: 1px solid gray;
+    font-size: 1.2rem;
+    width:50%;
+    display: inline-block;
+    padding: 3px
+}
+.editIcon{
+    float:right; 
+    margin-right: 20px   
+}
+
+.userInformation{
+    width:70%;
+    display: inline-block
+}
