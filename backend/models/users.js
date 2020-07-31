@@ -7,11 +7,26 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   dateJoined: { type: Date, required: true },
-  lastLoggedIn: { type: Date },
+  lastLoggedIn: { type: Date, required: true },
   location: String,
-  inventory: [[String, String, String]],
-  // inventory format -> Game name, game platform, url. First 2 need to be sent by user, last one determined by express
-  wishlist: [[String, String, String]],
+  inventory: [
+    {
+      _id: false,
+      gameID: { type: mongoose.Types.ObjectId, ref: "Game" },
+      title: String,
+      platform: String,
+      imageURL: String,
+    },
+  ],
+  wishlist: [
+    {
+      _id: false,
+      gameID: { type: mongoose.Types.ObjectId, ref: "Game" },
+      title: String,
+      platform: String,
+      imageURL: String,
+    },
+  ],
   description: String,
   listings: [{ type: mongoose.Types.ObjectId, ref: "Listing" }],
 });

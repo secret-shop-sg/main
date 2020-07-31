@@ -10,6 +10,7 @@ const addNewUser = async (req, res, next) => {
     email,
     password,
     dateJoined: new Date(),
+    lastLoggedIn: new Date(),
   });
 
   try {

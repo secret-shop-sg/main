@@ -175,10 +175,6 @@ function Signup(props) {
         alert("Sign up successful");
       }
     }
-
-    console.log(formState.inputValues.username);
-    console.log(formState.inputValues.email);
-    console.log(formState.inputValues.password);
   };
 
   return (
