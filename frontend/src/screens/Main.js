@@ -4,7 +4,6 @@ import { useAPI } from "../utils/useAPI";
 
 import Header from "../components/Shared/Header";
 import Platforms from "../components/Home/Platforms";
-import "./styles/Main.css";
 import HomeListing from "../components/Home/HomeListing";
 
 const Main = (props) => {
@@ -49,12 +48,27 @@ const Main = (props) => {
   return (
     <div className="mainScreen">
       <Header />
-      <div className="display">
+      <div style={styles.display}>
         <Platforms />
-        <div className="listings">{displayListings()}</div>
+        <div style={styles.listings}>{displayListings()}</div>
       </div>
     </div>
   );
+};
+
+// styles
+const styles = {
+  display: {
+    width: "90%",
+    marginTop: "5rem",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  listings: {
+    marginTop: "5rem",
+    width: "100%",
+  },
 };
 
 export default Main;
