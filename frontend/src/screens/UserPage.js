@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Shared/Header";
-import "./styles/UserPage.css";
+import "./styles/userPage.css";
 import { useAPI } from "../utils/useAPI";
 import { BsStarFill } from "react-icons/bs";
 import { GoVerified } from "react-icons/go";
