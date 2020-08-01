@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/Shared/Header";
 import AddGames from "../components/Shared/AddGames";
 import { useAPI } from "../utils/useAPI";
-import "./styles/updateProfile.css";
+import "./styles/UpdateProfile.css";
 import { FiEdit2 } from "react-icons/fi";
 import ImageUpload from "../components/UpdateProfile/ImageUpload";
 // import { useSelector } from "react-redux";
@@ -17,7 +17,7 @@ function UpdateProfile() {
   const [currentDescription, setNewDescription] = useState(
     "This is my descwiption. I seww stuwff fow the nintendo switch! OwO i wike games wike pokemon a wot! OwO smash bwos too ! OwO i hope to be abwe to buwy and seww games! OwO"
   );
-  const [editMode, setEditMode]= useState(false);
+  const [editMode, setEditMode] = useState(false);
   const [description, setDescription] = useState();
   const [wishlist, setWishlist] = useState([]);
   const [sendRequest] = useAPI();
@@ -66,8 +66,8 @@ function UpdateProfile() {
   const inputDescriptionChangeHandler = (inputIdentifier, value) => {
     setDescription(value);
   };
-  function editModeHandler(){
-    setEditMode(!editMode)
+  function editModeHandler() {
+    setEditMode(!editMode);
   }
 
   /*
@@ -152,26 +152,33 @@ temp image:
             />
           </span>
         )}
-        <hr />   
-{!editMode ? <button id="edit-update" onClick={
-          ()=>{
-            usernameHandler();
-            passwordHandler();
-            descriptionHandler();
-            editModeHandler();
-          }
-        }>
-        <FiEdit2/> Update
-        </button> : <button id="edit-update" className="saveButton " onClick={
-          ()=>{
-            usernameHandler();
-            passwordHandler();
-            descriptionHandler();
-            editModeHandler();
-          }
-        }>
-        Save
-        </button> }
+        <hr />
+        {!editMode ? (
+          <button
+            id="edit-update"
+            onClick={() => {
+              usernameHandler();
+              passwordHandler();
+              descriptionHandler();
+              editModeHandler();
+            }}
+          >
+            <FiEdit2 /> Update
+          </button>
+        ) : (
+          <button
+            id="edit-update"
+            className="saveButton "
+            onClick={() => {
+              usernameHandler();
+              passwordHandler();
+              descriptionHandler();
+              editModeHandler();
+            }}
+          >
+            Save
+          </button>
+        )}
         <hr />
         <p className="inputHeader">Inventory</p>
         {inventory &&
