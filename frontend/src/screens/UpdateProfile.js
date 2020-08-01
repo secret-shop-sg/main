@@ -91,18 +91,18 @@ temp image:
             <span> </span>
           </div>
         ) : (
-            <span>
-              <input
-                type="text"
-                id="username"
-                className="infoupdater"
-                name="username"
-                onChange={(e) =>
-                  inputUsernameChangeHandler(e.target.id, e.target.value)
-                }
-              />
-            </span>
-          )}
+          <span>
+            <input
+              type="text"
+              id="username"
+              className="infoupdater"
+              name="username"
+              onChange={(e) =>
+                inputUsernameChangeHandler(e.target.id, e.target.value)
+              }
+            />
+          </span>
+        )}
         <hr></hr>
         <p className="inputHeader">Password</p>
         {!editPassword ? (
@@ -111,28 +111,28 @@ temp image:
             <span> </span>
           </div>
         ) : (
-            <span>
-              <input
-                type="password"
-                id="password"
-                className="infoupdater"
-                name="password"
-                onChange={(e) =>
-                  inputPasswordChangeHandler(e.target.id, e.target.value)
-                }
-              />
-              <p className="inputHeader">Confirm Password</p>
-              <input
-                type="password"
-                id="password"
-                className="infoupdater"
-                name="password"
-                onChange={(e) =>
-                  inputPasswordChangeHandler(e.target.id, e.target.value)
-                }
-              />
-            </span>
-          )}
+          <span>
+            <input
+              type="password"
+              id="password"
+              className="infoupdater"
+              name="password"
+              onChange={(e) =>
+                inputPasswordChangeHandler(e.target.id, e.target.value)
+              }
+            />
+            <p className="inputHeader">Confirm Password</p>
+            <input
+              type="password"
+              id="password"
+              className="infoupdater"
+              name="password"
+              onChange={(e) =>
+                inputPasswordChangeHandler(e.target.id, e.target.value)
+              }
+            />
+          </span>
+        )}
         <hr />
         <p className="inputHeader">Description</p>
         {!editDescription ? (
@@ -141,18 +141,18 @@ temp image:
             <span> </span>
           </div>
         ) : (
-            <span>
-              <textarea
-                type="text"
-                id="description"
-                className="infoupdater"
-                name="description"
-                onChange={(e) =>
-                  inputDescriptionChangeHandler(e.target.id, e.target.value)
-                }
-              />
-            </span>
-          )}
+          <span>
+            <textarea
+              type="text"
+              id="description"
+              className="infoupdater"
+              name="description"
+              onChange={(e) =>
+                inputDescriptionChangeHandler(e.target.id, e.target.value)
+              }
+            />
+          </span>
+        )}
         <hr />
         {!editMode ? (
           <button
@@ -167,19 +167,19 @@ temp image:
             <FiEdit2 /> Update
           </button>
         ) : (
-            <button
-              id="edit-update"
-              className="saveButton "
-              onClick={() => {
-                usernameHandler();
-                passwordHandler();
-                descriptionHandler();
-                editModeHandler();
-              }}
-            >
-              Save
-            </button>
-          )}
+          <button
+            id="edit-update"
+            className="saveButton "
+            onClick={() => {
+              usernameHandler();
+              passwordHandler();
+              descriptionHandler();
+              editModeHandler();
+            }}
+          >
+            Save
+          </button>
+        )}
         <hr />
         <p className="inputHeader">Inventory</p>
         {inventory &&

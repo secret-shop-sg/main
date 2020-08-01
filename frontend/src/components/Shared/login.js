@@ -3,6 +3,8 @@ import "./Login.css";
 import "../../constants/styles/Bootstrap.css";
 import { useAPI } from "../../utils/useAPI";
 import { FaUserCircle } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { userLogin } from "../../store/actions/userActions";
 
 // reducer for login data
 const formReducer = (state, action) => {
@@ -13,12 +15,28 @@ const formReducer = (state, action) => {
         ...state.inputValues,
         [action.input]: action.value,
       };
-      // TODO: validities
+
+      // update field validity
+      const updatedValidities = {
+        ...state.inputValidities,
+        [action.input]: action.isValid,
+      };
+
+      // check if all fields are valid
+      let formIsValid = true;
+      for (const key in updatedValidities) {
+        if (!updatedValidities[key]) {
+          formIsValid = false;
+          break;
+        }
+      }
 
       // return updated state
       return {
         ...state,
         inputValues: updatedValues,
+        inputValidities: updatedValidities,
+        formIsValid: formIsValid,
       };
     default:
       return state;
@@ -26,6 +44,8 @@ const formReducer = (state, action) => {
 };
 
 function Login(props) {
+  const dispatch = useDispatch();
+
   // use reducer for login data
   const [sendRequest] = useAPI();
   const [formState, dispatchForm] = useReducer(formReducer, {
@@ -34,12 +54,22 @@ function Login(props) {
       password: "",
       // TODO: check if handling password securely
     },
-    // TODO: input validities
+    inputValidities: {
+      username: false,
+      password: false,
+    },
+    formIsValid: false,
   });
 
   // input handler for both fields
   const inputChangeHandler = (inputIdentifier, value) => {
-    // isValid for third parameter
+    // check validity
+    let isValid;
+    if (value.length == 0) {
+      isValid = false;
+    } else {
+      isValid = true;
+    }
 
     console.log(value);
 
@@ -48,7 +78,7 @@ function Login(props) {
       type: "UPDATE",
       value: value,
       input: inputIdentifier,
-      // TODO: add validity here as another value
+      isValid: isValid,
     });
   };
 
@@ -70,8 +100,8 @@ function Login(props) {
     event.preventDefault();
     const responseData = await sendRequest("/api/user/login", "POST", {
       // change the fields below to the actual fields
-      username: "Billy",
-      password: "test",
+      username: formState.inputValues.username,
+      password: formState.inputValues.password,
     });
 
     // responseData returns the user's userID
@@ -79,9 +109,10 @@ function Login(props) {
       if (!responseData.validCredentials) {
         // means either username or password is wrong
       } else {
-        // const userID = responseData.userID
-        // if validCredials === true, responseData also returns a userID u can store in redux
-        // Todo: Stored the userID in redux
+        // login in redux
+        const userID = responseData.userID;
+        dispatch(userLogin(userID));
+
         alert("Log in successful");
       }
     }
