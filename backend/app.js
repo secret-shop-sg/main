@@ -1,6 +1,7 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const mongoose = require("mongoose");
+const fs = require("fs");
 const searchRoutes = require("./routes/search-routes");
 const listingRoutes = require("./routes/listing-routes");
 const userRoutes = require("./routes/user-routes");
@@ -49,10 +50,16 @@ app.use((req, res, next) => {
 
 // custom error handler if any middleware threw an error
 app.use((error, req, res, next) => {
+  // delete profile pic that have been added if theres an error
+  if (req.file) {
+    fs.unlink(req.file.path);
+  }
+
+  // calls express' default error handler if res has already been sent
   if (res.headerSent) {
-    // calls express' default error handler if res has already been sent
     return next(error);
   }
+
   res.status(error.status || 500);
   res.json({
     message: error.message || "An unknown error has occured on the server",

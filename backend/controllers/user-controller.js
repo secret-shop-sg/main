@@ -1,6 +1,5 @@
 const User = require("../models/users");
 const DatabaseError = require("../models/databaseError");
-const utilFunctions = require("../utils/utilFunctions");
 
 const addNewUser = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -90,14 +89,6 @@ const getUser = async (req, res, next) => {
     } catch (err) {
       return next(new DatabaseError(err.message));
     }
-
-    if (matchedUser.inventory) {
-      matchedUser.inventory = utilFunctions.addImageURL(matchedUser.inventory);
-    }
-
-    if (matchedUser.wishlist) {
-      matchedUser.wishlist = utilFunctions.addImageURL(matchedUser.wishlist);
-    }
   }
 
   res.json({ matchedUser });
@@ -105,7 +96,16 @@ const getUser = async (req, res, next) => {
 
 const updateProfile = async (req, res, next) => {
   const userID = req.params.userID;
-  const { inventory, wishlist, location } = req.body;
+  const updatedInfo = req.body;
+
+  // remove all fields with null or undefined values
+  for (var property in updatedInfo) {
+    if (updatedInfo[property] === null || updatedInfo[property] === undefined) {
+      delete updatedInfo[property];
+    }
+  }
+
+  // finds the user to update
   let matchedUser;
 
   try {
@@ -115,10 +115,12 @@ const updateProfile = async (req, res, next) => {
   }
 
   if (matchedUser) {
-    matchedUser.wishlist = wishlist;
-    matchedUser.inventory = inventory;
-    matchedUser.location = location;
+    matchedUser.profilePicURL = req.file.path;
 
+    // iterates through whatever fields have updates and update them in the matchedUser
+    Object.keys(updatedInfo).forEach(
+      (key) => (matchedUser[key] = updatedInfo[key])
+    );
     try {
       await matchedUser.save();
     } catch {

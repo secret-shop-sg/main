@@ -10,8 +10,8 @@ const ImageUpload = (props) => {
   const pickedHandler = (event) => {
     if (event.target.files && event.target.files.length === 1) {
       setImage(event.target.files[0]);
+      // Todo: Add some way to get data back to parent
     }
-    // Todo: Add some way to get data back to parent
   };
 
   // creates a url for the image so it can be previewed

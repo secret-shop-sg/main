@@ -20,7 +20,7 @@ function UpdateProfile() {
   // change to the following when this page is done
   // const userID = useSelector((state) => state.user.userId);
 
-  const userID = "5f1c22e88ee3f6157ad84e41";
+  const userID = "5f1ed6a160fc2b0d9025117c";
 
   useEffect(() => {
     const getUserData = async () => {
