@@ -13,10 +13,15 @@ function CreateListing() {
   const [sendRequest] = useAPI();
   const [isChecked, setIsChecked] = useState(false);
   const history = useHistory();
+  const [listingAdded, setListingAdded] = useState(false);
 
   const ownerID = "5f1ed6a160fc2b0d9025117c";
   const owner = "Billy";
 
+  /*check if they added a listing yet*/
+  function addListingHandler() {
+    setListingAdded(!listingAdded)
+  }
   /* uncomment after page completed
   const ownerID = useSelector((state) => state.user.userId);
   const owner = 
@@ -59,7 +64,12 @@ function CreateListing() {
       <Header />
       <div className="imageUploader">
         <div>
-          <GrGallery id="galleryimage" size={100} />
+          {!listedGame[0] ? <GrGallery id="galleryimage" size={100} /> : <img
+            className="selected-listing-game-image gallery-image "
+            src={listedGame[0].imageURL}
+            alt={listedGame.title}
+            onClick={deselectGame}
+          />}
         </div>
         <div>
           <button id="uploadButton">Click here to upload an image!</button>
@@ -68,13 +78,16 @@ function CreateListing() {
       <div className="uploadDetails">
         <form>
           <p className="inputHeader">Title</p>
-          <input
-            type="text"
-            id="title"
-            className="listinginput"
-            name="title"
-            placeholder="eg. SSBU for Trade; Animal Crossing for Rent; Kirby Star Allies for sale"
-          />
+          {!listedGame[0] ?
+            <input
+              type="text"
+              id="title"
+              className="listinginput"
+              name="title"
+              placeholder="eg. SSBU for Trade; Animal Crossing for Rent; Kirby Star Allies for sale"
+            /> :
+            <h5>{listedGame[0].title}</h5>
+          }
           <p className="inputHeader2">Description</p>
           <textarea
             placeholder="eg. Near Mint, date bought etc."

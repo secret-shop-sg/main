@@ -2,7 +2,7 @@
   border: 2px dashed gray;
   width: 20%;
   margin: 2% 3%;
-  height: 200px;
+  height: 270px;
   text-align: center;
   float: left;
 }
@@ -63,4 +63,8 @@
 .selected-listing-game-image {
   width: 150px;
   height: 200px;
+}
+
+.gallery-image{
+ margin-top: 3%;
 }
