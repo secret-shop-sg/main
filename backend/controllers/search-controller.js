@@ -1,6 +1,6 @@
 const allListings = require("../data/dummyData");
 const searchAlgorithmns = require("../utils/searchAlgorithmns");
-const Filters = require("../constants/Filters");
+const filters = require("../constants/filters");
 const errorHandlers = require("../utils/errorHandlers");
 
 const getSearches = (req, res, next) => {
@@ -19,7 +19,7 @@ const getSearches = (req, res, next) => {
   errorHandlers.checkEmptyParamsError(queries);
   errorHandlers.checkFilterLabelError(
     Object.keys(queries),
-    Filters.FILTER_LABELS
+    filters.FILTER_LABELS
   );
 
   if (queries.phrase) {
@@ -37,7 +37,7 @@ const getSearches = (req, res, next) => {
     const platforms = queries.platform.split("%");
     errorHandlers.checkFilterLabelError(
       Object.values(platforms),
-      Filters.PLATFORMS_SUPPORTED
+      filters.PLATFORMS_SUPPORTED
     );
     const listingsToUse = getListingsToUse(matchedListings);
     matchedListings = listingsToUse.filter((listing) =>
@@ -49,7 +49,7 @@ const getSearches = (req, res, next) => {
     errorHandlers.checkRepeatedParamsError(queries.platform);
     // listingTypes is an array representing the different platforms selected by the user in the checkbox on the frontend
     const listingTypes = queries.listingtype.split("%");
-    errorHandlers.checkFilterLabelError(listingTypes, Filters.LISTING_TYPES);
+    errorHandlers.checkFilterLabelError(listingTypes, filters.LISTING_TYPES);
     const listingsToUse = getListingsToUse(matchedListings);
     matchedListings = listingsToUse.filter((listing) =>
       searchAlgorithmns.searchFilters(listing, "listingtype", listingTypes)

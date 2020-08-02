@@ -115,7 +115,9 @@ const updateProfile = async (req, res, next) => {
   }
 
   if (matchedUser) {
-    matchedUser.profilePicURL = req.file.path;
+    if (req.file) {
+      matchedUser.profilePicURL = req.file.path;
+    }
 
     // iterates through whatever fields have updates and update them in the matchedUser
     Object.keys(updatedInfo).forEach(
@@ -127,6 +129,7 @@ const updateProfile = async (req, res, next) => {
       return next(new DatabaseError(err.message));
     }
   }
+  res.json({ userID });
 };
 
 exports.updateProfile = updateProfile;
