@@ -14,7 +14,10 @@ function UpdateProfile() {
   const [inventory, setInventory] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [editMode, setEditMode] = useState(false);
+  const [editInventoryMode, setEditInventoryMode] = useState(false);
+  const [editWishlistMode, setEditWishlistMode] = useState(false);
   const [sendRequest] = useAPI();
+  const [displayPassword, setDisplayPassword] = useState();
   // change to the following when this page is done
   // const userID = useSelector((state) => state.user.userId);
 
@@ -25,16 +28,15 @@ function UpdateProfile() {
       const responseData = await sendRequest(`/api/user/id/${userID}`);
       if (responseData) {
         if (responseData.matchedUser) {
-          let passwordHidden = responseData.matchedUser.password.replace(
-            /./g,
-            "*"
-          );
-          setPassword(passwordHidden);
-
+          setPassword(responseData.matchedUser.password);
           setUsername(responseData.matchedUser.username);
           setDescription(responseData.matchedUser.description);
           setInventory(responseData.matchedUser.inventory);
           setWishlist(responseData.matchedUser.wishlist);
+          setDisplayPassword(responseData.matchedUser.password.replace(
+            /./g,
+            "*"
+          ))
         }
       }
     };
@@ -61,6 +63,10 @@ function UpdateProfile() {
         break;
       case "password":
         setPassword(event.target.value);
+        setDisplayPassword(event.target.value.replace(
+          /./g,
+          "*"
+        ))
         break;
       case "description":
         setDescription(event.target.value);
@@ -71,7 +77,6 @@ function UpdateProfile() {
   };
 
   const onSubmitHandler = async (event) => {
-    event.preventDefault();
     const responseData = await sendRequest(
       `/api/user/update/${userID}`,
       "PATCH",
@@ -86,11 +91,12 @@ function UpdateProfile() {
     if (responseData) {
       if (responseData.userID === userID) {
         setEditMode(false);
+        setEditInventoryMode(false);
+        setEditWishlistMode(false);
         alert("Update successful");
       }
     }
   };
-
   return (
     <div>
       <Header />
@@ -102,41 +108,41 @@ function UpdateProfile() {
             <span>{username}</span>
           </div>
         ) : (
-          <span>
-            <input
-              type="text"
-              className="infoupdater"
-              name="username"
-              onChange={inputChangeHandler}
-              value={username}
-            />
-          </span>
-        )}
+            <span>
+              <input
+                type="text"
+                className="infoupdater"
+                name="username"
+                onChange={inputChangeHandler}
+                value={username}
+              />
+            </span>
+          )}
         <hr></hr>
         <p className="inputHeader">Password</p>
         {!editMode ? (
           <div className="currentinfo">
-            <span>{password}</span>
+            <span>{displayPassword}</span>
           </div>
         ) : (
-          <span>
-            <input
-              type="password"
-              className="infoupdater"
-              name="password"
-              onChange={inputChangeHandler}
-              value={password}
-            />
-            <p className="inputHeader">Confirm Password</p>
-            <input
-              type="password"
-              className="infoupdater"
-              name="password"
-              onChange={inputChangeHandler}
-              value={password}
-            />
-          </span>
-        )}
+            <span>
+              <input
+                type="password"
+                className="infoupdater"
+                name="password"
+                onChange={inputChangeHandler}
+                value={password}
+              />
+              <p className="inputHeader">Confirm Password</p>
+              <input
+                type="password"
+                className="infoupdater"
+                name="password"
+                onChange={inputChangeHandler}
+                value={password}
+              />
+            </span>
+          )}
         <hr />
         <p className="inputHeader">Description</p>
         {!editMode ? (
@@ -144,28 +150,43 @@ function UpdateProfile() {
             <span>{description}</span>
           </div>
         ) : (
-          <span>
-            <textarea
-              type="text"
-              className="infoupdater"
-              name="description"
-              onChange={inputChangeHandler}
-              value={description}
-            />
-          </span>
-        )}
+            <span>
+              <textarea
+                type="text"
+                className="infoupdater"
+                name="description"
+                onChange={inputChangeHandler}
+                value={description}
+              />
+            </span>
+          )}
         <hr />
         {!editMode ? (
           <button onClick={() => setEditMode(true)}>
             <FiEdit2 /> Update
           </button>
         ) : (
-          <button className="saveButton" onClick={onSubmitHandler}>
-            Save
-          </button>
-        )}
+            <button className="saveButton" onClick={onSubmitHandler}>
+              Save
+            </button>
+          )}
         <hr />
-        <p className="inputHeader">Inventory</p>
+        <span>
+          <p className="inputHeader">
+            Inventory
+            <span> </span>
+            {!editInventoryMode ? (
+              <button onClick={() => setEditInventoryMode(true)}>
+                <FiEdit2 /> Update Inventory
+              </button>
+            ) : (
+                <button className="saveButton" onClick={onSubmitHandler}>
+                  Save
+                </button>
+              )}
+          </p>
+        </span>
+
         {inventory &&
           inventory.map((game, index) => (
             <div className="selected-inventory-games">
@@ -174,20 +195,35 @@ function UpdateProfile() {
                 src={game.imageURL}
                 key={index}
                 alt={game.title}
-                onClick={(event) => deselectGame(event, index)}
+                onClick={editInventoryMode ? (event) => deselectGame(event, index) : null}
                 name="inventory"
               />
             </div>
           ))}
-        <div>
-          <AddGames
-            setSelectedGames={setInventory}
-            selectedGames={inventory}
-            maxSelectionSize={3}
-          />
-        </div>
+        {editInventoryMode ?
+          <div>
+            <AddGames
+              setSelectedGames={setInventory}
+              selectedGames={inventory}
+              maxSelectionSize={3}
+            />
+          </div> : null}
         <hr />
-        <p className="inputHeader">Wishlist</p>
+        <span>
+          <p className="inputHeader">
+            Wishlist
+            <span> </span>
+            {!editWishlistMode ? (
+              <button onClick={() => setEditWishlistMode(true)}>
+                <FiEdit2 /> Update Wishlist
+              </button>
+            ) : (
+                <button className="saveButton" onClick={onSubmitHandler}>
+                  Save
+                </button>
+              )}
+          </p>
+        </span>
         {wishlist &&
           wishlist.map((game, index) => (
             <div className="selected-inventory-games">
@@ -196,18 +232,19 @@ function UpdateProfile() {
                 src={game.imageURL}
                 key={index}
                 alt={game.title}
-                onClick={(event) => deselectGame(event, index)}
+                onClick={editWishlistMode ? (event) => deselectGame(event, index) : null}
                 name="wishlist"
               />
             </div>
           ))}
-        <div className="update-user-game-images-div">
-          <AddGames
-            setSelectedGames={setWishlist}
-            selectedGames={wishlist}
-            maxSelectionSize={3}
-          />
-        </div>
+        {editWishlistMode ?
+          <div className="update-user-game-images-div">
+            <AddGames
+              setSelectedGames={setWishlist}
+              selectedGames={wishlist}
+              maxSelectionSize={3}
+            />
+          </div> : null}
       </div>
     </div>
   );
