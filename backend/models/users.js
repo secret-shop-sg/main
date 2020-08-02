@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
   inventory: [
     {
       _id: false,
-      gameID: { type: mongoose.Types.ObjectId, ref: "Game" },
+      _id: { type: mongoose.Types.ObjectId, ref: "Game" },
       title: String,
       platform: String,
       imageURL: String,
@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
   wishlist: [
     {
       _id: false,
-      gameID: { type: mongoose.Types.ObjectId, ref: "Game" },
+      _id: { type: mongoose.Types.ObjectId, ref: "Game" },
       title: String,
       platform: String,
       imageURL: String,

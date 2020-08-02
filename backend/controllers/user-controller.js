@@ -125,10 +125,11 @@ const updateProfile = async (req, res, next) => {
     );
     try {
       await matchedUser.save();
-    } catch {
+    } catch (err) {
       return next(new DatabaseError(err.message));
     }
   }
+
   res.json({ userID });
 };
 

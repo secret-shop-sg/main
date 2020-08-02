@@ -13,6 +13,7 @@ function UpdateProfile() {
   const [description, setDescription] = useState();
   const [inventory, setInventory] = useState([]);
   const [wishlist, setWishlist] = useState([]);
+  const [image, setImage] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [sendRequest] = useAPI();
   // change to the following when this page is done
@@ -30,7 +31,6 @@ function UpdateProfile() {
             "*"
           );
           setPassword(passwordHidden);
-
           setUsername(responseData.matchedUser.username);
           setDescription(responseData.matchedUser.description);
           setInventory(responseData.matchedUser.inventory);
@@ -72,16 +72,21 @@ function UpdateProfile() {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+
+    /*
+    let formData = new FormData();
+    formData.append("image", image);
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("description", description);
+    //formData.append("inventory", inventory);
+    //formData.append("wishlist", wishlist);
+    */
+
     const responseData = await sendRequest(
       `/api/user/update/${userID}`,
       "PATCH",
-      {
-        username,
-        password,
-        description,
-        inventory,
-        wishlist,
-      }
+      { username, password, description, inventory, wishlist }
     );
     if (responseData) {
       if (responseData.userID === userID) {
@@ -94,7 +99,7 @@ function UpdateProfile() {
   return (
     <div>
       <Header />
-      <ImageUpload />
+      <ImageUpload image={image} setImage={setImage} />
       <div className="userInformation">
         <p className="inputHeader">Username</p>
         {!editMode ? (

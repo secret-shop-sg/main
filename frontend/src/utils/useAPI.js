@@ -14,11 +14,12 @@ export const useAPI = () => {
       url,
       method = "GET",
       body = null,
+      isFormData = false,
       headers = { "Content-Type": "application/json" }
     ) => {
       setIsLoading(true);
 
-      if (body) {
+      if (body && !isFormData) {
         body = JSON.stringify(body);
       }
 

@@ -4,7 +4,7 @@ const uniqueValidator = require("mongoose-unique-validator");
 const listingSchema = new mongoose.Schema({
   hasItem: {
     type: {
-      gameID: { type: mongoose.Types.ObjectId, ref: "Game" },
+      _id: { type: mongoose.Types.ObjectId, ref: "Game" },
       title: String,
       platform: String,
       imageURL: String,
@@ -19,7 +19,7 @@ const listingSchema = new mongoose.Schema({
     type: [
       {
         _id: false,
-        gameID: { type: mongoose.Types.ObjectId, ref: "Game" },
+        _id: { type: mongoose.Types.ObjectId, ref: "Game" },
         title: String,
         platform: String,
         imageURL: String,
