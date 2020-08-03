@@ -94,7 +94,7 @@ const getUser = async (req, res, next) => {
   res.json({ matchedUser });
 };
 
-const updateProfile = async (req, res, next) => {
+const updateProfileDetails = async (req, res, next) => {
   const userID = req.params.userID;
   const updatedInfo = req.body;
 
@@ -133,7 +133,62 @@ const updateProfile = async (req, res, next) => {
   res.json({ userID });
 };
 
-exports.updateProfile = updateProfile;
+const updateInventory = async (req, res, next) => {
+  const userID = req.params.userID;
+  const inventory = req.body.inventory;
+
+  // even if inventory is empty, it would be an empty array
+  if (inventory) {
+    // finds the user to update
+    let matchedUser;
+
+    try {
+      matchedUser = await User.findById(userID);
+    } catch (err) {
+      return next(new DatabaseError(err.message));
+    }
+
+    if (matchedUser) {
+      matchedUser.inventory = inventory;
+    }
+    try {
+      await matchedUser.save();
+    } catch (err) {
+      return next(new DatabaseError(err.message));
+    }
+    res.json({ userID });
+  }
+};
+
+const updateWishlist = async (req, res, next) => {
+  const userID = req.params.userID;
+  const wishlist = req.body.wishlist;
+
+  if (wishlist) {
+    // finds the user to update
+    let matchedUser;
+
+    try {
+      matchedUser = await User.findById(userID);
+    } catch (err) {
+      return next(new DatabaseError(err.message));
+    }
+
+    if (matchedUser) {
+      matchedUser.wishlist = wishlist;
+    }
+    try {
+      await matchedUser.save();
+    } catch (err) {
+      return next(new DatabaseError(err.message));
+    }
+  }
+  res.json({ userID });
+};
+
+exports.updateInventory = updateInventory;
+exports.updateWishlist = updateWishlist;
+exports.updateProfileDetails = updateProfileDetails;
 exports.addNewUser = addNewUser;
 exports.getUser = getUser;
 exports.validateField = validateField;

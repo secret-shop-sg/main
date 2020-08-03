@@ -27,12 +27,23 @@ export const useAPI = () => {
       const httpAbortController = new AbortController();
       activeRequests.current.push(httpAbortController);
       try {
-        const response = await fetch((url = BACKEND_ADDRESS + url), {
-          method,
-          body,
-          headers,
-          signal: httpAbortController.signal,
-        });
+        let response;
+        if (!isFormData) {
+          response = await fetch((url = BACKEND_ADDRESS + url), {
+            method,
+            body,
+            headers,
+            signal: httpAbortController.signal,
+          });
+        } else {
+          // cannot send header for formData or it wont work
+          response = await fetch((url = BACKEND_ADDRESS + url), {
+            method,
+            body,
+            signal: httpAbortController.signal,
+          });
+        }
+
         const responseData = await response.json();
 
         // response.ok = response with status code of 200+ = no errors

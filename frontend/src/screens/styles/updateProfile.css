@@ -40,12 +40,12 @@
   height: 700px;
 }
 
-.selected-inventory-game-images {
+.selected-inventory-games {
+  display: inline-block;
+}
+
+.selected-inventory-games img {
   width: 150px;
   height: 180px;
   margin: 10px;
-}
-
-.selected-inventory-games {
-  display: inline-block;
 }

@@ -13,9 +13,13 @@ function UpdateProfile() {
   const [description, setDescription] = useState();
   const [inventory, setInventory] = useState([]);
   const [wishlist, setWishlist] = useState([]);
-  const [image, setImage] = useState([]);
+  const [profilePic, setProfilePic] = useState([]);
+  const [newImage, setNewImage] = useState();
   const [editMode, setEditMode] = useState(false);
+  const [editInventoryMode, setEditInventoryMode] = useState(false);
+  const [editWishlistMode, setEditWishlistMode] = useState(false);
   const [sendRequest] = useAPI();
+  const [displayPassword, setDisplayPassword] = useState();
   // change to the following when this page is done
   // const userID = useSelector((state) => state.user.userId);
 
@@ -26,20 +30,21 @@ function UpdateProfile() {
       const responseData = await sendRequest(`/api/user/id/${userID}`);
       if (responseData) {
         if (responseData.matchedUser) {
-          let passwordHidden = responseData.matchedUser.password.replace(
-            /./g,
-            "*"
+          const user = responseData.matchedUser;
+          setPassword(user.password);
+          setUsername(user.username);
+          setDescription(user.description);
+          setInventory(user.inventory);
+          setWishlist(user.wishlist);
+          setProfilePic(user.profilePicURL);
+          setDisplayPassword(
+            responseData.matchedUser.password.replace(/./g, "*")
           );
-          setPassword(passwordHidden);
-          setUsername(responseData.matchedUser.username);
-          setDescription(responseData.matchedUser.description);
-          setInventory(responseData.matchedUser.inventory);
-          setWishlist(responseData.matchedUser.wishlist);
         }
       }
     };
     getUserData();
-  }, [userID]);
+  }, [userID, sendRequest]);
 
   const deselectGame = (event, index) => {
     switch (event.target.name) {
@@ -61,6 +66,7 @@ function UpdateProfile() {
         break;
       case "password":
         setPassword(event.target.value);
+        setDisplayPassword(event.target.value.replace(/./g, "*"));
         break;
       case "description":
         setDescription(event.target.value);
@@ -70,25 +76,22 @@ function UpdateProfile() {
     }
   };
 
-  const onSubmitHandler = async (event) => {
+  const updateDetails = async (event) => {
     event.preventDefault();
-
-    /*
     let formData = new FormData();
-    formData.append("image", image);
+    formData.append("image", newImage);
     formData.append("username", username);
     formData.append("password", password);
     formData.append("description", description);
-    //formData.append("inventory", inventory);
-    //formData.append("wishlist", wishlist);
-    */
-
     const responseData = await sendRequest(
-      `/api/user/update/${userID}`,
+      `/api/user/update/details/${userID}`,
       "PATCH",
-      { username, password, description, inventory, wishlist }
+      formData,
+      true
     );
+
     if (responseData) {
+      console.log(responseData);
       if (responseData.userID === userID) {
         setEditMode(false);
         alert("Update successful");
@@ -96,10 +99,43 @@ function UpdateProfile() {
     }
   };
 
+  const updateInventory = async (event) => {
+    event.preventDefault();
+
+    const responseData = await sendRequest(
+      `/api/user/update/inventory/${userID}`,
+      "PATCH",
+      { inventory }
+    );
+
+    if (responseData) {
+      if (responseData.userID === userID) {
+        setEditInventoryMode(false);
+        alert("Update successful");
+      }
+    }
+  };
+
+  const updateWishlist = async (event) => {
+    event.preventDefault();
+
+    const responseData = await sendRequest(
+      `/api/user/update/wishlist/${userID}`,
+      "PATCH",
+      { wishlist }
+    );
+
+    if (responseData) {
+      if (responseData.userID === userID) {
+        setEditWishlistMode(false);
+        alert("Update successful");
+      }
+    }
+  };
   return (
     <div>
       <Header />
-      <ImageUpload image={image} setImage={setImage} />
+      <ImageUpload imageData={{ profilePic, newImage, setNewImage }} />
       <div className="userInformation">
         <p className="inputHeader">Username</p>
         {!editMode ? (
@@ -121,7 +157,7 @@ function UpdateProfile() {
         <p className="inputHeader">Password</p>
         {!editMode ? (
           <div className="currentinfo">
-            <span>{password}</span>
+            <span>{displayPassword}</span>
           </div>
         ) : (
           <span>
@@ -165,54 +201,90 @@ function UpdateProfile() {
             <FiEdit2 /> Update
           </button>
         ) : (
-          <button className="saveButton" onClick={onSubmitHandler}>
+          <button className="saveButton" onClick={updateDetails}>
             Save
           </button>
         )}
         <hr />
-        <p className="inputHeader">Inventory</p>
+        <span>
+          <p className="inputHeader">
+            Inventory
+            <span> </span>
+            {!editInventoryMode ? (
+              <button onClick={() => setEditInventoryMode(true)}>
+                <FiEdit2 /> Update Inventory
+              </button>
+            ) : (
+              <button className="saveButton" onClick={updateInventory}>
+                Save
+              </button>
+            )}
+          </p>
+        </span>
+
         {inventory &&
           inventory.map((game, index) => (
-            <div className="selected-inventory-games">
+            <div className="selected-inventory-games" key={index}>
               <img
-                className="selected-inventory-game-images"
                 src={game.imageURL}
-                key={index}
                 alt={game.title}
-                onClick={(event) => deselectGame(event, index)}
+                onClick={
+                  editInventoryMode
+                    ? (event) => deselectGame(event, index)
+                    : null
+                }
                 name="inventory"
               />
             </div>
           ))}
-        <div>
-          <AddGames
-            setSelectedGames={setInventory}
-            selectedGames={inventory}
-            maxSelectionSize={3}
-          />
-        </div>
+        {editInventoryMode ? (
+          <div>
+            <AddGames
+              setSelectedGames={setInventory}
+              selectedGames={inventory}
+              maxSelectionSize={3}
+            />
+          </div>
+        ) : null}
         <hr />
-        <p className="inputHeader">Wishlist</p>
+        <span>
+          <p className="inputHeader">
+            Wishlist
+            {!editWishlistMode ? (
+              <button onClick={() => setEditWishlistMode(true)}>
+                <FiEdit2 /> Update Wishlist
+              </button>
+            ) : (
+              <button className="saveButton" onClick={updateWishlist}>
+                Save
+              </button>
+            )}
+          </p>
+        </span>
         {wishlist &&
           wishlist.map((game, index) => (
-            <div className="selected-inventory-games">
+            <div className="selected-inventory-games" key={index}>
               <img
-                className="selected-inventory-game-images"
                 src={game.imageURL}
-                key={index}
                 alt={game.title}
-                onClick={(event) => deselectGame(event, index)}
+                onClick={
+                  editWishlistMode
+                    ? (event) => deselectGame(event, index)
+                    : null
+                }
                 name="wishlist"
               />
             </div>
           ))}
-        <div className="update-user-game-images-div">
-          <AddGames
-            setSelectedGames={setWishlist}
-            selectedGames={wishlist}
-            maxSelectionSize={3}
-          />
-        </div>
+        {editWishlistMode ? (
+          <div className="update-user-game-images-div">
+            <AddGames
+              setSelectedGames={setWishlist}
+              selectedGames={wishlist}
+              maxSelectionSize={3}
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   );

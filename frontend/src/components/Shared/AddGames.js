@@ -12,9 +12,7 @@ const AddGames = (props) => {
   const [query, setQuery] = useState({ title: null, platform: null });
 
   // list of all selectedGamesID so they would not be displayed
-  let selectedGamesID = props.selectedGames.map(
-    (game) => game._id || game.gameID
-  );
+  let selectedGamesID = props.selectedGames.map((game) => game._id);
 
   // get games from mongodb
   useEffect(() => {

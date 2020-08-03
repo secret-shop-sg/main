@@ -8,16 +8,26 @@ router.post("/signup", userController.addNewUser);
 
 router.post("/login", userController.login);
 
+// get user info
 router.get("/id/:userID", userController.getUser);
 
+// checks email is unique
 router.post("/validate/email", userController.validateField);
 
+// checks username is unique
 router.post("/validate/username", userController.validateField);
 
+// updates user details including profile picture
 router.patch(
-  "/update/:userID",
+  "/update/details/:userID",
   fileUpload.single("image"),
-  userController.updateProfile
+  userController.updateProfileDetails
 );
+
+// updates inventory
+router.patch("/update/inventory/:userID", userController.updateInventory);
+
+// updates wishlist
+router.patch("/update/wishlist/:userID", userController.updateWishlist);
 
 module.exports = router;
