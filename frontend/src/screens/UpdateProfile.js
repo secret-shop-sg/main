@@ -37,9 +37,7 @@ function UpdateProfile() {
           setInventory(user.inventory);
           setWishlist(user.wishlist);
           setProfilePic(user.profilePicURL);
-          setDisplayPassword(
-            responseData.matchedUser.password.replace(/./g, "*")
-          );
+          setDisplayPassword(user.password.replace(/./g, "*"));
         }
       }
     };

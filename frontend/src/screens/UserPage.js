@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { BACKEND_ADDRESS } from "../constants/Details";
 import Header from "../components/Shared/Header";
 import "./styles/UserPage.css";
 import { useAPI } from "../utils/useAPI";
@@ -7,39 +8,47 @@ import { GoVerified } from "react-icons/go";
 import { GrLocation } from "react-icons/gr";
 import ListBox from "../components/User/userListBox";
 
-const UserPage = () => {
+const UserPage = (props) => {
   const [sendRequest, isLoading] = useAPI();
   const [following, setFollowing] = useState(false);
+  const username = props.location.pathname.substring(1);
+  const [userDetails, setUserDetails] = useState();
 
   function clickedfollow() {
     setFollowing(!following);
   }
 
-  const [userdetails, setUserDetails] = useState();
   useEffect(() => {
     const getListing = async () => {
-      const responseData = await sendRequest(
-        `/api/user/id/5f1c22e88ee3f6157ad84e41`
-      );
+      const responseData = await sendRequest(`/api/user/username/${username}`);
       if (responseData) {
         setUserDetails(responseData.matchedUser);
       }
     };
     getListing();
-  }, ["5f1c22e88ee3f6157ad84e41"]);
+  }, [username]);
+  /*
+  useEffect(()=> {
+    if(userDetails){
+
+    }
+  },[userDetails])
+  */
+
   return (
     <div>
       <Header />
-      {!isLoading && userdetails && (
+      {!isLoading && userDetails && (
         <div>
-          <div className="user">
+          <div className="user-profile-sidebar">
             <img
-              className="profilepicture"
-              src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/kermit-the-frog-attends-the-2017-drama-league-benefit-gala-news-photo-1568466133.jpg"
+              className="user-profile-image"
+              src={BACKEND_ADDRESS + userDetails.profilePicURL}
+              alt="Profile picture"
             />
             <div className="userdetails">
               <h2 className="name">
-                {userdetails.username}
+                {userDetails.username}
                 <span className="verification">
                   {" "}
                   <GoVerified size={25} />
@@ -76,99 +85,36 @@ const UserPage = () => {
                 </span>
               </p>
               <p>
-                <GrLocation /> <span> </span> {userdetails.location}
+                {userDetails.location && (
+                  <div>
+                    <GrLocation /> <span /> {userDetails.location}
+                  </div>
+                )}
               </p>
               <p>Responsiveness</p>
-              <p className="userbody">
-                Charity hugs cats hugs yiff furry cats, foxes uwu steampunk
-                charity. Charity yiff cats yiff dogs owo hugs, furry furry uwu
-                yiff cats. Uwu fluff foxes uwu dogs fluff cats furry. Foxes
-                fluff cats fluff hugs, charity uwu foxes hugs cats. Dogs
-                steampunk furry, dogs steampunk fluff charity dogs hugs charity
-                foxes charity charity charity. Steampunk uwu cats fluff yiff
-                steampunk steampunk, dogs foxes steampunk steampunk. Steampunk
-                charity cats foxes steampunk fluff yiff cats. Yiff owo dogs
-                steampunk fluff uwu, uwu fluff steampunk uwu owo. Fluff uwu
-                cats, uwu steampunk yiff fluff steampunk hugs hugs yiff.
-              </p>
+              <p className="userbody">{userDetails.description}</p>
               <p className="followerfollowing">
                 <span className="followers">5k followers</span>
                 <span>2k following</span>
               </p>
             </div>
           </div>
-          <div className="inventory">
-            <h3>{userdetails.username}'s Inventory</h3>
+          <div className="user-profile-inventory">
+            <h3>{userDetails.username}'s Inventory</h3>
             <div className="scrollMenu">
-              <img
-                className="inventoryImg"
-                src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg"
-              />
-              <img
-                className="inventoryImg"
-                src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg"
-              />
-              <img
-                className="inventoryImg"
-                src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg"
-              />
-              <img
-                className="inventoryImg"
-                src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg"
-              />
-              <img
-                className="inventoryImg"
-                src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg"
-              />
-              <img
-                className="inventoryImg"
-                src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg"
-              />
-              <img
-                className="inventoryImg"
-                src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg"
-              />
-              <img
-                className="inventoryImg"
-                src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg"
-              />
-              <img
-                className="inventoryImg"
-                src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg"
-              />
-              <img
-                className="inventoryImg"
-                src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg"
-              />
-              <img
-                className="inventoryImg"
-                src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg"
-              />
-              <img
-                className="inventoryImg"
-                src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg"
-              />
-              <img
-                className="inventoryImg"
-                src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg"
-              />
-              <img
-                className="inventoryImg"
-                src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg"
-              />
-              <img
-                className="inventoryImg"
-                src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg"
-              />
-              <img
-                className="inventoryImg"
-                src="https://www.imore.com/sites/imore.com/files/styles/medium/public/field/image/2019/05/smash-bros-ult-rjd.jpg"
-              />
+              {userDetails.inventory &&
+                userDetails.inventory.map((game) => (
+                  <img
+                    className="inventoryImg"
+                    src={game.imageURL}
+                    key={game._id}
+                  />
+                ))}
             </div>
           </div>
-          <div className="userlistings">
+          <div className="user-profile-listings-container">
             <h3 style={{ marginBottom: "2%" }}>
-              {userdetails.username}'s Listings
+              {userDetails.username}'s Listings
             </h3>
             <ListBox />
           </div>

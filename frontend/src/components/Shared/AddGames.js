@@ -92,9 +92,9 @@ const AddGames = (props) => {
       {!isLoading &&
         matchedGames &&
         matchedGames.map(
-          (matchedGame, index) =>
+          (matchedGame) =>
             !selectedGamesID.includes(matchedGame._id) && (
-              <div className="matched-game-div" key={index}>
+              <div className="matched-game-div" key={matchedGame._id}>
                 <img
                   src={matchedGame.imageURL}
                   alt={matchedGame.title + " on" + matchedGame.platform}

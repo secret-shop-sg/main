@@ -79,7 +79,7 @@ const login = async (req, res, next) => {
   res.json({ validCredentials, userID });
 };
 
-const getUser = async (req, res, next) => {
+const getUserbyID = async (req, res, next) => {
   const userID = req.params.userID;
   let matchedUser;
 
@@ -89,6 +89,19 @@ const getUser = async (req, res, next) => {
     } catch (err) {
       return next(new DatabaseError(err.message));
     }
+  }
+
+  res.json({ matchedUser });
+};
+
+const getUserbyName = async (req, res, next) => {
+  const username = req.params.username;
+  let matchedUser;
+
+  try {
+    matchedUser = await User.findOne({ username });
+  } catch (err) {
+    return next(new DatabaseError(err.message));
   }
 
   res.json({ matchedUser });
@@ -116,7 +129,7 @@ const updateProfileDetails = async (req, res, next) => {
 
   if (matchedUser) {
     if (req.file) {
-      matchedUser.profilePicURL = req.file.path;
+      matchedUser.profilePicURL = "/" + req.file.path;
     }
 
     // iterates through whatever fields have updates and update them in the matchedUser
@@ -190,6 +203,7 @@ exports.updateInventory = updateInventory;
 exports.updateWishlist = updateWishlist;
 exports.updateProfileDetails = updateProfileDetails;
 exports.addNewUser = addNewUser;
-exports.getUser = getUser;
+exports.getUserbyID = getUserbyID;
+exports.getUserbyName = getUserbyName;
 exports.validateField = validateField;
 exports.login = login;

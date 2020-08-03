@@ -4,6 +4,7 @@ import { FiEdit2 } from "react-icons/fi";
 import "./ImageUpload.css";
 
 const ImageUpload = (props) => {
+  // Todo: Block files that are too big from being uploaded
   const image = props.imageData;
   const [previewURL, setPreviewURL] = useState();
   const filePickerRef = useRef();
@@ -46,7 +47,7 @@ const ImageUpload = (props) => {
           {previewURL && <img src={previewURL} alt="Preview" />}
           {/* If not, render user's existing picture if it is available*/}
           {!previewURL && image.profilePic && (
-            <img src={BACKEND_ADDRESS + "/" + image.profilePic} />
+            <img src={BACKEND_ADDRESS + image.profilePic} />
           )}
           {/* Else display instructions */}
           {!previewURL && !image.profilePic && <p>Please pick an image</p>}

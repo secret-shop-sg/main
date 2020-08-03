@@ -8,8 +8,11 @@ router.post("/signup", userController.addNewUser);
 
 router.post("/login", userController.login);
 
-// get user info
-router.get("/id/:userID", userController.getUser);
+// get user info based on user ID
+router.get("/id/:userID", userController.getUserbyID);
+
+// get user info based on username
+router.get("/username/:username", userController.getUserbyName);
 
 // checks email is unique
 router.post("/validate/email", userController.validateField);
