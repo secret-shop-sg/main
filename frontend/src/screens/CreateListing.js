@@ -77,17 +77,19 @@ function CreateListing() {
       </div>
       <div className="uploadDetails">
         <form>
-          <p className="inputHeader">Title</p>
+          <p className="inputHeader">Game</p>
           {!listedGame[0] ?
-            <input
-              type="text"
-              id="title"
-              className="listinginput"
-              name="title"
-              placeholder="eg. SSBU for Trade; Animal Crossing for Rent; Kirby Star Allies for sale"
-            /> :
+            null :
             <h5>{listedGame[0].title}</h5>
           }
+          <p className="inputHeader">Title</p>
+          <input
+            type="text"
+            id="title"
+            className="listinginput"
+            name="title"
+            placeholder="eg. SSBU for Trade; Animal Crossing for Rent; Kirby Star Allies for sale"
+          />
           <p className="inputHeader2">Description</p>
           <textarea
             placeholder="eg. Near Mint, date bought etc."
@@ -132,15 +134,17 @@ function CreateListing() {
               />
             </div>
           )}
-          <div className="games-component-body">
-            <AddGames
-              setSelectedGames={setListedGame}
-              selectedGames={listedGame}
-              maxSelectionSize={1}
-            />
-          </div>
+
           <input type="submit" value="Add Listing" />
         </form>
+      </div>
+
+      <div className="games-component-body">
+        <AddGames
+          setSelectedGames={setListedGame}
+          selectedGames={listedGame}
+          maxSelectionSize={1}
+        />
       </div>
     </div>
   );

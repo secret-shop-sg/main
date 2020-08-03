@@ -63,10 +63,10 @@ const UserPage = (props) => {
                       Follow!
                     </button>
                   ) : (
-                    <button className="followed" onClick={clickedfollow}>
-                      Followed!
-                    </button>
-                  )}
+                      <button className="followed" onClick={clickedfollow}>
+                        Followed!
+                      </button>
+                    )}
                 </span>
               </p>
               <p>
@@ -112,6 +112,19 @@ const UserPage = (props) => {
                 ))}
             </div>
           </div>
+          <div className="user-profile-wishlist">
+            <h3>{userDetails.username}'s Wishlist</h3>
+            <div className="scrollMenu">
+              {userDetails.wishlist &&
+                userDetails.wishlist.map((game) => (
+                  <img
+                    className="inventoryImg"
+                    src={game.imageURL}
+                    key={game._id}
+                  />
+                ))}
+            </div>
+          </div>
           <div className="user-profile-listings-container">
             <h3 style={{ marginBottom: "2%" }}>
               {userDetails.username}'s Listings
@@ -119,9 +132,10 @@ const UserPage = (props) => {
             <ListBox />
           </div>
         </div>
+
       )}
-    </div>
-  );
+    </div>)
 };
+
 
 export default UserPage;
