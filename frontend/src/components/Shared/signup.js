@@ -34,7 +34,6 @@ const formReducer = (state, action) => {
         }
       }
 
-      console.log(formIsValid);
       // return updated state
       return {
         ...state,
@@ -94,7 +93,27 @@ function Signup(props) {
     } else {
       isValid = true;
     }
-    // add more validity checks - switch case?
+    // more specific validity checks
+    switch (inputIdentifier) {
+      case "username":
+        break;
+      case "email":
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!re.test(String(value).toLowerCase())) {
+          isValid = false;
+        }
+        break;
+      case "password":
+        if (value.length < 6) {
+          isValid = false;
+        }
+        break;
+      case "confirmedPassword":
+        if (value != formState.inputValues.password) {
+          isValid = false;
+        }
+        break;
+    }
 
     // dispatch to reducer
     dispatchForm({
@@ -153,7 +172,6 @@ function Signup(props) {
         value: responseData.isValid,
         input: inputIdentifier,
       });
-      console.log("isValid:", responseData.isValid);
     }
   };
 
