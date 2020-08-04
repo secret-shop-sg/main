@@ -71,8 +71,6 @@ function Login(props) {
       isValid = true;
     }
 
-    console.log(value);
-
     //dispatch to reducer
     dispatchForm({
       type: "UPDATE",
@@ -108,6 +106,7 @@ function Login(props) {
     if (responseData) {
       if (!responseData.validCredentials) {
         // means either username or password is wrong
+        alert("Authentication failed");
       } else {
         // login in redux
         const userID = responseData.userID;
