@@ -3,11 +3,13 @@ const Listing = require("../models/listings");
 const User = require("../models/users");
 const mongoose = require("mongoose");
 const DatabaseError = require("../models/databaseError");
+const listings = require("../models/listings");
 
 // To be eventually added
 // const updateListing
 // const deleteLising
 
+/*
 const getListing = (req, res, next) => {
   const listingID = req.params.listingID;
 
@@ -35,7 +37,7 @@ const getListing = (req, res, next) => {
     similarListings = similarListings.filter((listing) => listing.length != 0);
     res.json({ listingToDisplay, similarListings });
   } else res.json({ listingToDisplay });
-};
+}; */
 
 const getMultipleListings = async (req, res, next) => {
   const listingIDs = req.body.listingIDs;
@@ -56,44 +58,40 @@ const getMultipleListings = async (req, res, next) => {
   res.json({ listingsData });
 };
 
-/*
 const getListing = async (req, res, next) => {
   const listingID = req.params.listingID;
   let listingToDisplay;
+  let platform;
   let similarListings;
 
   try {
-    listingToDisplay = await Listing.findById(listingID);
+    listingToDisplay = await Listing.findById(listingID, { __v: 0 })
+      .populate({
+        path: "ownerID",
+        select: "username",
+      })
+      .populate("hasItem wantsItem", { __v: 0 });
   } catch (err) {
     return next(new DatabaseError(err.message));
   }
 
+  /*
   if (listingToDisplay) {
     try {
-      User.count().exec(function (err, count) {
-        // Get a random entry
-        var random = Math.floor(Math.random() * count);
-
-        // Again query all users but only fetch one offset by our random #
-        User.findOne()
-          .skip(random)
-          .exec(function (err, result) {
-            // Tada! random user
-            console.log(result);
-          });
-      });
-
       similarListings = await Listing.find({
-        platform: listingToDisplay.platform,
+        $and: [
+          { _id: { $ne: listingID } },
+          { platform: listingToDisplay.platform },
+        ],
       }).limit(3);
     } catch (err) {
       return next(new DatabaseError(err.message));
     }
   }
+  */
 
   res.json({ listingToDisplay, similarListings });
 };
-*/
 
 const addListing = async (req, res, next) => {
   // optional parameters should be passed as null
@@ -157,7 +155,6 @@ const addListing = async (req, res, next) => {
 
   res.status(201).json({ listingID: newListing.id });
 };
-
 const getMostRecentListings = (req, res, next) => {
   let elementCount = 5;
   let mostRecentListings = allListings.slice(0, elementCount);
@@ -199,6 +196,22 @@ const getMostRecentListings = (req, res, next) => {
 
   res.json({ mostRecentListings });
 };
+/*
+const getMostRecentListings = async (req, res, next) => {
+  const documentCount = 5;
+  let matchedListings;
+
+  try {
+    matchedListings = await Listing.find({}, { __v: 0 })
+      .sort({ dateListed: "descending" })
+      .populate("hasItem wantsItem", { __v: 0 })
+      .limit(documentCount);
+  } catch (err) {
+    return next(new DatabaseError(err.message));
+  }
+
+  res.json({ matchedListings });
+}; */
 
 exports.getMultipleListings = getMultipleListings;
 exports.getListing = getListing;

@@ -22,6 +22,7 @@ const getGames = async (req, res, next) => {
   let matchedGames;
   const queries = req.query;
 
+  // if queries has no platform condition, all documents with a platform field would be returned
   let platform = { $exists: true };
   if (queries.platform) {
     platform = queries.platform;
