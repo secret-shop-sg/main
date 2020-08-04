@@ -20,6 +20,8 @@ const HomeListing = (props) => {
         return <img src={XboxLogo} height="40" alt="Xbox" />;
       case "PlayStation 4":
         return <img src={PlaystationLogo} height="40" alt="Playstation" />;
+      default:
+        break;
     }
   };
 

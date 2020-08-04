@@ -12,7 +12,7 @@ const AddGames = (props) => {
   const [query, setQuery] = useState({ title: null, platform: null });
 
   // list of all selectedGamesID so they would not be displayed
-  const selectedGamesID = props.selectedGames.map((game) => game._id);
+  let selectedGamesID = props.selectedGames.map((game) => game._id);
 
   // get games from mongodb
   useEffect(() => {
@@ -20,9 +20,6 @@ const AddGames = (props) => {
       const responseData = await sendRequest(apiPath);
 
       if (responseData) {
-        responseData.matchedGames.forEach((game) => {
-          game.imageURL = BACKEND_ADDRESS + game.imageURL;
-        });
         setMatchedGames(responseData.matchedGames);
       }
     };
@@ -92,11 +89,11 @@ const AddGames = (props) => {
       {!isLoading &&
         matchedGames &&
         matchedGames.map(
-          (matchedGame, index) =>
+          (matchedGame) =>
             !selectedGamesID.includes(matchedGame._id) && (
-              <div className="matched-game-div" key={index}>
+              <div className="matched-game-div" key={matchedGame._id}>
                 <img
-                  src={matchedGame.imageURL}
+                  src={BACKEND_ADDRESS + matchedGame.imageURL}
                   alt={matchedGame.title + " on" + matchedGame.platform}
                   className="matched-game-images"
                   onClick={() => onClickGame(matchedGame)}
