@@ -6,7 +6,7 @@ import { BACKEND_ADDRESS } from "../constants/Details";
 import "./styles/UpdateProfile.css";
 import { FiEdit2 } from "react-icons/fi";
 import ImageUpload from "../components/UpdateProfile/ImageUpload";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 function UpdateProfile() {
   const [username, setUsername] = useState();
@@ -22,9 +22,9 @@ function UpdateProfile() {
   const [sendRequest] = useAPI();
   const [displayPassword, setDisplayPassword] = useState();
   // change to the following when this page is done
-  // const userID = useSelector((state) => state.user.userId);
+  //const userID = useSelector((state) => state.user.userId);
 
-  const userID = "5f1ed6a160fc2b0d9025117c";
+  const userID = "5f290d05083dcc5b5cd1c91f";
 
   useEffect(() => {
     const getUserData = async () => {

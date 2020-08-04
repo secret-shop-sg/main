@@ -106,6 +106,19 @@ const UserPage = (props) => {
                 ))}
             </div>
           </div>
+          <div className="user-profile-wishlist">
+            <h3>{userDetails.username}'s Wishlist</h3>
+            <div className="scrollMenu">
+              {userDetails.wishlist &&
+                userDetails.wishlist.map((game) => (
+                  <img
+                    className="inventoryImg"
+                    src={BACKEND_ADDRESS + game.imageURL}
+                    key={game._id}
+                  />
+                ))}
+            </div>
+          </div>
           <div className="user-profile-listings-container">
             <h3 style={{ marginBottom: "2%" }}>
               {userDetails.username}'s Listings

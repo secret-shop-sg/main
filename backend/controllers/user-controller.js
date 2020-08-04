@@ -1,6 +1,5 @@
 const User = require("../models/users");
 const DatabaseError = require("../models/databaseError");
-const listings = require("../models/listings");
 
 const addNewUser = async (req, res, next) => {
   const { username, email, password } = req.body;

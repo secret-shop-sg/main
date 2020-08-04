@@ -58,11 +58,12 @@
 }
 .user-profile-listings-container {
   width: 60%;
-  margin-top: 3%;
+  margin-top: 1%;
   border: 1px solid lightgray;
-  float: left;
+  float: right;
   padding: 20px;
   padding-top: 2%;
+  margin-right:9%;
 }
 .user-profile-inventory {
   width: 60%;
@@ -70,14 +71,24 @@
   border: 1px solid lightgray;
   float: left;
   padding: 20px;
+  margin-bottom:none;
 }
 .inventoryImg {
   width: 100px;
   height: 150px;
+  margin-left: 1%;
 }
 
 div.scrollMenu {
-  background-color: #333;
+  background-color: lightgray;
   overflow: auto;
   white-space: nowrap;
+}
+.user-profile-wishlist {
+  width: 60%;
+  margin-top: 1%;
+  border: 1px solid lightgray;
+  float: left;
+  padding: 20px;
+  margin-bottom:none;
 }
