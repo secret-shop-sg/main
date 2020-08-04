@@ -3,6 +3,8 @@ import "./Login.css";
 import "../../constants/styles/Bootstrap.css";
 import { FaUserCircle } from "react-icons/fa";
 import { useAPI } from "../../utils/useAPI";
+import { useDispatch } from "react-redux";
+import { userLogin } from "../../store/actions/userActions";
 
 // icons
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
@@ -32,6 +34,7 @@ const formReducer = (state, action) => {
         }
       }
 
+      console.log(formIsValid);
       // return updated state
       return {
         ...state,
@@ -57,6 +60,8 @@ const formReducer = (state, action) => {
 };
 
 function Signup(props) {
+  // redux dispatch
+  const dispatch = useDispatch();
   const [sendRequest] = useAPI();
   // use reducer for signup data
   const [formState, dispatchForm] = useReducer(formReducer, {
@@ -171,8 +176,11 @@ function Signup(props) {
     // responseData returns the user's userID
     if (responseData) {
       if (responseData.userID) {
-        // Todo: Stored the userID in redux
+        // store userid in redux
+        dispatch(userLogin(responseData.userID));
+        // success
         alert("Sign up successful");
+        props.closeButtonHandler();
       }
     }
   };
@@ -232,7 +240,7 @@ function Signup(props) {
           />
           <input
             type="password"
-            id="passwordConfirmed"
+            id="confirmedPassword"
             className="fadeIn input textthing"
             name="login"
             placeholder="confirm password"
