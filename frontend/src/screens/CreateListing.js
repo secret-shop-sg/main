@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAPI } from "../utils/useAPI";
 import { useHistory } from "react-router-dom";
+import { BACKEND_ADDRESS } from "../constants/Details";
 import Header from "../components/Shared/Header";
 import AddGames from "../components/Shared/AddGames";
 import { GrGallery } from "react-icons/gr";
@@ -20,7 +21,7 @@ function CreateListing() {
 
   /*check if they added a listing yet*/
   function addListingHandler() {
-    setListingAdded(!listingAdded)
+    setListingAdded(!listingAdded);
   }
   /* uncomment after page completed
   const ownerID = useSelector((state) => state.user.userId);
@@ -64,12 +65,16 @@ function CreateListing() {
       <Header />
       <div className="imageUploader">
         <div>
-          {!listedGame[0] ? <GrGallery id="galleryimage" size={100} /> : <img
-            className="selected-listing-game-image gallery-image "
-            src={listedGame[0].imageURL}
-            alt={listedGame.title}
-            onClick={deselectGame}
-          />}
+          {!listedGame[0] ? (
+            <GrGallery id="galleryimage" size={100} />
+          ) : (
+            <img
+              className="selected-listing-game-image gallery-image "
+              src={BACKEND_ADDRESS + listedGame[0].imageURL}
+              alt={listedGame.title}
+              onClick={deselectGame}
+            />
+          )}
         </div>
         <div>
           <button id="uploadButton">Click here to upload an image!</button>
@@ -78,16 +83,17 @@ function CreateListing() {
       <div className="uploadDetails">
         <form>
           <p className="inputHeader">Title</p>
-          {!listedGame[0] ?
+          {!listedGame[0] ? (
             <input
               type="text"
               id="title"
               className="listinginput"
               name="title"
               placeholder="eg. SSBU for Trade; Animal Crossing for Rent; Kirby Star Allies for sale"
-            /> :
+            />
+          ) : (
             <h5>{listedGame[0].title}</h5>
-          }
+          )}
           <p className="inputHeader2">Description</p>
           <textarea
             placeholder="eg. Near Mint, date bought etc."
@@ -122,16 +128,6 @@ function CreateListing() {
             <br />
           </div>
           <hr />
-          {listedGame[0] && (
-            <div>
-              <img
-                className="selected-listing-game-image"
-                src={listedGame[0].imageURL}
-                alt={listedGame.title}
-                onClick={deselectGame}
-              />
-            </div>
-          )}
           <div className="games-component-body">
             <AddGames
               setSelectedGames={setListedGame}

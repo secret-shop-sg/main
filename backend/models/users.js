@@ -10,24 +10,8 @@ const userSchema = new mongoose.Schema({
   profilePicURL: String,
   lastLoggedIn: { type: Date, required: true },
   location: String,
-  inventory: [
-    {
-      _id: false,
-      _id: { type: mongoose.Types.ObjectId, ref: "Game" },
-      title: String,
-      platform: String,
-      imageURL: String,
-    },
-  ],
-  wishlist: [
-    {
-      _id: false,
-      _id: { type: mongoose.Types.ObjectId, ref: "Game" },
-      title: String,
-      platform: String,
-      imageURL: String,
-    },
-  ],
+  inventory: [{ type: mongoose.Types.ObjectId, ref: "Game" }],
+  wishlist: [{ type: mongoose.Types.ObjectId, ref: "Game" }],
   description: String,
   listings: [{ type: mongoose.Types.ObjectId, ref: "Listing" }],
 });

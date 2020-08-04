@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/Shared/Header";
 import AddGames from "../components/Shared/AddGames";
 import { useAPI } from "../utils/useAPI";
+import { BACKEND_ADDRESS } from "../constants/Details";
 import "./styles/UpdateProfile.css";
 import { FiEdit2 } from "react-icons/fi";
 import ImageUpload from "../components/UpdateProfile/ImageUpload";
@@ -103,7 +104,7 @@ function UpdateProfile() {
     const responseData = await sendRequest(
       `/api/user/update/inventory/${userID}`,
       "PATCH",
-      { inventory }
+      { inventory: inventory.map((game) => game._id) }
     );
 
     if (responseData) {
@@ -120,7 +121,7 @@ function UpdateProfile() {
     const responseData = await sendRequest(
       `/api/user/update/wishlist/${userID}`,
       "PATCH",
-      { wishlist }
+      { wishlist: wishlist.map((game) => game._id) }
     );
 
     if (responseData) {
@@ -224,7 +225,7 @@ function UpdateProfile() {
           inventory.map((game, index) => (
             <div className="selected-inventory-games" key={index}>
               <img
-                src={game.imageURL}
+                src={BACKEND_ADDRESS + game.imageURL}
                 alt={game.title}
                 onClick={
                   editInventoryMode
@@ -263,7 +264,7 @@ function UpdateProfile() {
           wishlist.map((game, index) => (
             <div className="selected-inventory-games" key={index}>
               <img
-                src={game.imageURL}
+                src={BACKEND_ADDRESS + game.imageURL}
                 alt={game.title}
                 onClick={
                   editWishlistMode

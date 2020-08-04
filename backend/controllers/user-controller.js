@@ -1,5 +1,6 @@
 const User = require("../models/users");
 const DatabaseError = require("../models/databaseError");
+const listings = require("../models/listings");
 
 const addNewUser = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -83,9 +84,16 @@ const getUserbyID = async (req, res, next) => {
   const userID = req.params.userID;
   let matchedUser;
 
+  // todo: add error handling in the event that id sent is not 24 chars
   if (userID.match(/^[0-9a-fA-F]{24}$/)) {
     try {
-      matchedUser = await User.findById(userID);
+      matchedUser = await User.findById(userID, { __v: 0 })
+        .populate({
+          path: "listings",
+          select: { __v: 0 },
+          populate: { path: "hasItem wantsItem", select: { __v: 0 } },
+        })
+        .populate("inventory wishlist", { __v: 0 });
     } catch (err) {
       return next(new DatabaseError(err.message));
     }
@@ -99,7 +107,13 @@ const getUserbyName = async (req, res, next) => {
   let matchedUser;
 
   try {
-    matchedUser = await User.findOne({ username });
+    matchedUser = await User.findOne({ username }, { __v: 0 })
+      .populate({
+        path: "listings",
+        select: { __v: 0 },
+        populate: { path: "hasItem wantsItem", select: { __v: 0 } },
+      })
+      .populate("inventory wishlist", { __v: 0 });
   } catch (err) {
     return next(new DatabaseError(err.message));
   }

@@ -36,8 +36,27 @@ const getListing = (req, res, next) => {
     res.json({ listingToDisplay, similarListings });
   } else res.json({ listingToDisplay });
 };
-/*
 
+const getMultipleListings = async (req, res, next) => {
+  const listingIDs = req.body.listingIDs;
+  let listingsData = [];
+
+  if (listingIDs) {
+    for (id of listingIDs) {
+      let listingData;
+      try {
+        listingData = await Listing.findById(id);
+        listingsData.push(listingData);
+      } catch (err) {
+        return next(new DatabaseError(err.message));
+      }
+    }
+  }
+
+  res.json({ listingsData });
+};
+
+/*
 const getListing = async (req, res, next) => {
   const listingID = req.params.listingID;
   let listingToDisplay;
@@ -51,19 +70,18 @@ const getListing = async (req, res, next) => {
 
   if (listingToDisplay) {
     try {
-
       User.count().exec(function (err, count) {
-
         // Get a random entry
-        var random = Math.floor(Math.random() * count)
-      
+        var random = Math.floor(Math.random() * count);
+
         // Again query all users but only fetch one offset by our random #
-        User.findOne().skip(random).exec(
-          function (err, result) {
+        User.findOne()
+          .skip(random)
+          .exec(function (err, result) {
             // Tada! random user
-            console.log(result) 
-          })
-      })
+            console.log(result);
+          });
+      });
 
       similarListings = await Listing.find({
         platform: listingToDisplay.platform,
@@ -75,8 +93,8 @@ const getListing = async (req, res, next) => {
 
   res.json({ listingToDisplay, similarListings });
 };
-
 */
+
 const addListing = async (req, res, next) => {
   // optional parameters should be passed as null
   const {
@@ -184,6 +202,7 @@ const getMostRecentListings = (req, res, next) => {
   res.json({ mostRecentListings });
 };
 
+exports.getMultipleListings = getMultipleListings;
 exports.getListing = getListing;
 exports.addListing = addListing;
 exports.getMostRecentListings = getMostRecentListings;

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { BACKEND_ADDRESS } from "../../constants/Details";
 import { FiEdit2 } from "react-icons/fi";
 import "./ImageUpload.css";
@@ -47,7 +47,7 @@ const ImageUpload = (props) => {
           {previewURL && <img src={previewURL} alt="Preview" />}
           {/* If not, render user's existing picture if it is available*/}
           {!previewURL && image.profilePic && (
-            <img src={BACKEND_ADDRESS + image.profilePic} />
+            <img src={BACKEND_ADDRESS + image.profilePic} alt="Profile pic" />
           )}
           {/* Else display instructions */}
           {!previewURL && !image.profilePic && <p>Please pick an image</p>}

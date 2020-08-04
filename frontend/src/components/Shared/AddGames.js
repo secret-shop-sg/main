@@ -20,9 +20,6 @@ const AddGames = (props) => {
       const responseData = await sendRequest(apiPath);
 
       if (responseData) {
-        responseData.matchedGames.forEach((game) => {
-          game.imageURL = BACKEND_ADDRESS + game.imageURL;
-        });
         setMatchedGames(responseData.matchedGames);
       }
     };
@@ -96,7 +93,7 @@ const AddGames = (props) => {
             !selectedGamesID.includes(matchedGame._id) && (
               <div className="matched-game-div" key={matchedGame._id}>
                 <img
-                  src={matchedGame.imageURL}
+                  src={BACKEND_ADDRESS + matchedGame.imageURL}
                   alt={matchedGame.title + " on" + matchedGame.platform}
                   className="matched-game-images"
                   onClick={() => onClickGame(matchedGame)}
