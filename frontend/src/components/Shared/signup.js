@@ -195,7 +195,9 @@ function Signup(props) {
     if (responseData) {
       if (responseData.userID) {
         // store userid in redux
-        dispatch(userLogin(responseData.userID));
+        dispatch(
+          userLogin(responseData.userID, formState.inputValues.username)
+        );
         // success
         alert("Sign up successful");
         props.closeButtonHandler();

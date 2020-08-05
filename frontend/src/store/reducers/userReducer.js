@@ -2,6 +2,7 @@
 
 const intialState = {
   userId: null,
+  username: null,
 };
 
 const userReducer = (state = intialState, action) => {
@@ -11,12 +12,14 @@ const userReducer = (state = intialState, action) => {
       return {
         ...state,
         userId: action.userId,
+        username: action.username,
       };
     case "LOGOUT":
       // logout
       return {
         ...state,
         userId: null,
+        username: null,
       };
     default:
       return state;

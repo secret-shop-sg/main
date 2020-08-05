@@ -1,6 +1,6 @@
 // login
-export const userLogin = (userId) => {
-  return { type: "LOGIN", userId: userId };
+export const userLogin = (userId, username) => {
+  return { type: "LOGIN", userId: userId, username: username };
 };
 
 // logout
