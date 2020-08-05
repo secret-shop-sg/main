@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
+const gameSchema = require("./games").game;
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
@@ -10,8 +11,8 @@ const userSchema = new mongoose.Schema({
   profilePicURL: String,
   lastLoggedIn: { type: Date, required: true },
   location: String,
-  inventory: [{ type: mongoose.Types.ObjectId, ref: "Game" }],
-  wishlist: [{ type: mongoose.Types.ObjectId, ref: "Game" }],
+  inventory: [gameSchema],
+  wishlist: [gameSchema],
   description: String,
   listings: [{ type: mongoose.Types.ObjectId, ref: "Listing" }],
 });

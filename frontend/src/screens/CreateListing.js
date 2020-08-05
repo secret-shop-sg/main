@@ -18,9 +18,10 @@ function CreateListing() {
   const [sellingPrice, setSellingPrice] = useState();
   const [rentalPrice, setRentalPrice] = useState();
 
-  const ownerID = "5f290d05083dcc5b5cd1c91f";
+  const ownerID = "5f29504f0f1bc35a048e5b70";
+  const owner = "test";
 
-  //const ownerID = useSelector((state) => state.user.userId);
+  //const owner = useSelector((state) => state.user.userId);
   /* uncomment after page completed*/
 
   /*check if they added a listing yet*/
@@ -33,13 +34,13 @@ function CreateListing() {
   };
 
   // function that triggers when user submits the form.
-  // Todo: link to api when all data is available
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     const responseData = await sendRequest("/api/listing/add", "POST", {
       // change the fields below to the actual fields
-      hasItem: listedGame[0]._id,
+      hasItem: listedGame[0],
       ownerID,
+      owner,
       description,
       sellingPrice,
       rentalPrice,

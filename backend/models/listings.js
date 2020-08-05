@@ -1,12 +1,14 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
+const gameSchema = require("./games").game;
 
 const listingSchema = new mongoose.Schema({
-  hasItem: { type: mongoose.Types.ObjectId, ref: "Game", required: true },
-  dateListed: { type: String, required: true },
+  hasItem: { type: gameSchema, required: true },
+  dateListed: { type: Date, required: true },
   description: String,
   ownerID: { type: mongoose.Types.ObjectId, ref: "User", required: true },
-  wantsItem: { type: [{ type: mongoose.Types.ObjectId, ref: "Game" }] },
+  owner: { type: String, required: true },
+  wantsItem: [gameSchema],
   sellingPrice: Number,
   rentingPrice: Number,
 });

@@ -1,4 +1,4 @@
-const Game = require("../models/games");
+const Game = require("../models/games").gameSchema;
 const DatabaseError = require("../models/databaseError");
 
 const addNewGame = async (req, res, next) => {

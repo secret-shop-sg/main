@@ -9,7 +9,6 @@ const listings = require("../models/listings");
 // const updateListing
 // const deleteLising
 
-/*
 const getListing = (req, res, next) => {
   const listingID = req.params.listingID;
 
@@ -37,7 +36,7 @@ const getListing = (req, res, next) => {
     similarListings = similarListings.filter((listing) => listing.length != 0);
     res.json({ listingToDisplay, similarListings });
   } else res.json({ listingToDisplay });
-}; */
+};
 
 const getMultipleListings = async (req, res, next) => {
   const listingIDs = req.body.listingIDs;
@@ -57,41 +56,57 @@ const getMultipleListings = async (req, res, next) => {
 
   res.json({ listingsData });
 };
-
+/*
 const getListing = async (req, res, next) => {
   const listingID = req.params.listingID;
+  const similarListingsCount = 3;
   let listingToDisplay;
   let platform;
   let similarListings;
 
   try {
-    listingToDisplay = await Listing.findById(listingID, { __v: 0 })
-      .populate({
-        path: "ownerID",
-        select: "username",
-      })
-      .populate("hasItem wantsItem", { __v: 0 });
+    listingToDisplay = await Listing.findById(listingID, { __v: 0 });
   } catch (err) {
     return next(new DatabaseError(err.message));
   }
-
   /*
+  const randomClothingDocs = await Clothing.aggregate([
+    {$match: {type: listingToDisplay.listedItem.type}},
+    {$sample: {size: 3}}, // Get 3 random clothing docs
+    {$project: { // Only get the ids
+      _id: 1 { $sample: { size: 3 } },{ _id: { $ne: "5f2a65822bdb837c98793a17" }},
+    }},
+  ]); 
+
   if (listingToDisplay) {
+    platform = listingToDisplay.hasItem.platform;
     try {
-      similarListings = await Listing.find({
-        $and: [
-          { _id: { $ne: listingID } },
-          { platform: listingToDisplay.platform },
-        ],
-      }).limit(3);
+      similarListings = await Listing.aggregate([
+        {
+          $match: {
+            $and: [
+              { "hasItem.platform": platform },
+              { _id: { $ne: mongoose.Types.ObjectId(listingID) } },
+            ],
+          },
+        },
+        { $sample: { size: similarListingsCount } },
+        {
+          $lookup: {
+            from: "users",
+            localField: "owner",
+            foreignField: "_id",
+            as: "username",
+          },
+        },
+      ]);
     } catch (err) {
       return next(new DatabaseError(err.message));
     }
   }
-  */
 
   res.json({ listingToDisplay, similarListings });
-};
+}; */
 
 const addListing = async (req, res, next) => {
   // optional parameters should be passed as null
@@ -127,7 +142,7 @@ const addListing = async (req, res, next) => {
     return next(new DatabaseError(err.message));
   }
 
-  // preventive measure in case ownerID is wrong.
+  // preventive measure in case owner is wrong.
   // Should not happen because you have to be logged in to post listings
   if (!user) {
     const error = new Error("Cannot find user with the provided ID");
@@ -143,7 +158,7 @@ const addListing = async (req, res, next) => {
     user.listings.push(newListing);
 
     // if game in listing is not in inventory, add in inventory
-    if (!user.inventory.includes(hasItem)) {
+    if (!user.inventory.some((game) => game._id == hasItem._id)) {
       user.inventory.push(hasItem);
     }
 
@@ -204,7 +219,6 @@ const getMostRecentListings = async (req, res, next) => {
   try {
     matchedListings = await Listing.find({}, { __v: 0 })
       .sort({ dateListed: "descending" })
-      .populate("hasItem wantsItem", { __v: 0 })
       .limit(documentCount);
   } catch (err) {
     return next(new DatabaseError(err.message));

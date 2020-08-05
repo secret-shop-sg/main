@@ -24,7 +24,7 @@ function UpdateProfile() {
   // change to the following when this page is done
   //const userID = useSelector((state) => state.user.userId);
 
-  const userID = "5f290d05083dcc5b5cd1c91f";
+  const userID = "5f29504f0f1bc35a048e5b70";
 
   useEffect(() => {
     const getUserData = async () => {
@@ -104,10 +104,11 @@ function UpdateProfile() {
     const responseData = await sendRequest(
       `/api/user/update/inventory/${userID}`,
       "PATCH",
-      { inventory: inventory.map((game) => game._id) }
+      { inventory }
     );
 
     if (responseData) {
+      console.log(responseData);
       if (responseData.userID === userID) {
         setEditInventoryMode(false);
         alert("Update successful");
@@ -121,7 +122,7 @@ function UpdateProfile() {
     const responseData = await sendRequest(
       `/api/user/update/wishlist/${userID}`,
       "PATCH",
-      { wishlist: wishlist.map((game) => game._id) }
+      { wishlist }
     );
 
     if (responseData) {
@@ -181,7 +182,7 @@ function UpdateProfile() {
         <p className="inputHeader">Description</p>
         {!editMode ? (
           <div className="currentinfo">
-            <span>{description}</span>
+            <span>{description || ""}</span>
           </div>
         ) : (
           <span>
@@ -190,7 +191,7 @@ function UpdateProfile() {
               className="infoupdater"
               name="description"
               onChange={inputChangeHandler}
-              value={description}
+              value={description || ""}
             />
           </span>
         )}
