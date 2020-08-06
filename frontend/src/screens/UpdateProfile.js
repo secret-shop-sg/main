@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import Header from "../components/Shared/Header";
 import AddGames from "../components/Shared/AddGames";
 import { useAPI } from "../utils/useAPI";
@@ -7,8 +7,8 @@ import "./styles/UpdateProfile.css";
 import { FiEdit2 } from "react-icons/fi";
 import ImageUpload from "../components/UpdateProfile/ImageUpload";
 import { useSelector } from "react-redux";
-import { AiOutlineWarning } from "react-icons/ai"
-import AntiLoginError from "../components/Shared/AntiLoginError"
+import { AiOutlineWarning } from "react-icons/ai";
+import AntiLoginError from "../components/Shared/AntiLoginError";
 
 // reducer for update profile data
 const formReducer = (state, action) => {
@@ -174,15 +174,16 @@ function UpdateProfile() {
   return (
     <div>
       <Header />
-      {loggedIn ? <div>
-        <ImageUpload imageData={{ profilePic, newImage, setNewImage }} />
-        <div className="userInformation">
-          <p className="inputHeader">Username</p>
-          {!editMode ? (
-            <div className="currentinfo">
-              <span>{username}</span>
-            </div>
-          ) : (
+      {loggedIn ? (
+        <div>
+          <ImageUpload imageData={{ profilePic, newImage, setNewImage }} />
+          <div className="userInformation">
+            <p className="inputHeader">Username</p>
+            {!editMode ? (
+              <div className="currentinfo">
+                <span>{username}</span>
+              </div>
+            ) : (
               <span>
                 <input
                   type="text"
@@ -193,13 +194,13 @@ function UpdateProfile() {
                 />
               </span>
             )}
-          <hr></hr>
-          <p className="inputHeader">Password</p>
-          {!editMode ? (
-            <div className="currentinfo">
-              <span>{displayPassword}</span>
-            </div>
-          ) : (
+            <hr></hr>
+            <p className="inputHeader">Password</p>
+            {!editMode ? (
+              <div className="currentinfo">
+                <span>{displayPassword}</span>
+              </div>
+            ) : (
               <span>
                 <input
                   type="password"
@@ -218,13 +219,13 @@ function UpdateProfile() {
                 />
               </span>
             )}
-          <hr />
-          <p className="inputHeader">Description</p>
-          {!editMode ? (
-            <div className="currentinfo">
-              <span>{description || ""}</span>
-            </div>
-          ) : (
+            <hr />
+            <p className="inputHeader">Description</p>
+            {!editMode ? (
+              <div className="currentinfo">
+                <span>{description || ""}</span>
+              </div>
+            ) : (
               <span>
                 <textarea
                   type="text"
@@ -235,101 +236,101 @@ function UpdateProfile() {
                 />
               </span>
             )}
-          <hr />
-          {!editMode ? (
-            <button onClick={() => setEditMode(true)}>
-              <FiEdit2 /> Update
-            </button>
-          ) : (
+            <hr />
+            {!editMode ? (
+              <button onClick={() => setEditMode(true)}>
+                <FiEdit2 /> Update
+              </button>
+            ) : (
               <button className="saveButton" onClick={updateDetails}>
                 Save
               </button>
             )}
-          <hr />
-          <span>
-            <p className="inputHeader">
-              Inventory
-            <span> </span>
-              {!editInventoryMode ? (
-                <button onClick={() => setEditInventoryMode(true)}>
-                  <FiEdit2 /> Update Inventory
-                </button>
-              ) : (
+            <hr />
+            <span>
+              <p className="inputHeader">
+                Inventory
+                <span> </span>
+                {!editInventoryMode ? (
+                  <button onClick={() => setEditInventoryMode(true)}>
+                    <FiEdit2 /> Update Inventory
+                  </button>
+                ) : (
                   <button className="saveButton" onClick={updateInventory}>
                     Save
                   </button>
                 )}
-            </p>
-          </span>
+              </p>
+            </span>
 
-          {inventory &&
-            inventory.map((game, index) => (
-              <div className="selected-inventory-games" key={index}>
-                <img
-                  src={BACKEND_ADDRESS + game.imageURL}
-                  alt={game.title}
-                  onClick={
-                    editInventoryMode
-                      ? (event) => deselectGame(event, index)
-                      : null
-                  }
-                  name="inventory"
+            {inventory &&
+              inventory.map((game, index) => (
+                <div className="selected-inventory-games" key={index}>
+                  <img
+                    src={BACKEND_ADDRESS + game.imageURL}
+                    alt={game.title}
+                    onClick={
+                      editInventoryMode
+                        ? (event) => deselectGame(event, index)
+                        : null
+                    }
+                    name="inventory"
+                  />
+                </div>
+              ))}
+            {editInventoryMode ? (
+              <div>
+                <AddGames
+                  setSelectedGames={setInventory}
+                  selectedGames={inventory}
+                  maxSelectionSize={3}
                 />
               </div>
-            ))}
-          {editInventoryMode ? (
-            <div>
-              <AddGames
-                setSelectedGames={setInventory}
-                selectedGames={inventory}
-                maxSelectionSize={3}
-              />
-            </div>
-          ) : null}
-          <hr />
-          <span>
-            <p className="inputHeader">
-              Wishlist
-            {!editWishlistMode ? (
-                <button onClick={() => setEditWishlistMode(true)}>
-                  <FiEdit2 /> Update Wishlist
-                </button>
-              ) : (
+            ) : null}
+            <hr />
+            <span>
+              <p className="inputHeader">
+                Wishlist
+                {!editWishlistMode ? (
+                  <button onClick={() => setEditWishlistMode(true)}>
+                    <FiEdit2 /> Update Wishlist
+                  </button>
+                ) : (
                   <button className="saveButton" onClick={updateWishlist}>
                     Save
                   </button>
                 )}
-            </p>
-          </span>
-          {wishlist &&
-            wishlist.map((game, index) => (
-              <div className="selected-inventory-games" key={index}>
-                <img
-                  src={BACKEND_ADDRESS + game.imageURL}
-                  alt={game.title}
-                  onClick={
-                    editWishlistMode
-                      ? (event) => deselectGame(event, index)
-                      : null
-                  }
-                  name="wishlist"
+              </p>
+            </span>
+            {wishlist &&
+              wishlist.map((game, index) => (
+                <div className="selected-inventory-games" key={index}>
+                  <img
+                    src={BACKEND_ADDRESS + game.imageURL}
+                    alt={game.title}
+                    onClick={
+                      editWishlistMode
+                        ? (event) => deselectGame(event, index)
+                        : null
+                    }
+                    name="wishlist"
+                  />
+                </div>
+              ))}
+            {editWishlistMode ? (
+              <div className="update-user-game-images-div">
+                <AddGames
+                  setSelectedGames={setWishlist}
+                  selectedGames={wishlist}
+                  maxSelectionSize={3}
                 />
               </div>
-            ))}
-          {editWishlistMode ? (
-            <div className="update-user-game-images-div">
-              <AddGames
-                setSelectedGames={setWishlist}
-                selectedGames={wishlist}
-                maxSelectionSize={3}
-              />
-            </div>
-          ) : null}
+            ) : null}
+          </div>
         </div>
-
-      </div> :
+      ) : (
         <AntiLoginError />
-      }
+      )}
     </div>
   );
 }
