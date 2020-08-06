@@ -24,8 +24,7 @@ function UpdateProfile() {
   const [sendRequest] = useAPI();
   const [displayPassword, setDisplayPassword] = useState();
   const [loggedIn, setLoggedIn] = useState(false);
-  const [loginActive, setLoginActive] = useState(false);
-  const [signupActive, setSignupActive] = useState(false);
+
   // change to the following when this page is done
   //const userID = useSelector((state) => state.user.userId);
 
