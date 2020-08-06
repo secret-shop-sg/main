@@ -32,7 +32,6 @@ const ListingDetails = (props) => {
   function likehandler() {
     setliked(!liked);
   }
-
   return (
     <div>
       <Header />
@@ -128,7 +127,7 @@ const ListingDetails = (props) => {
                       />
                       <p>{listing.owner} | Rating</p>
                       <p className="similarlistingdescription">
-                        {listing.description}
+                        {listing.description.length > 50 ? listing.description.slice(0, 51) + "..." : listing.description}
                       </p>
                     </div>
                   </div>
