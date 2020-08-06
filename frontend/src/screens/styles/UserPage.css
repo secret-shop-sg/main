@@ -1,0 +1,94 @@
+.user-profile-image {
+  height: 150px;
+  width: 150px;
+  border-radius: 75px;
+  margin-top: 2%;
+  margin-bottom: 1%;
+  border: 1px black solid;
+}
+.name {
+  font-size: 3rem;
+}
+.username {
+  font-size: 1.5rem;
+}
+.user-profile-sidebar {
+  margin: 1% 3%;
+  width: 25%;
+  float: left;
+}
+.rating {
+  font-size: 1.2rem;
+}
+.stars {
+  color: green;
+}
+.verification {
+  color: rgb(44, 66, 141);
+}
+.userbody {
+  text-align: justify;
+}
+.followers {
+  margin-right: 25%;
+}
+.followerfollowing {
+  margin-top: 30px;
+  color: lightslategray;
+  font-size: 1.1rem;
+}
+.follow {
+  color: black;
+  background-color: white;
+  border: black 1px solid;
+  width: 110px;
+  font-size: 1.3rem;
+  border-radius: 5px;
+}
+.follow:hover {
+  background-color: gainsboro;
+}
+.followed {
+  color: white;
+  background-color: green;
+  border: 1px black solid;
+  width: 110px;
+  font-size: 1.3rem;
+  border-radius: 5px;
+}
+.user-profile-listings-container {
+  width: 60%;
+  margin-top: 1%;
+  border: 1px solid lightgray;
+  float: right;
+  padding: 20px;
+  padding-top: 2%;
+  margin-right:9%;
+}
+.user-profile-inventory {
+  width: 60%;
+  margin-top: 3%;
+  border: 1px solid lightgray;
+  float: left;
+  padding: 20px;
+  margin-bottom:none;
+}
+.inventoryImg {
+  width: 100px;
+  height: 150px;
+  margin-left: 1%;
+}
+
+div.scrollMenu {
+  background-color: lightgray;
+  overflow: auto;
+  white-space: nowrap;
+}
+.user-profile-wishlist {
+  width: 60%;
+  margin-top: 1%;
+  border: 1px solid lightgray;
+  float: left;
+  padding: 20px;
+  margin-bottom:none;
+}
