@@ -7,6 +7,8 @@ import "./styles/UpdateProfile.css";
 import { FiEdit2 } from "react-icons/fi";
 import ImageUpload from "../components/UpdateProfile/ImageUpload";
 import { useSelector } from "react-redux";
+import { AiOutlineWarning } from "react-icons/ai"
+import AntiLoginError from "../components/Shared/AntiLoginError"
 
 // reducer for update profile data
 const formReducer = (state, action) => {
@@ -56,6 +58,8 @@ function UpdateProfile() {
   const [editWishlistMode, setEditWishlistMode] = useState(false);
   const [sendRequest] = useAPI();
   const [displayPassword, setDisplayPassword] = useState();
+  const [loggedIn, setLoggedIn] = useState(false);
+
   // change to the following when this page is done
   //const userID = useSelector((state) => state.user.userId);
 
@@ -170,157 +174,162 @@ function UpdateProfile() {
   return (
     <div>
       <Header />
-      <ImageUpload imageData={{ profilePic, newImage, setNewImage }} />
-      <div className="userInformation">
-        <p className="inputHeader">Username</p>
-        {!editMode ? (
-          <div className="currentinfo">
-            <span>{username}</span>
-          </div>
-        ) : (
+      {loggedIn ? <div>
+        <ImageUpload imageData={{ profilePic, newImage, setNewImage }} />
+        <div className="userInformation">
+          <p className="inputHeader">Username</p>
+          {!editMode ? (
+            <div className="currentinfo">
+              <span>{username}</span>
+            </div>
+          ) : (
+              <span>
+                <input
+                  type="text"
+                  className="infoupdater"
+                  name="username"
+                  onChange={inputChangeHandler}
+                  value={username}
+                />
+              </span>
+            )}
+          <hr></hr>
+          <p className="inputHeader">Password</p>
+          {!editMode ? (
+            <div className="currentinfo">
+              <span>{displayPassword}</span>
+            </div>
+          ) : (
+              <span>
+                <input
+                  type="password"
+                  className="infoupdater"
+                  name="password"
+                  onChange={inputChangeHandler}
+                  value={password}
+                />
+                <p className="inputHeader">Confirm Password</p>
+                <input
+                  type="password"
+                  className="infoupdater"
+                  name="password"
+                  onChange={inputChangeHandler}
+                  value={password}
+                />
+              </span>
+            )}
+          <hr />
+          <p className="inputHeader">Description</p>
+          {!editMode ? (
+            <div className="currentinfo">
+              <span>{description || ""}</span>
+            </div>
+          ) : (
+              <span>
+                <textarea
+                  type="text"
+                  className="infoupdater"
+                  name="description"
+                  onChange={inputChangeHandler}
+                  value={description || ""}
+                />
+              </span>
+            )}
+          <hr />
+          {!editMode ? (
+            <button onClick={() => setEditMode(true)}>
+              <FiEdit2 /> Update
+            </button>
+          ) : (
+              <button className="saveButton" onClick={updateDetails}>
+                Save
+              </button>
+            )}
+          <hr />
           <span>
-            <input
-              type="text"
-              className="infoupdater"
-              name="username"
-              onChange={inputChangeHandler}
-              value={username}
-            />
-          </span>
-        )}
-        <hr></hr>
-        <p className="inputHeader">Password</p>
-        {!editMode ? (
-          <div className="currentinfo">
-            <span>{displayPassword}</span>
-          </div>
-        ) : (
-          <span>
-            <input
-              type="password"
-              className="infoupdater"
-              name="password"
-              onChange={inputChangeHandler}
-              value={password}
-            />
-            <p className="inputHeader">Confirm Password</p>
-            <input
-              type="password"
-              className="infoupdater"
-              name="password"
-              onChange={inputChangeHandler}
-              value={password}
-            />
-          </span>
-        )}
-        <hr />
-        <p className="inputHeader">Description</p>
-        {!editMode ? (
-          <div className="currentinfo">
-            <span>{description || ""}</span>
-          </div>
-        ) : (
-          <span>
-            <textarea
-              type="text"
-              className="infoupdater"
-              name="description"
-              onChange={inputChangeHandler}
-              value={description || ""}
-            />
-          </span>
-        )}
-        <hr />
-        {!editMode ? (
-          <button onClick={() => setEditMode(true)}>
-            <FiEdit2 /> Update
-          </button>
-        ) : (
-          <button className="saveButton" onClick={updateDetails}>
-            Save
-          </button>
-        )}
-        <hr />
-        <span>
-          <p className="inputHeader">
-            Inventory
+            <p className="inputHeader">
+              Inventory
             <span> </span>
-            {!editInventoryMode ? (
-              <button onClick={() => setEditInventoryMode(true)}>
-                <FiEdit2 /> Update Inventory
-              </button>
-            ) : (
-              <button className="saveButton" onClick={updateInventory}>
-                Save
-              </button>
-            )}
-          </p>
-        </span>
+              {!editInventoryMode ? (
+                <button onClick={() => setEditInventoryMode(true)}>
+                  <FiEdit2 /> Update Inventory
+                </button>
+              ) : (
+                  <button className="saveButton" onClick={updateInventory}>
+                    Save
+                  </button>
+                )}
+            </p>
+          </span>
 
-        {inventory &&
-          inventory.map((game, index) => (
-            <div className="selected-inventory-games" key={index}>
-              <img
-                src={BACKEND_ADDRESS + game.imageURL}
-                alt={game.title}
-                onClick={
-                  editInventoryMode
-                    ? (event) => deselectGame(event, index)
-                    : null
-                }
-                name="inventory"
+          {inventory &&
+            inventory.map((game, index) => (
+              <div className="selected-inventory-games" key={index}>
+                <img
+                  src={BACKEND_ADDRESS + game.imageURL}
+                  alt={game.title}
+                  onClick={
+                    editInventoryMode
+                      ? (event) => deselectGame(event, index)
+                      : null
+                  }
+                  name="inventory"
+                />
+              </div>
+            ))}
+          {editInventoryMode ? (
+            <div>
+              <AddGames
+                setSelectedGames={setInventory}
+                selectedGames={inventory}
+                maxSelectionSize={3}
               />
             </div>
-          ))}
-        {editInventoryMode ? (
-          <div>
-            <AddGames
-              setSelectedGames={setInventory}
-              selectedGames={inventory}
-              maxSelectionSize={3}
-            />
-          </div>
-        ) : null}
-        <hr />
-        <span>
-          <p className="inputHeader">
-            Wishlist
+          ) : null}
+          <hr />
+          <span>
+            <p className="inputHeader">
+              Wishlist
             {!editWishlistMode ? (
-              <button onClick={() => setEditWishlistMode(true)}>
-                <FiEdit2 /> Update Wishlist
-              </button>
-            ) : (
-              <button className="saveButton" onClick={updateWishlist}>
-                Save
-              </button>
-            )}
-          </p>
-        </span>
-        {wishlist &&
-          wishlist.map((game, index) => (
-            <div className="selected-inventory-games" key={index}>
-              <img
-                src={BACKEND_ADDRESS + game.imageURL}
-                alt={game.title}
-                onClick={
-                  editWishlistMode
-                    ? (event) => deselectGame(event, index)
-                    : null
-                }
-                name="wishlist"
+                <button onClick={() => setEditWishlistMode(true)}>
+                  <FiEdit2 /> Update Wishlist
+                </button>
+              ) : (
+                  <button className="saveButton" onClick={updateWishlist}>
+                    Save
+                  </button>
+                )}
+            </p>
+          </span>
+          {wishlist &&
+            wishlist.map((game, index) => (
+              <div className="selected-inventory-games" key={index}>
+                <img
+                  src={BACKEND_ADDRESS + game.imageURL}
+                  alt={game.title}
+                  onClick={
+                    editWishlistMode
+                      ? (event) => deselectGame(event, index)
+                      : null
+                  }
+                  name="wishlist"
+                />
+              </div>
+            ))}
+          {editWishlistMode ? (
+            <div className="update-user-game-images-div">
+              <AddGames
+                setSelectedGames={setWishlist}
+                selectedGames={wishlist}
+                maxSelectionSize={3}
               />
             </div>
-          ))}
-        {editWishlistMode ? (
-          <div className="update-user-game-images-div">
-            <AddGames
-              setSelectedGames={setWishlist}
-              selectedGames={wishlist}
-              maxSelectionSize={3}
-            />
-          </div>
-        ) : null}
-      </div>
+          ) : null}
+        </div>
+
+      </div> :
+        <AntiLoginError />
+      }
     </div>
   );
 }
