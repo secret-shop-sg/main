@@ -143,16 +143,16 @@ function UpdateProfile() {
             <span>{username}</span>
           </div>
         ) : (
-            <span>
-              <input
-                type="text"
-                className="infoupdater"
-                name="username"
-                onChange={inputChangeHandler}
-                value={username}
-              />
-            </span>
-          )}
+          <span>
+            <input
+              type="text"
+              className="infoupdater"
+              name="username"
+              onChange={inputChangeHandler}
+              value={username}
+            />
+          </span>
+        )}
         <hr></hr>
         <p className="inputHeader">Password</p>
         {!editMode ? (
@@ -160,24 +160,24 @@ function UpdateProfile() {
             <span>{displayPassword}</span>
           </div>
         ) : (
-            <span>
-              <input
-                type="password"
-                className="infoupdater"
-                name="password"
-                onChange={inputChangeHandler}
-                value={password}
-              />
-              <p className="inputHeader">Confirm Password</p>
-              <input
-                type="password"
-                className="infoupdater"
-                name="password"
-                onChange={inputChangeHandler}
-                value={password}
-              />
-            </span>
-          )}
+          <span>
+            <input
+              type="password"
+              className="infoupdater"
+              name="password"
+              onChange={inputChangeHandler}
+              value={password}
+            />
+            <p className="inputHeader">Confirm Password</p>
+            <input
+              type="password"
+              className="infoupdater"
+              name="password"
+              onChange={inputChangeHandler}
+              value={password}
+            />
+          </span>
+        )}
         <hr />
         <p className="inputHeader">Description</p>
         {!editMode ? (
@@ -185,18 +185,6 @@ function UpdateProfile() {
             <span>{description || ""}</span>
           </div>
         ) : (
-<<<<<<< HEAD
-            <span>
-              <textarea
-                type="text"
-                className="infoupdater"
-                name="description"
-                onChange={inputChangeHandler}
-                value={description}
-              />
-            </span>
-          )}
-=======
           <span>
             <textarea
               type="text"
@@ -207,17 +195,16 @@ function UpdateProfile() {
             />
           </span>
         )}
->>>>>>> 7f0c9ee8260dfbc6e3bf636ee53b32d8423f5992
         <hr />
         {!editMode ? (
           <button onClick={() => setEditMode(true)}>
             <FiEdit2 /> Update
           </button>
         ) : (
-            <button className="saveButton" onClick={updateDetails}>
-              Save
-            </button>
-          )}
+          <button className="saveButton" onClick={updateDetails}>
+            Save
+          </button>
+        )}
         <hr />
         <span>
           <p className="inputHeader">
@@ -228,10 +215,10 @@ function UpdateProfile() {
                 <FiEdit2 /> Update Inventory
               </button>
             ) : (
-                <button className="saveButton" onClick={updateInventory}>
-                  Save
-                </button>
-              )}
+              <button className="saveButton" onClick={updateInventory}>
+                Save
+              </button>
+            )}
           </p>
         </span>
 
@@ -268,10 +255,10 @@ function UpdateProfile() {
                 <FiEdit2 /> Update Wishlist
               </button>
             ) : (
-                <button className="saveButton" onClick={updateWishlist}>
-                  Save
-                </button>
-              )}
+              <button className="saveButton" onClick={updateWishlist}>
+                Save
+              </button>
+            )}
           </p>
         </span>
         {wishlist &&
