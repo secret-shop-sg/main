@@ -59,4 +59,49 @@ const getSearches = (req, res, next) => {
   res.json({ matchedListings });
 };
 
+/*
+const getSearches = async (req, res, next) => {
+  let matchedListings;
+  const queries = req.query;
+  errorHandlers.checkEmptyParamsError(queries);
+  errorHandlers.checkFilterLabelError(
+    Object.keys(queries),
+    filters.FILTER_LABELS
+  );
+
+  let phrase = { $exists: true };
+  if (queries.phrase) {
+    phrase = { $regex: queries.phrase, $options: "i" };
+  }
+
+  /* Search within the platform and title field of a game
+
+  let platform = {$exists:true};
+  if (queries.platform){
+    platform = {}
+  } 
+
+  let platform = {$exists:true};
+  if (queries.platform){
+    queries = {}
+  } 
+
+
+  // phrase searches in title or platform of the listed game currently
+  try {
+    matchedGames = await Game.find(
+      {
+        $or: [
+          { title: { title, phrase }, platform },
+          { platform: { title, platform }, title },
+        ],
+      },
+      { __v: 0 }
+    );
+  } catch (err) {
+    return next(matchedListings);
+  }
+};
+*/
+
 exports.getSearches = getSearches;

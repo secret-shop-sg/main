@@ -3,6 +3,7 @@ const Listing = require("../models/listings");
 const User = require("../models/users");
 const mongoose = require("mongoose");
 const DatabaseError = require("../models/databaseError");
+const listings = require("../models/listings");
 
 // To be eventually added
 // const updateListing
@@ -36,47 +37,77 @@ const getListing = (req, res, next) => {
     res.json({ listingToDisplay, similarListings });
   } else res.json({ listingToDisplay });
 };
-/*
 
+const getMultipleListings = async (req, res, next) => {
+  const listingIDs = req.body.listingIDs;
+  let listingsData = [];
+
+  if (listingIDs) {
+    for (id of listingIDs) {
+      let listingData;
+      try {
+        listingData = await Listing.findById(id);
+        listingsData.push(listingData);
+      } catch (err) {
+        return next(new DatabaseError(err.message));
+      }
+    }
+  }
+
+  res.json({ listingsData });
+};
+/*
 const getListing = async (req, res, next) => {
   const listingID = req.params.listingID;
+  const similarListingsCount = 3;
   let listingToDisplay;
+  let platform;
   let similarListings;
 
   try {
-    listingToDisplay = await Listing.findById(listingID);
+    listingToDisplay = await Listing.findById(listingID, { __v: 0 });
   } catch (err) {
     return next(new DatabaseError(err.message));
   }
+  /*
+  const randomClothingDocs = await Clothing.aggregate([
+    {$match: {type: listingToDisplay.listedItem.type}},
+    {$sample: {size: 3}}, // Get 3 random clothing docs
+    {$project: { // Only get the ids
+      _id: 1 { $sample: { size: 3 } },{ _id: { $ne: "5f2a65822bdb837c98793a17" }},
+    }},
+  ]); 
 
   if (listingToDisplay) {
+    platform = listingToDisplay.hasItem.platform;
     try {
-
-      User.count().exec(function (err, count) {
-
-        // Get a random entry
-        var random = Math.floor(Math.random() * count)
-      
-        // Again query all users but only fetch one offset by our random #
-        User.findOne().skip(random).exec(
-          function (err, result) {
-            // Tada! random user
-            console.log(result) 
-          })
-      })
-
-      similarListings = await Listing.find({
-        platform: listingToDisplay.platform,
-      }).limit(3);
+      similarListings = await Listing.aggregate([
+        {
+          $match: {
+            $and: [
+              { "hasItem.platform": platform },
+              { _id: { $ne: mongoose.Types.ObjectId(listingID) } },
+            ],
+          },
+        },
+        { $sample: { size: similarListingsCount } },
+        {
+          $lookup: {
+            from: "users",
+            localField: "owner",
+            foreignField: "_id",
+            as: "username",
+          },
+        },
+      ]);
     } catch (err) {
       return next(new DatabaseError(err.message));
     }
   }
 
   res.json({ listingToDisplay, similarListings });
-};
+}; */
 
-*/
 const addListing = async (req, res, next) => {
   // optional parameters should be passed as null
   const {
@@ -111,15 +142,13 @@ const addListing = async (req, res, next) => {
     return next(new DatabaseError(err.message));
   }
 
-  // preventive measure in case ownerID is wrong.
+  // preventive measure in case owner is wrong.
   // Should not happen because you have to be logged in to post listings
   if (!user) {
     const error = new Error("Cannot find user with the provided ID");
     error.status = 404;
     return next(error);
   }
-
-  const ownedGames = user.inventory.map((game) => game.gameID);
 
   try {
     const session = await mongoose.startSession();
@@ -129,7 +158,7 @@ const addListing = async (req, res, next) => {
     user.listings.push(newListing);
 
     // if game in listing is not in inventory, add in inventory
-    if (!ownedGames.includes(hasItem.gameID)) {
+    if (!user.inventory.some((game) => game._id == hasItem._id)) {
       user.inventory.push(hasItem);
     }
 
@@ -141,7 +170,6 @@ const addListing = async (req, res, next) => {
 
   res.status(201).json({ listingID: newListing.id });
 };
-
 const getMostRecentListings = (req, res, next) => {
   let elementCount = 5;
   let mostRecentListings = allListings.slice(0, elementCount);
@@ -183,7 +211,23 @@ const getMostRecentListings = (req, res, next) => {
 
   res.json({ mostRecentListings });
 };
+/*
+const getMostRecentListings = async (req, res, next) => {
+  const documentCount = 5;
+  let matchedListings;
 
+  try {
+    matchedListings = await Listing.find({}, { __v: 0 })
+      .sort({ dateListed: "descending" })
+      .limit(documentCount);
+  } catch (err) {
+    return next(new DatabaseError(err.message));
+  }
+
+  res.json({ matchedListings });
+}; */
+
+exports.getMultipleListings = getMultipleListings;
 exports.getListing = getListing;
 exports.addListing = addListing;
 exports.getMostRecentListings = getMostRecentListings;

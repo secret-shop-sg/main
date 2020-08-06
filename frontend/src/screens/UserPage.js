@@ -6,7 +6,7 @@ import { useAPI } from "../utils/useAPI";
 import { BsStarFill } from "react-icons/bs";
 import { GoVerified } from "react-icons/go";
 import { GrLocation } from "react-icons/gr";
-import ListBox from "../components/User/userListBox";
+import ListBox from "../components/User/ListBox";
 
 const UserPage = (props) => {
   const [sendRequest, isLoading] = useAPI();
@@ -19,21 +19,14 @@ const UserPage = (props) => {
   }
 
   useEffect(() => {
-    const getListing = async () => {
+    const getUserData = async () => {
       const responseData = await sendRequest(`/api/user/username/${username}`);
       if (responseData) {
         setUserDetails(responseData.matchedUser);
       }
     };
-    getListing();
-  }, [username]);
-  /*
-  useEffect(()=> {
-    if(userDetails){
-
-    }
-  },[userDetails])
-  */
+    getUserData();
+  }, [username, sendRequest]);
 
   return (
     <div>
@@ -44,7 +37,7 @@ const UserPage = (props) => {
             <img
               className="user-profile-image"
               src={BACKEND_ADDRESS + userDetails.profilePicURL}
-              alt="Profile picture"
+              alt="Profile pic"
             />
             <div className="userdetails">
               <h2 className="name">
@@ -63,10 +56,10 @@ const UserPage = (props) => {
                       Follow!
                     </button>
                   ) : (
-                      <button className="followed" onClick={clickedfollow}>
-                        Followed!
-                      </button>
-                    )}
+                    <button className="followed" onClick={clickedfollow}>
+                      Followed!
+                    </button>
+                  )}
                 </span>
               </p>
               <p>
@@ -106,8 +99,9 @@ const UserPage = (props) => {
                 userDetails.inventory.map((game) => (
                   <img
                     className="inventoryImg"
-                    src={game.imageURL}
+                    src={BACKEND_ADDRESS + game.imageURL}
                     key={game._id}
+                    alt={game.title}
                   />
                 ))}
             </div>
@@ -119,7 +113,7 @@ const UserPage = (props) => {
                 userDetails.wishlist.map((game) => (
                   <img
                     className="inventoryImg"
-                    src={game.imageURL}
+                    src={BACKEND_ADDRESS + game.imageURL}
                     key={game._id}
                   />
                 ))}
@@ -129,13 +123,12 @@ const UserPage = (props) => {
             <h3 style={{ marginBottom: "2%" }}>
               {userDetails.username}'s Listings
             </h3>
-            <ListBox />
+            <ListBox listings={userDetails.listings} />
           </div>
         </div>
-
       )}
-    </div>)
+    </div>
+  );
 };
-
 
 export default UserPage;

@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/Shared/Header";
 import AddGames from "../components/Shared/AddGames";
 import { useAPI } from "../utils/useAPI";
+import { BACKEND_ADDRESS } from "../constants/Details";
 import "./styles/UpdateProfile.css";
 import { FiEdit2 } from "react-icons/fi";
 import ImageUpload from "../components/UpdateProfile/ImageUpload";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 function UpdateProfile() {
   const [username, setUsername] = useState();
@@ -21,9 +22,9 @@ function UpdateProfile() {
   const [sendRequest] = useAPI();
   const [displayPassword, setDisplayPassword] = useState();
   // change to the following when this page is done
-  // const userID = useSelector((state) => state.user.userId);
+  //const userID = useSelector((state) => state.user.userId);
 
-  const userID = "5f1ed6a160fc2b0d9025117c";
+  const userID = "5f29504f0f1bc35a048e5b70";
 
   useEffect(() => {
     const getUserData = async () => {
@@ -107,6 +108,7 @@ function UpdateProfile() {
     );
 
     if (responseData) {
+      console.log(responseData);
       if (responseData.userID === userID) {
         setEditInventoryMode(false);
         alert("Update successful");
@@ -180,9 +182,10 @@ function UpdateProfile() {
         <p className="inputHeader">Description</p>
         {!editMode ? (
           <div className="currentinfo">
-            <span>{description}</span>
+            <span>{description || ""}</span>
           </div>
         ) : (
+<<<<<<< HEAD
             <span>
               <textarea
                 type="text"
@@ -193,6 +196,18 @@ function UpdateProfile() {
               />
             </span>
           )}
+=======
+          <span>
+            <textarea
+              type="text"
+              className="infoupdater"
+              name="description"
+              onChange={inputChangeHandler}
+              value={description || ""}
+            />
+          </span>
+        )}
+>>>>>>> 7f0c9ee8260dfbc6e3bf636ee53b32d8423f5992
         <hr />
         {!editMode ? (
           <button onClick={() => setEditMode(true)}>
@@ -224,7 +239,7 @@ function UpdateProfile() {
           inventory.map((game, index) => (
             <div className="selected-inventory-games" key={index}>
               <img
-                src={game.imageURL}
+                src={BACKEND_ADDRESS + game.imageURL}
                 alt={game.title}
                 onClick={
                   editInventoryMode
@@ -263,7 +278,7 @@ function UpdateProfile() {
           wishlist.map((game, index) => (
             <div className="selected-inventory-games" key={index}>
               <img
-                src={game.imageURL}
+                src={BACKEND_ADDRESS + game.imageURL}
                 alt={game.title}
                 onClick={
                   editWishlistMode

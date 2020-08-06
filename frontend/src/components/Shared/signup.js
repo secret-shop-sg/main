@@ -3,6 +3,8 @@ import "./Login.css";
 import "../../constants/styles/Bootstrap.css";
 import { FaUserCircle } from "react-icons/fa";
 import { useAPI } from "../../utils/useAPI";
+import { useDispatch } from "react-redux";
+import { userLogin } from "../../store/actions/userActions";
 
 // icons
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
@@ -57,6 +59,8 @@ const formReducer = (state, action) => {
 };
 
 function Signup(props) {
+  // redux dispatch
+  const dispatch = useDispatch();
   const [sendRequest] = useAPI();
   // use reducer for signup data
   const [formState, dispatchForm] = useReducer(formReducer, {
@@ -89,7 +93,27 @@ function Signup(props) {
     } else {
       isValid = true;
     }
-    // add more validity checks - switch case?
+    // more specific validity checks
+    switch (inputIdentifier) {
+      case "username":
+        break;
+      case "email":
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!re.test(String(value).toLowerCase())) {
+          isValid = false;
+        }
+        break;
+      case "password":
+        if (value.length < 6) {
+          isValid = false;
+        }
+        break;
+      case "confirmedPassword":
+        if (value != formState.inputValues.password) {
+          isValid = false;
+        }
+        break;
+    }
 
     // dispatch to reducer
     dispatchForm({
@@ -148,7 +172,6 @@ function Signup(props) {
         value: responseData.isValid,
         input: inputIdentifier,
       });
-      console.log("isValid:", responseData.isValid);
     }
   };
 
@@ -171,8 +194,11 @@ function Signup(props) {
     // responseData returns the user's userID
     if (responseData) {
       if (responseData.userID) {
-        // Todo: Stored the userID in redux
+        // store userid in redux
+        dispatch(userLogin(responseData.userID));
+        // success
         alert("Sign up successful");
+        props.closeButtonHandler();
       }
     }
   };
@@ -232,7 +258,7 @@ function Signup(props) {
           />
           <input
             type="password"
-            id="passwordConfirmed"
+            id="confirmedPassword"
             className="fadeIn input textthing"
             name="login"
             placeholder="confirm password"

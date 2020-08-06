@@ -4,6 +4,7 @@ import { FaSearch, FaUserAlt, FaUserPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Login from "./Login";
 import Signup from "./Signup";
+
 // header component
 const Header = () => {
   const [enteredText, setEnteredText] = useState("");
