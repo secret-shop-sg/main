@@ -8,7 +8,42 @@ import { FiEdit2 } from "react-icons/fi";
 import ImageUpload from "../components/UpdateProfile/ImageUpload";
 import { useSelector } from "react-redux";
 
+// reducer for update profile data
+const formReducer = (state, action) => {
+  switch (action.type) {
+    case "UPDATE":
+      // update profile values
+      const updatedValues = {
+        ...state.inputValues,
+        [action.input]: action.value,
+      };
+
+      // validity?
+
+      // return updated state
+      return {
+        ...state,
+        inputValues: updatedValues,
+      };
+
+    default:
+      return state;
+  }
+};
+
 function UpdateProfile() {
+  // use reducer for profile data
+  const [formState, dispatchForm] = useReducer(formReducer, {
+    inputValues: {
+      username: null,
+      password: null,
+      description: null,
+      inventory: null,
+      wishlist: null,
+      profilePic: null,
+    },
+  });
+
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [description, setDescription] = useState();
