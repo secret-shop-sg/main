@@ -3,6 +3,7 @@ import { AiOutlineWarning } from "react-icons/ai"
 import Login from "./Login"
 import Signup from "./Signup"
 import CombinedLoginSignup from "./CombinedLoginSignup"
+import "./AntiLoginError.css"
 function AntiLoginError() {
     const [loginActive, setLoginActive] = useState(false);
     const [signupActive, setSignupActive] = useState(false);

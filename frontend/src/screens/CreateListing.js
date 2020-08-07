@@ -12,13 +12,14 @@ import AntiLoginError from "../components/Shared/AntiLoginError"
 
 function CreateListing() {
   const [listedGame, setListedGame] = useState([]);
+  const [gamesWanted, setGamesWanted] = useState([]);
   const [sendRequest] = useAPI();
   const history = useHistory();
   const [description, setDescription] = useState();
   const [listingAdded, setListingAdded] = useState(false);
   const [sellingPrice, setSellingPrice] = useState();
   const [rentalPrice, setRentalPrice] = useState();
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
 
   const ownerID = "5f29504f0f1bc35a048e5b70";
   const owner = "test";
@@ -155,8 +156,15 @@ function CreateListing() {
             <hr />
             <input type="checkbox" />
             <label>
-              Trade for: <input type="text" />
+              Trade for:
               <GoPlus />
+              <div className="games-component-body" style={{ borderRight: "1px solid lightgray" }}>
+                <AddGames
+                  setSelectedGames={setGamesWanted}
+                  selectedGames={gamesWanted}
+                  maxSelectionSize={10}
+                />
+              </div>
             </label>
             <br />
             <br />
