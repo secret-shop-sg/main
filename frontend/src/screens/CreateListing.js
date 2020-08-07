@@ -57,6 +57,9 @@ function CreateListing() {
       }
     }
   };
+  const deselectGameWanted = (event, index) => {
+    setGamesWanted((games) => games.filter((_, i) => i !== index));
+  };
 
   const onChangeInputHandler = (event) => {
     switch (event.target.id) {
@@ -158,12 +161,18 @@ function CreateListing() {
             <label>
               Trade for:
               <GoPlus />
-              <div className="games-component-body" style={{ borderRight: "1px solid lightgray" }}>
-                <AddGames
-                  setSelectedGames={setGamesWanted}
-                  selectedGames={gamesWanted}
-                  maxSelectionSize={10}
-                />
+              <div>
+                <div className="games-component-body" style={{ borderRight: "1px solid lightgray" }}>
+                  <AddGames
+                    setSelectedGames={setGamesWanted}
+                    selectedGames={gamesWanted}
+                    maxSelectionSize={10}
+                  />
+                </div>
+                <div className="game-selector-body">
+                  <h4> Your selections</h4>
+                  {gamesWanted.map((game, index) => (<img onClick={(event) => deselectGameWanted(event, index)} src={BACKEND_ADDRESS + game.imageURL} key={index} />))}
+                </div>
               </div>
             </label>
             <br />

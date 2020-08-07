@@ -58,6 +58,7 @@
 
 .games-component-body {
   width: 50%;
+  float:left;
 }
 
 .selected-listing-game-image {
@@ -67,4 +68,16 @@
 
 .gallery-image{
  margin-top: 3%;
+}
+.game-selector-body{
+width:40%;
+float: left;
+margin-left: 2%;
+}
+
+.game-selector-body img{
+  margin-left:2%;
+  height: 150px;
+  width: 20%;
+  margin-bottom:1%
 }
