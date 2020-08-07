@@ -31,12 +31,12 @@ function ListBox(props) {
                   onClick={likeHandler}
                 />
               ) : (
-                <BsFillHeartFill
-                  className="likedbutton"
-                  size={23}
-                  onClick={likeHandler}
-                />
-              )}
+                  <BsFillHeartFill
+                    className="likedbutton"
+                    size={23}
+                    onClick={likeHandler}
+                  />
+                )}
             </Card.Body>
           </Card>
         ))}

@@ -22,3 +22,6 @@
 **/yarn-debug.log*
 **/yarn-error.log*backend/node_modules
 **/yarn-error.log*frontend/node_modules
+
+# vscode
+**/.vs
