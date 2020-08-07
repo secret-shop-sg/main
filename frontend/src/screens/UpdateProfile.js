@@ -27,6 +27,11 @@ const formReducer = (state, action) => {
         ...state,
         inputValues: updatedValues,
       };
+    case "SET_VALUES":
+      return {
+        ...state,
+        inputValues: action.values,
+      };
 
     default:
       return state;
@@ -46,9 +51,6 @@ function UpdateProfile() {
     },
   });
 
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
-  const [description, setDescription] = useState();
   const [inventory, setInventory] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [profilePic, setProfilePic] = useState([]);
@@ -65,19 +67,39 @@ function UpdateProfile() {
 
   const userID = "5f29504f0f1bc35a048e5b70";
 
+  // when input value of any input field changes
+  const inputChangeHandler = (event) => {
+    dispatchForm({
+      type: "UPDATE",
+      value: event.target.value,
+      input: event.target.name,
+    });
+  };
+
+  // fetch values when component is first loaded
   useEffect(() => {
     const getUserData = async () => {
       const responseData = await sendRequest(`/api/user/id/${userID}`);
       if (responseData) {
         if (responseData.matchedUser) {
           const user = responseData.matchedUser;
-          setPassword(user.password);
-          setUsername(user.username);
-          setDescription(user.description);
           setInventory(user.inventory);
           setWishlist(user.wishlist);
           setProfilePic(user.profilePicURL);
           setDisplayPassword(user.password.replace(/./g, "*"));
+
+          // initalize values in reducer
+          dispatchForm({
+            type: "SET_VALUES",
+            values: {
+              username: user.username,
+              password: user.password,
+              description: user.description,
+              inventory: user.inventory,
+              wishlist: user.wishlist,
+              profilePic: user.profilePicURL,
+            },
+          });
         }
       }
     };
@@ -97,30 +119,13 @@ function UpdateProfile() {
     }
   };
 
-  const inputChangeHandler = (event) => {
-    switch (event.target.name) {
-      case "username":
-        setUsername(event.target.value);
-        break;
-      case "password":
-        setPassword(event.target.value);
-        setDisplayPassword(event.target.value.replace(/./g, "*"));
-        break;
-      case "description":
-        setDescription(event.target.value);
-        break;
-      default:
-        break;
-    }
-  };
-
   const updateDetails = async (event) => {
     event.preventDefault();
     let formData = new FormData();
     formData.append("image", newImage);
-    formData.append("username", username);
-    formData.append("password", password);
-    formData.append("description", description);
+    formData.append("username", formState.inputValues.username);
+    formData.append("password", formState.inputValues.password);
+    formData.append("description", formState.inputValues.description);
     const responseData = await sendRequest(
       `/api/user/update/details/${userID}`,
       "PATCH",
@@ -181,19 +186,19 @@ function UpdateProfile() {
             <p className="inputHeader">Username</p>
             {!editMode ? (
               <div className="currentinfo">
-                <span>{username}</span>
+                <span>{formState.inputValues.username}</span>
               </div>
             ) : (
-                <span>
-                  <input
-                    type="text"
-                    className="infoupdater"
-                    name="username"
-                    onChange={inputChangeHandler}
-                    value={username}
-                  />
-                </span>
-              )}
+              <span>
+                <input
+                  type="text"
+                  className="infoupdater"
+                  name="username"
+                  onChange={inputChangeHandler}
+                  value={formState.inputValues.username}
+                />
+              </span>
+            )}
             <hr></hr>
             <p className="inputHeader">Password</p>
             {!editMode ? (
@@ -201,51 +206,51 @@ function UpdateProfile() {
                 <span>{displayPassword}</span>
               </div>
             ) : (
-                <span>
-                  <input
-                    type="password"
-                    className="infoupdater"
-                    name="password"
-                    onChange={inputChangeHandler}
-                    value={password}
-                  />
-                  <p className="inputHeader">Confirm Password</p>
-                  <input
-                    type="password"
-                    className="infoupdater"
-                    name="password"
-                    onChange={inputChangeHandler}
-                    value={password}
-                  />
-                </span>
-              )}
+              <span>
+                <input
+                  type="password"
+                  className="infoupdater"
+                  name="password"
+                  onChange={inputChangeHandler}
+                  value={formState.inputValues.password}
+                />
+                <p className="inputHeader">Confirm Password</p>
+                <input
+                  type="password"
+                  className="infoupdater"
+                  name="password"
+                  onChange={inputChangeHandler}
+                  value={formState.inputValues.password}
+                />
+              </span>
+            )}
             <hr />
             <p className="inputHeader">Description</p>
             {!editMode ? (
               <div className="currentinfo">
-                <span>{description || ""}</span>
+                <span>{formState.inputValues.description || ""}</span>
               </div>
             ) : (
-                <span>
-                  <textarea
-                    type="text"
-                    className="infoupdater"
-                    name="description"
-                    onChange={inputChangeHandler}
-                    value={description || ""}
-                  />
-                </span>
-              )}
+              <span>
+                <textarea
+                  type="text"
+                  className="infoupdater"
+                  name="description"
+                  onChange={inputChangeHandler}
+                  value={formState.inputValues.description || ""}
+                />
+              </span>
+            )}
             <hr />
             {!editMode ? (
               <button onClick={() => setEditMode(true)}>
                 <FiEdit2 /> Update
               </button>
             ) : (
-                <button className="saveButton" onClick={updateDetails}>
-                  Save
-                </button>
-              )}
+              <button className="saveButton" onClick={updateDetails}>
+                Save
+              </button>
+            )}
             <hr />
             <span>
               <p className="inputHeader">
@@ -256,10 +261,10 @@ function UpdateProfile() {
                     <FiEdit2 /> Update Inventory
                   </button>
                 ) : (
-                    <button className="saveButton" onClick={updateInventory}>
-                      Save
-                    </button>
-                  )}
+                  <button className="saveButton" onClick={updateInventory}>
+                    Save
+                  </button>
+                )}
               </p>
             </span>
 
@@ -296,10 +301,10 @@ function UpdateProfile() {
                     <FiEdit2 /> Update Wishlist
                   </button>
                 ) : (
-                    <button className="saveButton" onClick={updateWishlist}>
-                      Save
-                    </button>
-                  )}
+                  <button className="saveButton" onClick={updateWishlist}>
+                    Save
+                  </button>
+                )}
               </p>
             </span>
             {wishlist &&
@@ -329,8 +334,8 @@ function UpdateProfile() {
           </div>
         </div>
       ) : (
-          <AntiLoginError />
-        )}
+        <AntiLoginError />
+      )}
     </div>
   );
 }
