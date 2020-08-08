@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
   location: String,
   inventory: [gameSchema],
   wishlist: [gameSchema],
-  description: { type: String, required: true },
+  description: String,
   listings: [{ type: mongoose.Types.ObjectId, ref: "Listing" }],
 });
 

@@ -110,7 +110,7 @@ function Login(props) {
       } else {
         // login in redux
         const userID = responseData.userID;
-        dispatch(userLogin(userID));
+        dispatch(userLogin(userID, formState.inputValues.username));
 
         alert("Log in successful");
       }
