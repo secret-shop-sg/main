@@ -36,7 +36,10 @@ const getListing = async (req, res, next) => {
   let similarListings;
 
   try {
-    listingToDisplay = await Listing.findById(listingID, { __v: 0 });
+    listingToDisplay = await Listing.findById(listingID, { __v: 0 }).populate(
+      "ownerID",
+      "profilePicURL"
+    );
   } catch (err) {
     return next(new DatabaseError(err.message));
   }
@@ -54,15 +57,11 @@ const getListing = async (req, res, next) => {
           },
         },
         { $sample: { size: similarListingsCount } },
-        {
-          $lookup: {
-            from: "users",
-            localField: "owner",
-            foreignField: "_id",
-            as: "username",
-          },
-        },
       ]);
+      await User.populate(similarListings, {
+        path: "ownerID",
+        select: "profilePicURL",
+      });
     } catch (err) {
       return next(new DatabaseError(err.message));
     }

@@ -65,7 +65,7 @@ function Login(props) {
   const inputChangeHandler = (inputIdentifier, value) => {
     // check validity
     let isValid;
-    if (value.length == 0) {
+    if (value.length === 0) {
       isValid = false;
     } else {
       isValid = true;

@@ -11,7 +11,8 @@ import ListBox from "../components/User/ListBox";
 const UserPage = (props) => {
   const [sendRequest, isLoading] = useAPI();
   const [following, setFollowing] = useState(false);
-  const username = props.location.pathname.substring(1);
+  // substring(5) because pathname starts with /user/
+  const username = props.location.pathname.substring(6);
   const [userDetails, setUserDetails] = useState();
 
   function clickedfollow() {
@@ -115,6 +116,7 @@ const UserPage = (props) => {
                     className="inventoryImg"
                     src={BACKEND_ADDRESS + game.imageURL}
                     key={game._id}
+                    alt={game._id}
                   />
                 ))}
             </div>

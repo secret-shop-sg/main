@@ -54,14 +54,10 @@ const ListingDetails = (props) => {
               <img
                 className="userpicture"
                 alt="User"
-                src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/kermit-the-frog-attends-the-2017-drama-league-benefit-gala-news-photo-1568466133.jpg"
+                src={BACKEND_ADDRESS + listingToDisplay.ownerID.profilePicURL}
               />
             </span>
-            <Link
-              to={{
-                pathname: `/user`,
-              }}
-            >
+            <Link to={`/user/${listingToDisplay.owner}`}>
               <span>{listingToDisplay.owner}</span>
             </Link>
             <span> | </span>
@@ -121,20 +117,22 @@ const ListingDetails = (props) => {
                           <h5>{listing.hasItem.title}</h5>
                           <img
                             className="similarlistinguserdp"
-                            src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/kermit-the-frog-attends-the-2017-drama-league-benefit-gala-news-photo-1568466133.jpg"
+                            src={
+                              BACKEND_ADDRESS + listing.ownerID.profilePicURL
+                            }
                             alt={listing.owner}
-                          />{" "}
+                          />
                         </div>
                       </Link>
-
-                      <p>{listing.owner} | Rating</p>
+                      <Link to={`/user/${listingToDisplay.owner}`}>
+                        <p>{listing.owner} | Rating</p>
+                      </Link>
                       <p className="similarlistingdescription">
                         {listing.description.length > 50
                           ? listing.description.slice(0, 51) + "..."
                           : listing.description}
                       </p>
                     </div>
-
                     <hr />
                   </React.Fragment>
                 ))}

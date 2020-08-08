@@ -1,5 +1,5 @@
 // Page includes different methods of checking for errors
-const filters = require("../constants/filters");
+const details = require("../constants/details");
 
 const searchControllerErrorHandler = (queries) => {
   let hasError;
@@ -22,7 +22,7 @@ const searchControllerErrorHandler = (queries) => {
 
 const checkUnknownLabelsError = (queries) => {
   for (key of Object.keys(queries)) {
-    if (!filters.FILTER_LABELS.includes(key)) {
+    if (!details.FILTER_LABELS.includes(key)) {
       const error = new Error(
         "You have entered labels that are not recorded on the backend. Check your URL"
       );
@@ -32,7 +32,7 @@ const checkUnknownLabelsError = (queries) => {
 
     if (key === "listingtype") {
       for (value of queries[key].split("%")) {
-        if (!filters.LISTING_TYPES.includes(value)) {
+        if (!details.LISTING_TYPES.includes(value)) {
           const error = new Error(
             "You have entered labels that are not recorded on the backend. Check your URL"
           );
@@ -43,7 +43,7 @@ const checkUnknownLabelsError = (queries) => {
     } else if (key === "platform") {
       for (value of queries[key].split("%")) {
         value = value.replace(/-/g, " ");
-        if (!filters.PLATFORMS_SUPPORTED.includes(value)) {
+        if (!details.PLATFORMS_SUPPORTED.includes(value)) {
           const error = new Error(
             "You have entered labels that are not recorded on the backend. Check your URL"
           );

@@ -3,6 +3,7 @@ const DatabaseError = require("../models/databaseError");
 const fs = require("fs");
 const Listing = require("../models/listings");
 const mongoose = require("mongoose");
+const { DEFAULT_PROFILE_PIC } = require("../constants/details");
 
 const addNewUser = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -11,6 +12,7 @@ const addNewUser = async (req, res, next) => {
     username,
     email,
     password,
+    profilePicURL: DEFAULT_PROFILE_PIC,
     description: "",
     dateJoined: new Date(),
     lastLoggedIn: new Date(),
@@ -147,7 +149,7 @@ const updateProfileDetails = async (req, res, next) => {
 
       if (req.file) {
         // queues the old profile pic for deletion if there is a new pic exists
-        if (matchedUser.profilePicURL) {
+        if (matchedUser.profilePicURL != DEFAULT_PROFILE_PIC) {
           fileToUnlink = matchedUser.profilePicURL.substring(1);
         }
         // creates a new file path to where the user profile pic is stored

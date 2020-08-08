@@ -19,7 +19,7 @@ const RoutingTable = () => {
         <Route path="/create" component={CreateListing} />
         {/*Path should be protected and only accessible by users after logging in */}
         <Route exact path="/update" component={UpdateProfile} />
-        <Route path="/" component={UserPage} />
+        <Route path="/user" component={UserPage} />
         <Route component={ClientSideErrorsPage} />
         {/* Routes client to ClientSideErrorsPage page if path does not match any of the others*/}
       </Switch>

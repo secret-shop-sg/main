@@ -109,9 +109,11 @@ function Signup(props) {
         }
         break;
       case "confirmedPassword":
-        if (value != formState.inputValues.password) {
+        if (value !== formState.inputValues.password) {
           isValid = false;
         }
+        break;
+      default:
         break;
     }
 

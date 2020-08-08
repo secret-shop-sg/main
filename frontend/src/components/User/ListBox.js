@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BACKEND_ADDRESS } from "../../constants/Details";
+import { useHistory } from "react-router-dom";
 import "./Listbox.css";
 import Card from "react-bootstrap/Card";
 import { BsFillHeartFill, BsHeart } from "react-icons/bs";
@@ -11,11 +12,20 @@ function ListBox(props) {
     setLiked(!liked);
   }
 
+  const history = useHistory();
+
   return (
     <div id="listbox">
       {listings &&
         listings.map((listing) => (
-          <Card className="card" style={{ width: "18rem" }} key={listing._id}>
+          <Card
+            className="card"
+            style={{ width: "18rem" }}
+            key={listing._id}
+            onClick={() =>
+              history.push(`/listing/${listing.hasItem.title}?${listing._id}`)
+            }
+          >
             <Card.Img
               className="cardimage"
               variant="top"
@@ -31,12 +41,12 @@ function ListBox(props) {
                   onClick={likeHandler}
                 />
               ) : (
-                  <BsFillHeartFill
-                    className="likedbutton"
-                    size={23}
-                    onClick={likeHandler}
-                  />
-                )}
+                <BsFillHeartFill
+                  className="likedbutton"
+                  size={23}
+                  onClick={likeHandler}
+                />
+              )}
             </Card.Body>
           </Card>
         ))}
