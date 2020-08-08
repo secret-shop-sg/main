@@ -1,12 +1,12 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { BACKEND_ADDRESS } from "../../constants/Details";
 
 import "./HomeListing.css";
 
 // bootstrap components
 import Badge from "react-bootstrap/Badge";
 import Card from "react-bootstrap/Card";
-
 import XboxLogo from "../../constants/icons/xbox.svg";
 import SwitchLogo from "../../constants/icons/switch.svg";
 import PlaystationLogo from "../../constants/icons/playstation.svg";
@@ -41,7 +41,7 @@ const HomeListing = (props) => {
         <img
           className="game-img"
           alt="name of game"
-          src={props.image}
+          src={BACKEND_ADDRESS + props.image}
           onClick={goToListing}
         />
       </div>
@@ -74,9 +74,7 @@ const HomeListing = (props) => {
             </div>
           )}
         </div>
-        <Card.Text>
-          <div>{props.description}</div>
-        </Card.Text>
+        <Card.Text>{props.description}</Card.Text>
       </Card.Body>
       <div>{setPlatform()}</div>
     </Card>

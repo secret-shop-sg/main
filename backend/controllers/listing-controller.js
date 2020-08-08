@@ -1,43 +1,13 @@
-const allListings = require("../data/dummyData");
 const Listing = require("../models/listings");
 const User = require("../models/users");
 const mongoose = require("mongoose");
 const DatabaseError = require("../models/databaseError");
-const listings = require("../models/listings");
 
 // To be eventually added
 // const updateListing
 // const deleteLising
 
-const getListing = (req, res, next) => {
-  const listingID = req.params.listingID;
-
-  const listingToDisplay = allListings.find(
-    (listing) => listing.listingId.toString() === listingID
-  );
-  if (listingToDisplay) {
-    const selectedPlatform = listingToDisplay.platform;
-    // find all other games on the same platform
-    const otherListings = allListings.filter(
-      (listing) =>
-        listing.listingId.toString() !== listingID &&
-        listing.platform === selectedPlatform
-    );
-    // similarListings = 3 random listings on the same platform
-    let similarListings = [];
-
-    while (similarListings.length < 3 && otherListings.length > 0) {
-      const randomNum = Math.floor(Math.random() * otherListings.length);
-      const [randomListing] = otherListings.splice(randomNum, 1);
-      similarListings.push(randomListing);
-    }
-
-    // remove empty listings if there are < 3 games on the same platform
-    similarListings = similarListings.filter((listing) => listing.length != 0);
-    res.json({ listingToDisplay, similarListings });
-  } else res.json({ listingToDisplay });
-};
-
+/*
 const getMultipleListings = async (req, res, next) => {
   const listingIDs = req.body.listingIDs;
   let listingsData = [];
@@ -56,7 +26,8 @@ const getMultipleListings = async (req, res, next) => {
 
   res.json({ listingsData });
 };
-/*
+*/
+
 const getListing = async (req, res, next) => {
   const listingID = req.params.listingID;
   const similarListingsCount = 3;
@@ -69,14 +40,6 @@ const getListing = async (req, res, next) => {
   } catch (err) {
     return next(new DatabaseError(err.message));
   }
-  /*
-  const randomClothingDocs = await Clothing.aggregate([
-    {$match: {type: listingToDisplay.listedItem.type}},
-    {$sample: {size: 3}}, // Get 3 random clothing docs
-    {$project: { // Only get the ids
-      _id: 1 { $sample: { size: 3 } },{ _id: { $ne: "5f2a65822bdb837c98793a17" }},
-    }},
-  ]); 
 
   if (listingToDisplay) {
     platform = listingToDisplay.hasItem.platform;
@@ -106,7 +69,7 @@ const getListing = async (req, res, next) => {
   }
 
   res.json({ listingToDisplay, similarListings });
-}; */
+};
 
 const addListing = async (req, res, next) => {
   // optional parameters should be passed as null
@@ -119,6 +82,10 @@ const addListing = async (req, res, next) => {
     sellingPrice,
     rentalPrice,
   } = req.body;
+
+  if (description) {
+    description = "";
+  }
 
   const dateListed = new Date();
   let user;
@@ -170,64 +137,22 @@ const addListing = async (req, res, next) => {
 
   res.status(201).json({ listingID: newListing.id });
 };
-const getMostRecentListings = (req, res, next) => {
-  let elementCount = 5;
-  let mostRecentListings = allListings.slice(0, elementCount);
 
-  // sorts the first n listing dates in ascending order
-  mostRecentListings.sort((a, b) => {
-    if (a.dateListed > b.dateListed) {
-      return 1;
-    } else if (a.dateListed < b.dateListed) {
-      return -1;
-    } else return 0;
-  });
-
-  for (listing of allListings.slice(elementCount)) {
-    for (i = 0; i < mostRecentListings.length; i++) {
-      // if incoming listing is the newest listing in the mostRecentListings array
-      if (i === mostRecentListings.length - 1) {
-        let prevListing = listing;
-        for (j = i; j >= 0; j--) {
-          [mostRecentListings[j], prevListing] = [
-            prevListing,
-            mostRecentListings[j],
-          ];
-        }
-      } else if (listing.dateListed < mostRecentListings[i].dateListed) {
-        if (i > 0) {
-          let prevListing = listing;
-          for (j = i - 1; j >= 0; j--) {
-            [mostRecentListings[j], prevListing] = [
-              prevListing,
-              mostRecentListings[j],
-            ];
-          }
-          break;
-        }
-      }
-    }
-  }
-
-  res.json({ mostRecentListings });
-};
-/*
 const getMostRecentListings = async (req, res, next) => {
   const documentCount = 5;
-  let matchedListings;
+  let mostRecentListings;
 
   try {
-    matchedListings = await Listing.find({}, { __v: 0 })
+    mostRecentListings = await Listing.find({}, { __v: 0 })
       .sort({ dateListed: "descending" })
       .limit(documentCount);
   } catch (err) {
     return next(new DatabaseError(err.message));
   }
 
-  res.json({ matchedListings });
-}; */
+  res.json({ mostRecentListings });
+};
 
-exports.getMultipleListings = getMultipleListings;
 exports.getListing = getListing;
 exports.addListing = addListing;
 exports.getMostRecentListings = getMostRecentListings;

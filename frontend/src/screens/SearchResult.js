@@ -40,6 +40,7 @@ const SearchResult = (props) => {
       const responseData = await sendRequest(`/api/search?${apiPath}`);
       if (responseData) {
         setMatchedListings(responseData.matchedListings);
+        console.log(matchedListings);
       }
     };
     getListings();
@@ -61,14 +62,14 @@ const SearchResult = (props) => {
           <div className="results-display">
             {matchedListings.map((listing) => (
               <HomeListing
-                title={listing.title}
+                title={listing.hasItem.title}
                 description={listing.description}
-                image={listing.image}
-                id={listing.listingId}
-                platform={listing.platform}
-                isTrading={listing.isTrading}
-                isRenting={listing.isRenting}
-                isSelling={listing.isSelling}
+                image={listing.hasItem.imageURL}
+                id={listing._id}
+                platform={listing.hasItem.platform}
+                isTrading={listing.wantsItem.length > 0}
+                isRenting={listing.rentalPrice}
+                isSelling={listing.sellingPrice}
               />
             ))}
           </div>

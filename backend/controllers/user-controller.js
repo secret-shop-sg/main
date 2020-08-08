@@ -1,6 +1,8 @@
 const User = require("../models/users");
 const DatabaseError = require("../models/databaseError");
 const fs = require("fs");
+const Listing = require("../models/listings");
+const mongoose = require("mongoose");
 
 const addNewUser = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -9,6 +11,7 @@ const addNewUser = async (req, res, next) => {
     username,
     email,
     password,
+    description: "",
     dateJoined: new Date(),
     lastLoggedIn: new Date(),
   });
@@ -118,6 +121,8 @@ const getUserbyName = async (req, res, next) => {
 const updateProfileDetails = async (req, res, next) => {
   const userID = req.params.userID;
   const updatedInfo = req.body;
+  let fileToUnlink;
+  let error;
 
   // remove all fields with null or undefined values
   for (var property in updatedInfo) {
@@ -136,37 +141,52 @@ const updateProfileDetails = async (req, res, next) => {
   }
 
   if (matchedUser) {
-    if (req.file) {
-      // deletes the old profile pic if it exists
-      if (matchedUser.profilePicURL) {
-        fs.unlink(matchedUser.profilePicURL.substring(1), (err) => {
-          console.log(err);
-        });
-      }
-      // creates a new file path to where the user profile pic is stored
-      matchedUser.profilePicURL = "/" + req.file.path;
-    }
-
-    // iterates through whatever fields have updates and update them in the matchedUser
-    Object.keys(updatedInfo).forEach(
-      (key) => (matchedUser[key] = updatedInfo[key])
-    );
-
     try {
       const session = await mongoose.startSession();
       session.startTransaction();
-      await matchedUser.save({ session });
-      // update owner for existing listings
-      await session.commitTransaction();
-    } catch (err) {
-      // if transaction fail, delete the image file that has been uploaded
+
       if (req.file) {
-        fs.unlink(req.file.path, (error) => {
-          console.log(error);
-        });
+        // queues the old profile pic for deletion if there is a new pic exists
+        if (matchedUser.profilePicURL) {
+          fileToUnlink = matchedUser.profilePicURL.substring(1);
+        }
+        // creates a new file path to where the user profile pic is stored
+        matchedUser.profilePicURL = "/" + req.file.path;
       }
 
-      return next(new DatabaseError(err.message));
+      // iterates through whatever fields have updates and update them in the matchedUser
+      Object.keys(updatedInfo).forEach(
+        (key) => (matchedUser[key] = updatedInfo[key])
+      );
+
+      await matchedUser.save({ session });
+
+      // if the username updated, find all of the user's listing and update the owner field
+      if (updatedInfo.username) {
+        for (listingID of matchedUser.listings) {
+          const listing = await Listing.findById(listingID);
+          listing.owner = updatedInfo.username;
+          await listing.save({ session });
+        }
+      }
+
+      await session.commitTransaction();
+    } catch (err) {
+      // if transaction fail, queue the image file that has been uploaded for deletion instead
+      if (req.file) {
+        fileToUnlink = req.file.path;
+      }
+      error = err;
+    }
+
+    if (fileToUnlink) {
+      fs.unlink(fileToUnlink, function (err) {
+        console.log("Error while deleting files", err);
+      });
+    }
+
+    if (error) {
+      return next(new DatabaseError(error.message));
     }
   }
 

@@ -5,9 +5,6 @@ const router = express.Router();
 
 router.get("/id/:listingID", listingController.getListing);
 
-// retrieve data for multiple listings with the listingIDs specified in req.body
-router.patch("/multiple", listingController.getMultipleListings);
-
 // get the 5 most recent listings on the platform
 router.get("/recent", listingController.getMostRecentListings);
 

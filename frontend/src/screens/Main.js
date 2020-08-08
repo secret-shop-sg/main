@@ -32,14 +32,15 @@ const Main = (props) => {
     } else {
       return listings.map((listing) => (
         <HomeListing
-          title={listing.title}
+          title={listing.hasItem.title}
           description={listing.description}
-          image={listing.image}
-          id={listing.listingId}
-          platform={listing.platform}
-          isTrading={listing.isTrading}
-          isRenting={listing.isRenting}
-          isSelling={listing.isSelling}
+          image={listing.hasItem.imageURL}
+          id={listing._id}
+          key={listing._id}
+          platform={listing.hasItem.platform}
+          isTrading={listing.wantsItem.length > 0}
+          isRenting={listing.rentalPrice}
+          isSelling={listing.sellingPrice}
         />
       ));
     }

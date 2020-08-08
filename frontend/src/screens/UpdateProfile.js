@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 function UpdateProfile() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
-  const [description, setDescription] = useState();
+  const [description, setDescription] = useState("");
   const [inventory, setInventory] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [profilePic, setProfilePic] = useState([]);
@@ -90,7 +90,6 @@ function UpdateProfile() {
     );
 
     if (responseData) {
-      console.log(responseData);
       if (responseData.userID === userID) {
         setEditMode(false);
         alert("Update successful");
@@ -108,7 +107,6 @@ function UpdateProfile() {
     );
 
     if (responseData) {
-      console.log(responseData);
       if (responseData.userID === userID) {
         setEditInventoryMode(false);
         alert("Update successful");
@@ -182,7 +180,7 @@ function UpdateProfile() {
         <p className="inputHeader">Description</p>
         {!editMode ? (
           <div className="currentinfo">
-            <span>{description || ""}</span>
+            <span>{description}</span>
           </div>
         ) : (
           <span>
@@ -191,7 +189,7 @@ function UpdateProfile() {
               className="infoupdater"
               name="description"
               onChange={inputChangeHandler}
-              value={description || ""}
+              value={description}
             />
           </span>
         )}

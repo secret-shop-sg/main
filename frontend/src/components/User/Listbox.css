@@ -1,0 +1,29 @@
+.cardimage{
+    width: 120px;
+    height:150px;
+    margin:auto
+}
+.card{
+    padding:2px;
+    border:0;
+    float: left;
+    margin-left: 5%;
+    margin-bottom: 2%;
+    border: 1px solid #F3F2F2;
+}
+.card:hover{
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2)
+}
+
+.likebutton{
+    color: gray;
+}
+.likebutton:hover{
+    cursor: pointer;
+}
+.likedbutton{
+    color:red
+}
+.likedbutton:hover{
+    cursor: pointer;
+}

@@ -1,107 +1,71 @@
-const allListings = require("../data/dummyData");
-const searchAlgorithmns = require("../utils/searchAlgorithmns");
-const filters = require("../constants/filters");
-const errorHandlers = require("../utils/errorHandlers");
+const searchControllerErrorHandler = require("../utils/errorHandlers");
+const Listing = require("../models/listings");
+const DatabaseError = require("../models/databaseError");
 
-const getSearches = (req, res, next) => {
-  let matchedListings;
-
-  // check if values are valid if not throw page not found error
-
-  // checks if matchedListings contains data yet. If not use allListings
-  const getListingsToUse = (matchedListings) => {
-    if (matchedListings) {
-      return matchedListings;
-    } else return allListings;
-  };
-
-  const queries = req.query;
-  errorHandlers.checkEmptyParamsError(queries);
-  errorHandlers.checkFilterLabelError(
-    Object.keys(queries),
-    filters.FILTER_LABELS
-  );
-
-  if (queries.phrase) {
-    errorHandlers.checkRepeatedParamsError(queries.phrase);
-    const searchphrase = queries.phrase.toLowerCase().split("-");
-    const listingsToUse = getListingsToUse(matchedListings);
-    matchedListings = listingsToUse.filter((listing) =>
-      searchAlgorithmns.searchGeneral(searchphrase, listing)
-    );
-  }
-  // handles filters for different game platforms
-  if (queries.platform) {
-    errorHandlers.checkRepeatedParamsError(queries.platform);
-    // platforms is an array representing the different platforms selected by the user in the checkbox on the frontend
-    const platforms = queries.platform.split("%");
-    errorHandlers.checkFilterLabelError(
-      Object.values(platforms),
-      filters.PLATFORMS_SUPPORTED
-    );
-    const listingsToUse = getListingsToUse(matchedListings);
-    matchedListings = listingsToUse.filter((listing) =>
-      searchAlgorithmns.searchFilters(listing, "platform", platforms)
-    );
-  }
-  // handles filters for different listing types
-  if (queries.listingtype) {
-    errorHandlers.checkRepeatedParamsError(queries.platform);
-    // listingTypes is an array representing the different platforms selected by the user in the checkbox on the frontend
-    const listingTypes = queries.listingtype.split("%");
-    errorHandlers.checkFilterLabelError(listingTypes, filters.LISTING_TYPES);
-    const listingsToUse = getListingsToUse(matchedListings);
-    matchedListings = listingsToUse.filter((listing) =>
-      searchAlgorithmns.searchFilters(listing, "listingtype", listingTypes)
-    );
-  }
-
-  res.json({ matchedListings });
-};
-
-/*
 const getSearches = async (req, res, next) => {
   let matchedListings;
   const queries = req.query;
-  errorHandlers.checkEmptyParamsError(queries);
-  errorHandlers.checkFilterLabelError(
-    Object.keys(queries),
-    filters.FILTER_LABELS
-  );
 
-  let phrase = { $exists: true };
-  if (queries.phrase) {
-    phrase = { $regex: queries.phrase, $options: "i" };
+  let hasError;
+  hasError = searchControllerErrorHandler(queries);
+  if (hasError) {
+    return next(hasError);
   }
 
-  /* Search within the platform and title field of a game
+  //General searches keyed in by the user only searches within the title field of a game currently
+  let phraseQuery = { _id: { $exists: true } };
+  if (queries.phrase) {
+    phraseQuery = {
+      "hasItem.title": {
+        $regex: queries.phrase.replace(/-/g, " "),
+        $options: "i",
+      },
+    };
+  }
 
-  let platform = {$exists:true};
-  if (queries.platform){
-    platform = {}
-  } 
+  // handles queries from checking the platform checkbox
+  let platformQuery = { _id: { $exists: true } };
+  if (queries.platform) {
+    const platforms = queries.platform.replace(/-/g, " ").split("%");
+    platformQuery = { "hasItem.platform": { $in: platforms } };
+  }
 
-  let platform = {$exists:true};
-  if (queries.platform){
-    queries = {}
-  } 
+  // handles queries from checking the listingtype checkbox
+  let listingtypeQuery = { _id: { $exists: true } };
+  if (queries.listingtype) {
+    const listingtypes = queries.listingtype.split("%");
+    listingtypeQuery = [];
+    for (listingtype of listingtypes) {
+      switch (listingtype) {
+        case "Trade":
+          listingtypeQuery.push({ wantsItem: { $ne: [] } });
+          break;
+        case "Buy":
+          listingtypeQuery.push({ sellingPrice: { $exists: true } });
+          break;
+        case "Rent":
+          listingtypeQuery.push({ rentalPrice: { $exists: true } });
+          break;
+        default:
+          break;
+      }
+    }
+    listingtypeQuery = { $or: listingtypeQuery };
+  }
 
-
-  // phrase searches in title or platform of the listed game currently
+  // queries database
   try {
-    matchedGames = await Game.find(
+    matchedListings = await Listing.find(
       {
-        $or: [
-          { title: { title, phrase }, platform },
-          { platform: { title, platform }, title },
-        ],
+        $and: [phraseQuery, platformQuery, listingtypeQuery],
       },
       { __v: 0 }
     );
   } catch (err) {
-    return next(matchedListings);
+    return next(new DatabaseError(err.message));
   }
+
+  res.json({ matchedListings });
 };
-*/
 
 exports.getSearches = getSearches;

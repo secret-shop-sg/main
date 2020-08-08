@@ -5,12 +5,12 @@ const gameSchema = require("./games").game;
 const listingSchema = new mongoose.Schema({
   hasItem: { type: gameSchema, required: true },
   dateListed: { type: Date, required: true },
-  description: String,
+  description: { type: String, required: true },
   ownerID: { type: mongoose.Types.ObjectId, ref: "User", required: true },
   owner: { type: String, required: true },
   wantsItem: [gameSchema],
   sellingPrice: Number,
-  rentingPrice: Number,
+  rentalPrice: Number,
 });
 
 listingSchema.plugin(uniqueValidator);
