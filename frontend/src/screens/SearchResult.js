@@ -40,7 +40,6 @@ const SearchResult = (props) => {
       const responseData = await sendRequest(`/api/search?${apiPath}`);
       if (responseData) {
         setMatchedListings(responseData.matchedListings);
-        console.log(matchedListings);
       }
     };
     getListings();
