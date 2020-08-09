@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useCallback } from "react";
 import Header from "../components/Shared/Header";
 import AddGames from "../components/Shared/AddGames";
 import { useAPI } from "../utils/useAPI";
@@ -51,8 +51,6 @@ function UpdateProfile() {
     },
   });
 
-  const [inventory, setInventory] = useState([]);
-  const [wishlist, setWishlist] = useState([]);
   const [profilePic, setProfilePic] = useState([]);
   const [newImage, setNewImage] = useState();
   const [editMode, setEditMode] = useState(false);
@@ -68,13 +66,28 @@ function UpdateProfile() {
   const userID = "5f29504f0f1bc35a048e5b70";
 
   // when input value of any input field changes
-  const inputChangeHandler = (event) => {
-    dispatchForm({
-      type: "UPDATE",
-      value: event.target.value,
-      input: event.target.name,
-    });
-  };
+  const inputChangeHandler = useCallback(
+    (event) => {
+      dispatchForm({
+        type: "UPDATE",
+        value: event.target.value,
+        input: event.target.name,
+      });
+    },
+    [dispatchForm]
+  );
+
+  // function to set selected games
+  const setSelectedGames = useCallback(
+    (inputIdentifier, games) => {
+      dispatchForm({
+        type: "UPDATE",
+        value: games,
+        input: inputIdentifier,
+      });
+    },
+    [dispatchForm]
+  );
 
   // fetch values when component is first loaded
   useEffect(() => {
@@ -83,8 +96,6 @@ function UpdateProfile() {
       if (responseData) {
         if (responseData.matchedUser) {
           const user = responseData.matchedUser;
-          setInventory(user.inventory);
-          setWishlist(user.wishlist);
           setProfilePic(user.profilePicURL);
           setDisplayPassword(user.password.replace(/./g, "*"));
 
@@ -107,16 +118,24 @@ function UpdateProfile() {
   }, [userID, sendRequest]);
 
   const deselectGame = (event, index) => {
+    let collection;
+
     switch (event.target.name) {
       case "inventory":
-        setInventory((inventory) => inventory.filter((_, i) => i !== index));
+        collection = formState.inputValues.inventory;
         break;
       case "wishlist":
-        setWishlist((wishlist) => wishlist.filter((_, i) => i !== index));
+        collection = formState.inputValues.wishlist;
         break;
       default:
         break;
     }
+
+    dispatchForm({
+      type: "UPDATE",
+      value: collection.filter((_, i) => i !== index),
+      input: event.target.name,
+    });
   };
 
   const updateDetails = async (event) => {
@@ -145,10 +164,12 @@ function UpdateProfile() {
   const updateInventory = async (event) => {
     event.preventDefault();
 
+    const updatedInventory = formState.inputValues.inventory;
+
     const responseData = await sendRequest(
       `/api/user/update/inventory/${userID}`,
       "PATCH",
-      { inventory }
+      { updatedInventory }
     );
 
     if (responseData) {
@@ -163,10 +184,12 @@ function UpdateProfile() {
   const updateWishlist = async (event) => {
     event.preventDefault();
 
+    const updatedWishlist = formState.inputValues.wishlist;
+
     const responseData = await sendRequest(
       `/api/user/update/wishlist/${userID}`,
       "PATCH",
-      { wishlist }
+      { updatedWishlist }
     );
 
     if (responseData) {
@@ -176,6 +199,7 @@ function UpdateProfile() {
       }
     }
   };
+
   return (
     <div>
       <Header />
@@ -268,8 +292,8 @@ function UpdateProfile() {
               </p>
             </span>
 
-            {inventory &&
-              inventory.map((game, index) => (
+            {formState.inputValues.inventory &&
+              formState.inputValues.inventory.map((game, index) => (
                 <div className="selected-inventory-games" key={index}>
                   <img
                     src={BACKEND_ADDRESS + game.imageURL}
@@ -286,8 +310,8 @@ function UpdateProfile() {
             {editInventoryMode ? (
               <div>
                 <AddGames
-                  setSelectedGames={setInventory}
-                  selectedGames={inventory}
+                  setSelectedGames={setSelectedGames.bind(this, "inventory")}
+                  selectedGames={formState.inputValues.inventory}
                   maxSelectionSize={3}
                 />
               </div>
@@ -307,8 +331,8 @@ function UpdateProfile() {
                 )}
               </p>
             </span>
-            {wishlist &&
-              wishlist.map((game, index) => (
+            {formState.inputValues.wishlist &&
+              formState.inputValues.wishlist.map((game, index) => (
                 <div className="selected-inventory-games" key={index}>
                   <img
                     src={BACKEND_ADDRESS + game.imageURL}
@@ -325,8 +349,8 @@ function UpdateProfile() {
             {editWishlistMode ? (
               <div className="update-user-game-images-div">
                 <AddGames
-                  setSelectedGames={setWishlist}
-                  selectedGames={wishlist}
+                  setSelectedGames={setSelectedGames.bind(this, "wishlist")}
+                  selectedGames={formState.inputValues.wishlist}
                   maxSelectionSize={3}
                 />
               </div>
