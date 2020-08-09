@@ -1,7 +1,5 @@
 const gameController = require("../controllers/game-controllers");
-const express = require("express");
-
-const router = express.Router();
+const router = require("express").Router();
 
 // used to add games temporarily
 router.post("/add", gameController.addNewGame);
