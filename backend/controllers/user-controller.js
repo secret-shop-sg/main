@@ -1,17 +1,26 @@
-const User = require("../models/users");
-const DatabaseError = require("../models/databaseError");
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 const fs = require("fs");
 const Listing = require("../models/listings");
-const mongoose = require("mongoose");
+const User = require("../models/users");
+const DatabaseError = require("../models/databaseError");
 const { DEFAULT_PROFILE_PIC } = require("../constants/details");
 
 const addNewUser = async (req, res, next) => {
   const { username, email, password } = req.body;
 
+  let hashedPassword;
+  // 12 is the strength of the hash
+  try {
+    hashedPassword = await bcrypt.hash(password, 12);
+  } catch (err) {
+    return next(new DatabaseError(err.message));
+  }
+
   const newUser = new User({
     username,
     email,
-    password,
+    password: hashedPassword,
     profilePicURL: DEFAULT_PROFILE_PIC,
     description: "",
     dateJoined: new Date(),
@@ -67,21 +76,32 @@ const login = async (req, res, next) => {
     return next(new DatabaseError(err.message));
   }
 
-  if (!existingUser || existingUser.password !== password) {
+  // if username is wrong
+  if (!existingUser) {
     validCredentials = false;
   } else {
-    // updates when the user successfully logs in
-    existingUser.lastLoggedIn = new Date();
+    let isValidPassword = false;
     try {
-      await existingUser.save();
+      isValidPassword = await bcrypt.compare(password, existingUser.password);
     } catch (err) {
       return next(new DatabaseError(err.message));
     }
 
-    userID = existingUser.id;
-    validCredentials = true;
-  }
+    if (!isValidPassword) {
+      validCredentials = false;
+    } else {
+      // updates when the user successfully logs in
+      existingUser.lastLoggedIn = new Date();
+      try {
+        await existingUser.save();
+      } catch (err) {
+        return next(new DatabaseError(err.message));
+      }
 
+      userID = existingUser.id;
+      validCredentials = true;
+    }
+  }
   res.json({ validCredentials, userID });
 };
 
@@ -164,7 +184,7 @@ const updateProfileDetails = async (req, res, next) => {
       await matchedUser.save({ session });
 
       // if the username updated, find all of the user's listing and update the owner field
-      if (updatedInfo.username) {
+      if (updatedInfo.username !== matchedUser.username) {
         for (listingID of matchedUser.listings) {
           const listing = await Listing.findById(listingID);
           listing.owner = updatedInfo.username;

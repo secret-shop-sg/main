@@ -9,6 +9,13 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   dateJoined: { type: Date, required: true },
   profilePicURL: String,
+  // each js object is the chat log with one other individual
+  chatLogs: [
+    {
+      recipient: { type: mongoose.Types.ObjectId, ref: "User" },
+      conversation: { type: mongoose.Types.ObjectId, ref: "Conversation" },
+    },
+  ],
   lastLoggedIn: { type: Date, required: true },
   location: String,
   inventory: [gameSchema],
