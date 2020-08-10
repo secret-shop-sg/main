@@ -168,7 +168,7 @@ function UpdateProfile() {
         }
       }
     },
-    [formState]
+    [formState, userID]
   );
 
   const updateInventory = useCallback(
@@ -222,10 +222,8 @@ function UpdateProfile() {
       {userID ? (
         <div>
           <ImageUpload
-            imageData={{
-              profilePic: formState.inputValues.profilePic,
-              setProfilePic,
-            }}
+            userID={userID}
+            username={formState.inputValues.username}
           />
           <div className="userInformation">
             <p className="inputHeader">Username</p>
