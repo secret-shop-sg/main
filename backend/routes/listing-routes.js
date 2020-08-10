@@ -1,8 +1,5 @@
-const express = require("express");
 const listingController = require("../controllers/listing-controller");
-
-const router = express.Router();
-
+const router = require("express").Router();
 router.get("/id/:listingID", listingController.getListing);
 
 // get the 5 most recent listings on the platform

@@ -6,6 +6,7 @@ const searchRoutes = require("./routes/search-routes");
 const listingRoutes = require("./routes/listing-routes");
 const userRoutes = require("./routes/user-routes");
 const gameRoutes = require("./routes/game-routes");
+const chatRoutes = require("./routes/chat-routes");
 
 const app = express();
 
@@ -37,6 +38,8 @@ app.use("/api/user", userRoutes);
 
 // api requests for images of games
 app.use("/api/game", gameRoutes);
+
+app.use("/api/chat", chatRoutes);
 
 // if api calls a wrong address
 app.use((req, res, next) => {

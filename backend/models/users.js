@@ -12,8 +12,9 @@ const userSchema = new mongoose.Schema({
   // each js object is the chat log with one other individual
   chatLogs: [
     {
-      recipient: { type: mongoose.Types.ObjectId, ref: "User" },
-      conversation: { type: mongoose.Types.ObjectId, ref: "Conversation" },
+      _id: false,
+      recipientID: { type: mongoose.Types.ObjectId, ref: "User" },
+      chat: { type: mongoose.Types.ObjectId, ref: "Chat" },
     },
   ],
   lastLoggedIn: { type: Date, required: true },
