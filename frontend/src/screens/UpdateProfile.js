@@ -7,7 +7,6 @@ import "./styles/UpdateProfile.css";
 import { FiEdit2 } from "react-icons/fi";
 import ImageUpload from "../components/UpdateProfile/ImageUpload";
 //import { useSelector } from "react-redux";
-import { AiOutlineWarning } from "react-icons/ai";
 import AntiLoginError from "../components/Shared/AntiLoginError";
 
 // reducer for update profile data
@@ -28,6 +27,7 @@ const formReducer = (state, action) => {
         inputValues: updatedValues,
       };
     case "SET_VALUES":
+      // set initial values
       return {
         ...state,
         inputValues: action.values,
