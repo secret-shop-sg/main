@@ -180,18 +180,17 @@ function UpdateProfile() {
       const responseData = await sendRequest(
         `/api/user/update/inventory/${userID}`,
         "PATCH",
-        { updatedInventory }
+        { inventory: updatedInventory }
       );
 
       if (responseData) {
-        console.log(responseData);
         if (responseData.userID === userID) {
           setEditInventoryMode(false);
           alert("Update successful");
         }
       }
     },
-    [formState]
+    [formState, sendRequest]
   );
 
   const updateWishlist = useCallback(
@@ -203,7 +202,7 @@ function UpdateProfile() {
       const responseData = await sendRequest(
         `/api/user/update/wishlist/${userID}`,
         "PATCH",
-        { updatedWishlist }
+        { wishlist: updatedWishlist }
       );
 
       if (responseData) {
