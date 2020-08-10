@@ -11,7 +11,7 @@ const ImageUpload = (props) => {
 
   const pickedHandler = (event) => {
     if (event.target.files && event.target.files.length === 1) {
-      image.setNewImage(event.target.files[0]);
+      image.setProfilePic(event.target.files[0]);
       createPreview(event.target.files[0]);
     }
   };
