@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useCallback } from "react";
 import Header from "../components/Shared/Header";
 import AddGames from "../components/Shared/AddGames";
 import { useAPI } from "../utils/useAPI";
@@ -7,7 +7,6 @@ import "./styles/UpdateProfile.css";
 import { FiEdit2 } from "react-icons/fi";
 import ImageUpload from "../components/UpdateProfile/ImageUpload";
 //import { useSelector } from "react-redux";
-import { AiOutlineWarning } from "react-icons/ai";
 import AntiLoginError from "../components/Shared/AntiLoginError";
 
 // reducer for update profile data
@@ -28,6 +27,7 @@ const formReducer = (state, action) => {
         inputValues: updatedValues,
       };
     case "SET_VALUES":
+      // set initial values
       return {
         ...state,
         inputValues: action.values,
@@ -42,51 +42,66 @@ function UpdateProfile() {
   // use reducer for profile data
   const [formState, dispatchForm] = useReducer(formReducer, {
     inputValues: {
-      username: null,
-      password: null,
-      description: null,
-      inventory: null,
-      wishlist: null,
-      profilePic: null,
+      username: "",
+      password: "",
+      description: "",
+      inventory: [],
+      wishlist: [],
+      profilePic: "",
     },
   });
 
-  const [inventory, setInventory] = useState([]);
-  const [wishlist, setWishlist] = useState([]);
-  const [profilePic, setProfilePic] = useState([]);
-  const [newImage, setNewImage] = useState();
   const [editMode, setEditMode] = useState(false);
   const [editInventoryMode, setEditInventoryMode] = useState(false);
   const [editWishlistMode, setEditWishlistMode] = useState(false);
   const [sendRequest] = useAPI();
-  const [displayPassword, setDisplayPassword] = useState();
-  const [loggedIn, setLoggedIn] = useState(true);
 
   // change to the following when this page is done
   //const userID = useSelector((state) => state.user.userId);
-
   const userID = "5f29504f0f1bc35a048e5b70";
 
   // when input value of any input field changes
-  const inputChangeHandler = (event) => {
+  const inputChangeHandler = useCallback(
+    (event) => {
+      dispatchForm({
+        type: "UPDATE",
+        value: event.target.value,
+        input: event.target.name,
+      });
+    },
+    [dispatchForm]
+  );
+
+  // function to set selected games
+  const setSelectedGames = useCallback(
+    (inputIdentifier, games) => {
+      console.log(games);
+      dispatchForm({
+        type: "UPDATE",
+        value: games,
+        input: inputIdentifier,
+      });
+    },
+    [dispatchForm]
+  );
+
+  // function to set image
+  const setProfilePic = useCallback((newPic) => {
     dispatchForm({
       type: "UPDATE",
-      value: event.target.value,
-      input: event.target.name,
+      value: newPic,
+      input: "profilePic",
     });
-  };
+  });
 
-  // fetch values when component is first loaded
+  // fetch values when user id is changed
   useEffect(() => {
+    // fetch data
     const getUserData = async () => {
       const responseData = await sendRequest(`/api/user/id/${userID}`);
       if (responseData) {
         if (responseData.matchedUser) {
           const user = responseData.matchedUser;
-          setInventory(user.inventory);
-          setWishlist(user.wishlist);
-          setProfilePic(user.profilePicURL);
-          setDisplayPassword(user.password.replace(/./g, "*"));
 
           // initalize values in reducer
           dispatchForm({
@@ -104,84 +119,112 @@ function UpdateProfile() {
       }
     };
     getUserData();
-  }, [userID, sendRequest]);
+  }, [userID]);
 
-  const deselectGame = (event, index) => {
-    switch (event.target.name) {
-      case "inventory":
-        setInventory((inventory) => inventory.filter((_, i) => i !== index));
-        break;
-      case "wishlist":
-        setWishlist((wishlist) => wishlist.filter((_, i) => i !== index));
-        break;
-      default:
-        break;
-    }
-  };
+  const deselectGame = useCallback(
+    (event, index) => {
+      let collection;
 
-  const updateDetails = async (event) => {
-    event.preventDefault();
-    let formData = new FormData();
-    formData.append("image", newImage);
-    formData.append("username", formState.inputValues.username);
-    formData.append("password", formState.inputValues.password);
-    formData.append("description", formState.inputValues.description);
-    const responseData = await sendRequest(
-      `/api/user/update/details/${userID}`,
-      "PATCH",
-      formData,
-      true
-    );
-
-    if (responseData) {
-      console.log(responseData);
-      if (responseData.userID === userID) {
-        setEditMode(false);
-        alert("Update successful");
+      switch (event.target.name) {
+        case "inventory":
+          collection = formState.inputValues.inventory;
+          break;
+        case "wishlist":
+          collection = formState.inputValues.wishlist;
+          break;
+        default:
+          break;
       }
-    }
-  };
 
-  const updateInventory = async (event) => {
-    event.preventDefault();
+      dispatchForm({
+        type: "UPDATE",
+        value: collection.filter((_, i) => i !== index),
+        input: event.target.name,
+      });
+    },
+    [formState, dispatchForm]
+  );
 
-    const responseData = await sendRequest(
-      `/api/user/update/inventory/${userID}`,
-      "PATCH",
-      { inventory }
-    );
+  const updateDetails = useCallback(
+    async (event) => {
+      event.preventDefault();
+      let formData = new FormData();
+      formData.append("image", formState.inputValues.profilePic);
+      formData.append("username", formState.inputValues.username);
+      formData.append("password", formState.inputValues.password);
+      formData.append("description", formState.inputValues.description);
+      const responseData = await sendRequest(
+        `/api/user/update/details/${userID}`,
+        "PATCH",
+        formData,
+        true
+      );
 
-    if (responseData) {
-      console.log(responseData);
-      if (responseData.userID === userID) {
-        setEditInventoryMode(false);
-        alert("Update successful");
+      if (responseData) {
+        console.log(responseData);
+        if (responseData.userID === userID) {
+          setEditMode(false);
+          alert("Update successful");
+        }
       }
-    }
-  };
+    },
+    [formState, userID]
+  );
 
-  const updateWishlist = async (event) => {
-    event.preventDefault();
+  const updateInventory = useCallback(
+    async (event) => {
+      event.preventDefault();
 
-    const responseData = await sendRequest(
-      `/api/user/update/wishlist/${userID}`,
-      "PATCH",
-      { wishlist }
-    );
+      const updatedInventory = formState.inputValues.inventory;
 
-    if (responseData) {
-      if (responseData.userID === userID) {
-        setEditWishlistMode(false);
-        alert("Update successful");
+      const responseData = await sendRequest(
+        `/api/user/update/inventory/${userID}`,
+        "PATCH",
+        { updatedInventory }
+      );
+
+      if (responseData) {
+        console.log(responseData);
+        if (responseData.userID === userID) {
+          setEditInventoryMode(false);
+          alert("Update successful");
+        }
       }
-    }
-  };
+    },
+    [formState]
+  );
+
+  const updateWishlist = useCallback(
+    async (event) => {
+      event.preventDefault();
+
+      const updatedWishlist = formState.inputValues.wishlist;
+
+      const responseData = await sendRequest(
+        `/api/user/update/wishlist/${userID}`,
+        "PATCH",
+        { updatedWishlist }
+      );
+
+      if (responseData) {
+        if (responseData.userID === userID) {
+          setEditWishlistMode(false);
+          alert("Update successful");
+        }
+      }
+    },
+    [formState]
+  );
+
   return (
     <div>
       <Header />
-      {loggedIn ? (
+      {userID ? (
         <div>
-          <ImageUpload imageData={{ profilePic, newImage, setNewImage }} />
+          <ImageUpload
+            userID={userID}
+            username={formState.inputValues.username}
+          />
           <div className="userInformation">
             <p className="inputHeader">Username</p>
             {!editMode ? (
@@ -203,7 +246,7 @@ function UpdateProfile() {
             <p className="inputHeader">Password</p>
             {!editMode ? (
               <div className="currentinfo">
-                <span>{displayPassword}</span>
+                <span>{formState.inputValues.password.replace(/./g, "*")}</span>
               </div>
             ) : (
               <span>
@@ -268,8 +311,8 @@ function UpdateProfile() {
               </p>
             </span>
 
-            {inventory &&
-              inventory.map((game, index) => (
+            {formState.inputValues.inventory &&
+              formState.inputValues.inventory.map((game, index) => (
                 <div className="selected-inventory-games" key={index}>
                   <img
                     src={BACKEND_ADDRESS + game.imageURL}
@@ -286,8 +329,8 @@ function UpdateProfile() {
             {editInventoryMode ? (
               <div>
                 <AddGames
-                  setSelectedGames={setInventory}
-                  selectedGames={inventory}
+                  setSelectedGames={setSelectedGames.bind(this, "inventory")}
+                  selectedGames={formState.inputValues.inventory}
                   maxSelectionSize={3}
                 />
               </div>
@@ -307,8 +350,8 @@ function UpdateProfile() {
                 )}
               </p>
             </span>
-            {wishlist &&
-              wishlist.map((game, index) => (
+            {formState.inputValues.wishlist &&
+              formState.inputValues.wishlist.map((game, index) => (
                 <div className="selected-inventory-games" key={index}>
                   <img
                     src={BACKEND_ADDRESS + game.imageURL}
@@ -325,8 +368,8 @@ function UpdateProfile() {
             {editWishlistMode ? (
               <div className="update-user-game-images-div">
                 <AddGames
-                  setSelectedGames={setWishlist}
-                  selectedGames={wishlist}
+                  setSelectedGames={setSelectedGames.bind(this, "wishlist")}
+                  selectedGames={formState.inputValues.wishlist}
                   maxSelectionSize={3}
                 />
               </div>
