@@ -75,7 +75,6 @@ function UpdateProfile() {
   // function to set selected games
   const setSelectedGames = useCallback(
     (inputIdentifier, games) => {
-      console.log(games);
       dispatchForm({
         type: "UPDATE",
         value: games,
@@ -161,7 +160,6 @@ function UpdateProfile() {
       );
 
       if (responseData) {
-        console.log(responseData);
         if (responseData.userID === userID) {
           setEditMode(false);
           alert("Update successful");

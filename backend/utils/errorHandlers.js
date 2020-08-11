@@ -22,7 +22,7 @@ const searchControllerErrorHandler = (queries) => {
 
 const checkUnknownLabelsError = (queries) => {
   for (key of Object.keys(queries)) {
-    if (!details.FILTER_LABELS.includes(key)) {
+    if (!details.QUERY_LABELS.includes(key)) {
       const error = new Error(
         "You have entered labels that are not recorded on the backend. Check your URL"
       );
@@ -50,6 +50,15 @@ const checkUnknownLabelsError = (queries) => {
           error.status = 400;
           return error;
         }
+      }
+    } else if (key === "page") {
+      // checks that the page property contains a valid value
+      if (!Number.isInteger(parseInt(queries.page))) {
+        const error = new Error(
+          "The page you have entered is not valid. Please check your URL"
+        );
+        error.status = 400;
+        return error;
       }
     }
   }

@@ -7,27 +7,6 @@ const DatabaseError = require("../models/databaseError");
 // const updateListing
 // const deleteLising
 
-/*
-const getMultipleListings = async (req, res, next) => {
-  const listingIDs = req.body.listingIDs;
-  let listingsData = [];
-
-  if (listingIDs) {
-    for (id of listingIDs) {
-      let listingData;
-      try {
-        listingData = await Listing.findById(id);
-        listingsData.push(listingData);
-      } catch (err) {
-        return next(new DatabaseError(err.message));
-      }
-    }
-  }
-
-  res.json({ listingsData });
-};
-*/
-
 const getListing = async (req, res, next) => {
   const listingID = req.params.listingID;
   const similarListingsCount = 3;

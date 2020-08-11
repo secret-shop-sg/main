@@ -12,6 +12,7 @@
   align-items: center;
 }
 
+/* Following code is not in use*/
 .results-display {
   width: 90%;
   display: flex;
