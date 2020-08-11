@@ -23,7 +23,7 @@ const Chat = (props) => {
       <div className="chat-interface">
         <ChatOverview userID={userID} onChatSelect={onChatSelect} />
         <div className="messages">
-          <ChatMessages recipientID={selectedChatRecipient} />
+          <ChatMessages userID={userID} recipientID={selectedChatRecipient} />
         </div>
       </div>
     </div>
