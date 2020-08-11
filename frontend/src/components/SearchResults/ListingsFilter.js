@@ -61,7 +61,7 @@ const ListingsFilter = (props) => {
           label={label}
           key={index}
           filterLabel={props.filterLabel}
-          isChecked={filterValues.includes(label.replace(" ", "-"))}
+          isChecked={filterValues.includes(label.replace(/ /g, "-"))}
         />
       ))}
     </div>

@@ -15,15 +15,15 @@ const Platforms = (props) => {
 
   // functions for button press
   const onXboxPress = () => {
-    history.push({ pathname: "/search", search: `platform=Xbox-One` });
+    history.push("/search?platform=Xbox-One");
   };
 
   const onPsPress = () => {
-    history.push({ pathname: "/search", search: `platform=PlayStation-4` });
+    history.push("/search?platform=PlayStation-4");
   };
 
   const onSwitchPress = () => {
-    history.push({ pathname: "/search", search: `platform=Nintendo-Switch` });
+    history.push("/search?platform=Nintendo-Switch");
   };
 
   return (

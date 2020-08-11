@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Header.css";
 import { FaSearch, FaUserAlt, FaUserPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -10,11 +10,29 @@ const Header = () => {
   const [enteredText, setEnteredText] = useState("");
   // enteredText represents what the user typed the search bar
 
+  // set the text in the search bar based on the URL of the page
+  useEffect(() => {
+    if (window.location.search) {
+      const query = window.location.search;
+      console.log("query", query);
+      const startingIndex = query.indexOf("phrase=") + 7;
+      console.log("startingIndex", startingIndex);
+      if (startingIndex !== -1) {
+        const phraseLength = query.substring(startingIndex).indexOf("&");
+        if (phraseLength !== -1) {
+          setEnteredText(
+            query
+              .substring(startingIndex, startingIndex + phraseLength)
+              .replace(/-/g, " ")
+          );
+        } else
+          setEnteredText(query.substring(startingIndex).replace(/-/g, " "));
+      }
+    }
+  }, []);
+
   const textChangeHandler = (event) => {
-    // filters away symbols and changes spaces into -
-    setEnteredText(
-      event.target.value.replace(/(<([^>]+)>)=/gi, "").replace(" ", "-")
-    );
+    setEnteredText(event.target.value);
   };
 
   const [loginForm, setLoginForm] = useState(false);
@@ -42,13 +60,11 @@ const Header = () => {
               type="text"
               className="search-input"
               placeholder="Search for games"
+              value={enteredText}
               onChange={textChangeHandler}
             />
             <Link
-              to={{
-                pathname: "/search",
-                search: `phrase=${enteredText}`,
-              }}
+              to={`/search?phrase=${enteredText.replace(/ /g, "-")}`}
               style={{ backgroundImage: "none" }}
             >
               <button type="submit" className="search-button">
