@@ -8,6 +8,8 @@ import UserPage from "./screens/UserPage";
 import ServerSideErrorPage from "./screens/errors/ServerSideErrorPage";
 import CreateListing from "./screens/CreateListing";
 import UpdateProfile from "./screens/UpdateProfile";
+import Chat from "./screens/Chat";
+
 const RoutingTable = () => {
   return (
     <Router>
@@ -20,6 +22,7 @@ const RoutingTable = () => {
         {/*Path should be protected and only accessible by users after logging in */}
         <Route exact path="/update" component={UpdateProfile} />
         <Route path="/user" component={UserPage} />
+        <Route path="/chat" component={Chat} />
         <Route component={ClientSideErrorsPage} />
         {/* Routes client to ClientSideErrorsPage page if path does not match any of the others*/}
       </Switch>

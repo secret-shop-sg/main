@@ -1,0 +1,26 @@
+.chat-summary-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  padding: 30px 0px;
+  border: 1px solid black;
+}
+
+.chat-summary-img {
+  border-radius: 50%;
+}
+
+.chat-summary-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.recipient-label {
+  font-size: large;
+  font-weight: bold;
+}
+
+.message-preview {
+  color: gray;
+}
