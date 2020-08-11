@@ -97,6 +97,7 @@ function CreateListing() {
       description: formState.inputValues.description,
       sellingPrice: formState.inputValues.sellingPrice,
       rentalPrice: formState.inputValues.rentalPrice,
+      wantsItem: formState.inputValues.gamesWanted,
     });
 
     // responseData returns the user's userID
