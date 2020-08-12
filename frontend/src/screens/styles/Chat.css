@@ -1,7 +1,7 @@
 .chat-interface {
   display: flex;
   flex-direction: row;
-  margin-top: 1rem;
+  margin: 1rem;
 }
 
 .messages {

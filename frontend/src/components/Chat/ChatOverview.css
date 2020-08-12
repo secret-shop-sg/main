@@ -1,5 +1,8 @@
 .chats {
   width: 30%;
+}
+
+.chat-overview-label {
   display: flex;
-  flex-direction: column;
+  padding: 1rem 0px;
 }

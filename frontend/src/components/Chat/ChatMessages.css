@@ -1,3 +1,7 @@
 .chat-messages-display {
-  padding: 30px 10px;
+  margin-left: 1rem;
+}
+
+.chat-messages-label {
+  padding: 1rem 0px;
 }

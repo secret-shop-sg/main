@@ -10,6 +10,22 @@ const ChatMessages = (props) => {
   const recipientID = props.recipientID;
   console.log(chatData);
 
+  // function to display contents of chat message
+  const displayChatMessage = (message) => {
+    let name;
+    if (message.sentBySelf) {
+      name = "You";
+    } else {
+      name = recipientID;
+    }
+
+    return (
+      <div>
+        {name}: {message.content}
+      </div>
+    );
+  };
+
   // get chat data if user/recipient changes or on page load
   useEffect(() => {
     if (userID && recipientID) {
@@ -34,11 +50,9 @@ const ChatMessages = (props) => {
 
   return (
     <div className="chat-messages-display">
-      {props.recipientID}
+      <div className="chat-messages-label">{props.recipientID}</div>
       <div className="chat-messages-log">
-        {chatData.messages.map((message) => (
-          <div>{message.content}</div>
-        ))}
+        {chatData.messages.map(displayChatMessage)}
       </div>
     </div>
   );
