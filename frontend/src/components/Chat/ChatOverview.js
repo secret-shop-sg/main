@@ -18,11 +18,16 @@ const ChatOverview = (props) => {
   return (
     <div className="chats">
       <div className="chat-overview-label">Messages</div>
-      <ButtonGroup vertical>
-        {chats.map((chatData) => (
-          <ChatSummary chatData={chatData} onChatSelect={props.onChatSelect} />
-        ))}
-      </ButtonGroup>
+      <div className="chat-summaries">
+        <ButtonGroup vertical>
+          {chats.map((chatData) => (
+            <ChatSummary
+              chatData={chatData}
+              onChatSelect={props.onChatSelect}
+            />
+          ))}
+        </ButtonGroup>
+      </div>
     </div>
   );
 };
