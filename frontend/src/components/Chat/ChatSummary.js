@@ -9,8 +9,7 @@ const ChatSummary = (props) => {
   const clickChatHandler = () => {
     const recipientID = recipient._id;
     const name = recipient.username;
-    const image = recipient.profilePicURL;
-    props.onChatSelect(recipientID, name, image);
+    props.onChatSelect(recipientID, name);
   };
 
   return (

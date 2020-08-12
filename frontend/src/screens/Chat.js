@@ -11,15 +11,14 @@ const Chat = (props) => {
   const [selectedChatRecipientName, setSelectedChatRecipientName] = useState(
     ""
   );
-  const [selectedChatRecipientImg, setSelectedChatRecipientImg] = useState("");
+
   // use dummy userID for now
   const userID = "5f2faf5ad18a76073729f475";
 
   // handler for selecting chat
-  const onChatSelect = useCallback((recipient, name, image) => {
+  const onChatSelect = useCallback((recipient, name) => {
     setSelectedChatRecipient(recipient);
     setSelectedChatRecipientName(name);
-    setSelectedChatRecipientImg(image);
   });
 
   return (
@@ -33,7 +32,6 @@ const Chat = (props) => {
               userID,
               recipientID: selectedChatRecipient,
               recipientName: selectedChatRecipientName,
-              recipientImage: selectedChatRecipientImg,
             }}
           />
         </div>

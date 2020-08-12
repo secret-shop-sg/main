@@ -3,14 +3,18 @@ import "./ChatMessages.css";
 import { BACKEND_ADDRESS } from "../../constants/Details";
 import { useAPI } from "../../utils/useAPI";
 import { InputGroup, FormControl, Button } from "react-bootstrap";
+import MessageSend from "./MessageSend";
 
 const ChatMessages = (props) => {
   const [sendRequest] = useAPI();
   const [chatData, setChatData] = useState();
   const [chatIsLoading, setChatIsLoading] = useState(false);
   // unpack user data
-  const { userID, recipientID, recipientName, recipientImage } = props.userData;
+  const { userID, recipientID, recipientName } = props.userData;
   console.log(chatData);
+
+  // this is so that we can rerender the chat messages after a message is sent
+  const [sentMessage, setSentMessage] = useState("");
 
   // function to display contents of chat message
   const displayChatMessage = (message) => {
@@ -20,7 +24,7 @@ const ChatMessages = (props) => {
           <div>{message.content}</div>
           <img
             className="chat-message-img"
-            src={BACKEND_ADDRESS + recipientImage}
+            src={BACKEND_ADDRESS + chatData.userProfilePic}
           />
         </div>
       );
@@ -29,7 +33,7 @@ const ChatMessages = (props) => {
         <div className="message-box message-by-rec">
           <img
             className="chat-message-img"
-            src={BACKEND_ADDRESS + recipientImage}
+            src={BACKEND_ADDRESS + chatData.recipientProfilePic}
           />
           <div>{message.content}</div>
         </div>
@@ -43,12 +47,12 @@ const ChatMessages = (props) => {
       setChatIsLoading(true);
       sendRequest("/api/chat/specific", "PATCH", { userID, recipientID }).then(
         (responseData) => {
-          setChatData(responseData.matchedChatLog);
+          setChatData(responseData.chatData);
         }
       );
       setChatIsLoading(false);
     }
-  }, [userID, recipientID]);
+  }, [userID, recipientID, sentMessage]);
 
   // return no chat selected if no recipientID
   if (!chatData) {
@@ -65,12 +69,11 @@ const ChatMessages = (props) => {
       <div className="chat-messages-log">
         {chatData.messages.map(displayChatMessage)}
       </div>
-      <InputGroup>
-        <FormControl placeholder="Message" />
-        <InputGroup.Append>
-          <Button variant="secondary">Send</Button>
-        </InputGroup.Append>
-      </InputGroup>
+      <MessageSend
+        userID={userID}
+        recipientID={recipientID}
+        setSentMessage={setSentMessage}
+      />
     </div>
   );
 };
