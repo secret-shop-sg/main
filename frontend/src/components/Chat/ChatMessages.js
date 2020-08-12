@@ -50,7 +50,7 @@ const ChatMessages = (props) => {
 
   return (
     <div className="chat-messages-display">
-      <div className="chat-messages-label">{props.recipientID}</div>
+      <div className="chat-messages-label">{props.recipientUsername}</div>
       <div className="chat-messages-log">
         {chatData.messages.map(displayChatMessage)}
       </div>

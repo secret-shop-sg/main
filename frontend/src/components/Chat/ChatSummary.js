@@ -8,7 +8,8 @@ const ChatSummary = (props) => {
 
   const clickChatHandler = () => {
     const recipientID = recipient._id;
-    props.onChatSelect(recipientID);
+    const name = recipient.username;
+    props.onChatSelect(recipientID, name);
   };
 
   return (
