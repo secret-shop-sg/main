@@ -21,7 +21,7 @@ const ChatMessages = (props) => {
           <div>{message.content}</div>
           <img
             className="chat-message-img"
-            src={BACKEND_ADDRESS + recipientImage}
+            src={BACKEND_ADDRESS + chatData.userProfilePic}
           />
         </div>
       );
@@ -30,7 +30,7 @@ const ChatMessages = (props) => {
         <div className="message-box message-by-rec">
           <img
             className="chat-message-img"
-            src={BACKEND_ADDRESS + recipientImage}
+            src={BACKEND_ADDRESS + chatData.recipientProfilePic}
           />
           <div>{message.content}</div>
         </div>
@@ -44,7 +44,7 @@ const ChatMessages = (props) => {
       setChatIsLoading(true);
       sendRequest("/api/chat/specific", "PATCH", { userID, recipientID }).then(
         (responseData) => {
-          setChatData(responseData.matchedChatLog);
+          setChatData(responseData.chatData);
         }
       );
       setChatIsLoading(false);
