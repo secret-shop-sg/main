@@ -3,6 +3,7 @@ import "./ChatMessages.css";
 import { BACKEND_ADDRESS } from "../../constants/Details";
 import { useAPI } from "../../utils/useAPI";
 import { InputGroup, FormControl, Button } from "react-bootstrap";
+import MessageSend from "./MessageSend";
 
 const ChatMessages = (props) => {
   const [sendRequest] = useAPI();
@@ -65,12 +66,7 @@ const ChatMessages = (props) => {
       <div className="chat-messages-log">
         {chatData.messages.map(displayChatMessage)}
       </div>
-      <InputGroup>
-        <FormControl placeholder="Message" />
-        <InputGroup.Append>
-          <Button variant="secondary">Send</Button>
-        </InputGroup.Append>
-      </InputGroup>
+      <MessageSend userID={userID} recipientID={recipientID} />
     </div>
   );
 };
