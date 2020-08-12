@@ -19,6 +19,9 @@ const MessageSend = (props) => {
       content: messageContent,
     });
     setMessageContent("");
+
+    //re render parent
+    props.setSentMessage(messageContent);
   };
 
   return (

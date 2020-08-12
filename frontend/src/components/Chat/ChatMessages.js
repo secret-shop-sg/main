@@ -10,8 +10,11 @@ const ChatMessages = (props) => {
   const [chatData, setChatData] = useState();
   const [chatIsLoading, setChatIsLoading] = useState(false);
   // unpack user data
-  const { userID, recipientID, recipientName, recipientImage } = props.userData;
+  const { userID, recipientID, recipientName } = props.userData;
   console.log(chatData);
+
+  // this is so that we can rerender the chat messages after a message is sent
+  const [sentMessage, setSentMessage] = useState("");
 
   // function to display contents of chat message
   const displayChatMessage = (message) => {
@@ -49,7 +52,7 @@ const ChatMessages = (props) => {
       );
       setChatIsLoading(false);
     }
-  }, [userID, recipientID]);
+  }, [userID, recipientID, sentMessage]);
 
   // return no chat selected if no recipientID
   if (!chatData) {
@@ -66,7 +69,11 @@ const ChatMessages = (props) => {
       <div className="chat-messages-log">
         {chatData.messages.map(displayChatMessage)}
       </div>
-      <MessageSend userID={userID} recipientID={recipientID} />
+      <MessageSend
+        userID={userID}
+        recipientID={recipientID}
+        setSentMessage={setSentMessage}
+      />
     </div>
   );
 };
