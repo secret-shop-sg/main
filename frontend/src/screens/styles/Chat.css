@@ -1,4 +1,11 @@
+.chat-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
 .chat-interface {
+  flex: 1;
   display: flex;
   flex-direction: row;
   margin: 1rem;
@@ -6,4 +13,5 @@
 
 .messages {
   flex: 1;
+  height: 100%;
 }

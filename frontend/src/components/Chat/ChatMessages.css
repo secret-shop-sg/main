@@ -1,7 +1,37 @@
 .chat-messages-display {
   margin-left: 1rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .chat-messages-label {
   padding: 1rem 0px;
+}
+
+.chat-messages-log {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.message-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.message-by-you {
+  align-self: flex-end;
+}
+
+.message-by-rec {
+  align-self: flex-start;
+}
+
+.chat-message-img {
+  border-radius: 50%;
+  width: 2rem;
+  height: auto;
+  margin: 0px 1rem;
 }

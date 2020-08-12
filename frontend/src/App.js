@@ -19,8 +19,9 @@ function App() {
   return (
     <Provider store={store}>
       <div>
-        <RoutingTable />
-        <div className="App"></div>
+        <div className="App">
+          <RoutingTable />
+        </div>
       </div>
     </Provider>
   );
