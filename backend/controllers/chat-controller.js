@@ -55,7 +55,7 @@ const sendNewMessage = async (req, res, next) => {
         return next(new DatabaseError(err.message));
       }
     }
-    res.json({ ok: "ok" });
+    res.json({ messageSaved: true });
   }
 };
 
@@ -65,11 +65,11 @@ const getChatLogsOverview = async (req, res, next) => {
 
   // todo: add error handling in the event that id sent is not 24 chars
   if (userID.match(/^[0-9a-fA-F]{24}$/)) {
-    let existingChatLogs;
+    let existingUserData;
 
     try {
       // find all existing chatLogs of this particular user
-      existingChatLogs = await User.findById(userID, {
+      existingUserData = await User.findById(userID, {
         chatLogs: 1,
       });
     } catch (err) {
@@ -77,7 +77,7 @@ const getChatLogsOverview = async (req, res, next) => {
     }
 
     try {
-      for (existingChatLog of existingChatLogs.chatLogs) {
+      for (existingChatLog of existingUserData.chatLogs) {
         // collecting data from recipient
         const recipient = await User.findById(existingChatLog.recipientID, {
           username: 1,
@@ -119,22 +119,32 @@ const getChatLogsOverview = async (req, res, next) => {
 
 const getSpecificChat = async (req, res, next) => {
   const { userID, recipientID } = req.body;
-  const messagesToLoad = -20;
-  let userChatLogs;
-  let matchedChatLog;
+  const messagesToLoad = 20;
+  let existingUserData;
+  let chatData = {};
 
   try {
-    userChatLogs = await User.findById(userID, { chatLogs: 1 });
+    existingUserData = await User.findById(userID, {
+      chatLogs: 1,
+      profilePicURL: 1,
+    }).populate({
+      path: "chatLogs",
+      populate: { path: "recipientID", model: User, select: "profilePicURL" },
+    });
   } catch (err) {
     return next(new DatabaseError(err.message));
   }
 
-  if (userChatLogs) {
-    const chat = userChatLogs.chatLogs.find(
+  chatData.userProfilePic = existingUserData.profilePicURL;
+  chatData.recipientProfilePic =
+    existingUserData.chatLogs[0].recipientID.profilePicURL;
+
+  if (existingUserData) {
+    const chat = existingUserData.chatLogs.find(
       (chatLog) => (chatLog.recipientID = recipientID)
     );
 
-    [matchedChatLog] = await Chat.aggregate([
+    const [chatLogs] = await Chat.aggregate([
       {
         $match: {
           _id: chat.chat,
@@ -150,7 +160,7 @@ const getSpecificChat = async (req, res, next) => {
       },
     ]);
 
-    for (message of matchedChatLog.messages) {
+    for (message of chatLogs.messages) {
       if (message.senderID == userID) {
         message.sentBySelf = true;
       } else message.sentBySelf = false;
@@ -158,7 +168,9 @@ const getSpecificChat = async (req, res, next) => {
       delete message.senderID;
     }
 
-    res.json({ matchedChatLog });
+    chatData.messages = chatLogs.messages;
+
+    res.json({ chatData });
   }
 };
 

@@ -18,7 +18,7 @@ const SearchResult = (props) => {
     const getListings = async () => {
       const responseData = await sendRequest(`/api/search?${query}`);
       if (responseData) {
-        setMatchedListings(responseData.queryData.matchedListings);
+        setMatchedListings(responseData.queryData.matchedData);
         setPageData(responseData.queryData.pageData);
       }
     };
