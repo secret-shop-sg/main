@@ -55,7 +55,7 @@ const sendNewMessage = async (req, res, next) => {
         return next(new DatabaseError(err.message));
       }
     }
-    res.json({ msgSaved: true });
+    res.json({ messageSaved: true });
   }
 };
 
