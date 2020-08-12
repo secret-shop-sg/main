@@ -14,7 +14,7 @@ const Header = () => {
   useEffect(() => {
     if (window.location.search) {
       const query = window.location.search;
-      const startingIndex = query.indexOf("phrase=");
+      let startingIndex = query.indexOf("phrase=");
       if (startingIndex !== -1) {
         startingIndex = startingIndex + 7;
         const phraseLength = query.substring(startingIndex).indexOf("&");

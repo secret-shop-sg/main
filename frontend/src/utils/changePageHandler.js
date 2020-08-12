@@ -16,7 +16,6 @@ const changePageHandler = (currentApiPath, currentPage, buttonType) => {
     if (currentApiPath.includes("?")) {
       symbol = "&";
     } else symbol = "?";
-
     newApiPath = currentApiPath + symbol + `page=${currentPage + value}`;
   } else {
     newApiPath =

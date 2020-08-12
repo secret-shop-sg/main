@@ -136,12 +136,14 @@ const getSpecificChat = async (req, res, next) => {
   }
 
   chatData.userProfilePic = existingUserData.profilePicURL;
-  chatData.recipientProfilePic =
-    existingUserData.chatLogs[0].recipientID.profilePicURL;
+  const correctRecipient = existingUserData.chatLogs.find(
+    (chatlog) => chatlog.recipientID._id == recipientID
+  );
+  chatData.recipientProfilePic = correctRecipient.recipientID.profilePicURL;
 
   if (existingUserData) {
     const chat = existingUserData.chatLogs.find(
-      (chatLog) => (chatLog.recipientID = recipientID)
+      (chatLog) => chatLog.recipientID._id == recipientID
     );
 
     const [chatLogs] = await Chat.aggregate([
