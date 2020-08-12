@@ -1,4 +1,5 @@
 const searchControllerErrorHandler = require("../utils/errorHandlers");
+const queryAndPaginate = require("../utils/queryAndPaginate");
 const Listing = require("../models/listings");
 const DatabaseError = require("../models/databaseError");
 
@@ -54,47 +55,18 @@ const getSearches = async (req, res, next) => {
     listingtypeQuery = { $or: listingtypeQuery };
   }
 
-  // always first page by default
-  if (!queries.page) {
-    queries.page = 1;
-  }
+  const listingPerPage = 5;
 
-  // documentLimit = maximum number of listings to show on the page
-  const documentLimit = 5;
-  const startIndex = parseInt(queries.page - 1) * documentLimit;
-  const endIndex = parseInt(queries.page) * documentLimit;
-
-  // queries database
   try {
-    [queryData] = await Listing.aggregate([
-      {
-        $match: { $and: [phraseQuery, platformQuery, listingtypeQuery] },
-      },
-      {
-        $facet: {
-          matchedListings: [{ $skip: startIndex }, { $limit: documentLimit }],
-          pageData: [{ $count: "count" }],
-        },
-      },
-    ]);
+    queryData = await queryAndPaginate(
+      Listing,
+      [phraseQuery, platformQuery, listingtypeQuery],
+      listingPerPage,
+      queries.page
+    );
   } catch (err) {
+    // error handling alr included in queryAndPaginate function
     return next(new DatabaseError(err.message));
-  }
-
-  // if there are matched listings
-  if (queryData) {
-    if (queryData.matchedListings.length > 0) {
-      queryData.pageData = queryData.pageData[0];
-      queryData.pageData.currentPage = parseInt(queries.page) || 1;
-
-      if (startIndex > 0) {
-        queryData.pageData.previousPage = true;
-      } else queryData.pageData.previousPage = false;
-
-      if (endIndex < queryData.pageData.count) {
-        queryData.pageData.nextPage = true;
-      } else queryData.pageData.nextPage = false;
-    }
   }
 
   res.json({ queryData });

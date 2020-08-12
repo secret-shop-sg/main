@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { BACKEND_ADDRESS, PLATFORMS_SUPPORTED } from "../../constants/Details";
 import { useAPI } from "../../utils/useAPI";
 import "./AddGames.css";
+import changePageHandler from "../../utils/changePageHandler";
 
 const AddGames = (props) => {
   const initialPath = "/api/game";
   const [sendRequest, isLoading] = useAPI();
   const [matchedGames, setMatchedGames] = useState();
+  const [pageData, setPageData] = useState();
   const [apiPath, setApiPath] = useState();
   const [dropDownOptions] = useState(["All"].concat(PLATFORMS_SUPPORTED));
   const [query, setQuery] = useState({ title: null, platform: null });
@@ -14,13 +16,23 @@ const AddGames = (props) => {
   // list of all selectedGamesID so they would not be displayed
   let selectedGamesID = props.selectedGames.map((game) => game._id);
 
+  const pageButtonHandler = (event) => {
+    const newAPI = changePageHandler(
+      apiPath,
+      pageData.currentPage,
+      event.target.id
+    );
+    setApiPath(newAPI);
+  };
+
   // get games from mongodb
   useEffect(() => {
     const getListing = async () => {
       const responseData = await sendRequest(apiPath);
 
       if (responseData) {
-        setMatchedGames(responseData.matchedGames);
+        setMatchedGames(responseData.queryData.matchedData);
+        setPageData(responseData.queryData.pageData);
       }
     };
 
@@ -101,6 +113,33 @@ const AddGames = (props) => {
               </div>
             )
         )}
+
+      {
+        //Only renders if pageData.previousPage = true
+        pageData && pageData.previousPage && (
+          <div>
+            <input
+              type="button"
+              value="Previous page"
+              id="previousPage"
+              onClick={pageButtonHandler}
+            />
+          </div>
+        )
+      }
+      {
+        //Only renders if pageData.nextPage = true
+        pageData && pageData.nextPage && (
+          <div>
+            <input
+              type="button"
+              value="Next page"
+              id="nextPage"
+              onClick={pageButtonHandler}
+            />
+          </div>
+        )
+      }
     </div>
   );
 };
