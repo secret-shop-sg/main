@@ -1,6 +1,7 @@
 const Game = require("../models/games").gameSchema;
 const DatabaseError = require("../models/databaseError");
 const queryAndPaginate = require("../utils/queryAndPaginate");
+const mongoose = require("mongoose");
 
 const addNewGame = async (req, res, next) => {
   const { title, platform, imageURL } = req.body;
@@ -11,6 +12,7 @@ const addNewGame = async (req, res, next) => {
   });
 
   try {
+    // saves new game in database
     await newGame.save();
   } catch (err) {
     return next(new DatabaseError(err.message));
@@ -20,31 +22,42 @@ const addNewGame = async (req, res, next) => {
 };
 
 const getGames = async (req, res) => {
-  const queries = req.query;
+  const { platform, title, gamesToHide, page } = req.body;
   let queryData;
 
-  // if queries has no platform condition, all documents with a platform field would be returned
-  let platformQuery = { _id: { $ne: null } };
-  if (queries.platform) {
-    platformQuery = { platform: queries.platform };
+  // searches for listings with the specific platform
+  let platformQuery = {};
+  if (platform) {
+    platformQuery = { platform };
   }
 
   // searches titles even if it is an incomplete word
-  let titleQuery = { _id: { $ne: null } };
-  if (queries.title) {
+  let titleQuery = {};
+  if (title) {
     titleQuery = {
-      title: { $regex: queries.title, $options: "i" },
+      title: { $regex: title, $options: "i" },
     };
   }
 
+  // games that should be hidden because the user selected it
+  let gamesToHideQuery = {};
+  if (gamesToHide) {
+    const hiddenGames = gamesToHide.map((gameID) =>
+      mongoose.Types.ObjectId(gameID)
+    );
+
+    gamesToHideQuery = { _id: { $nin: hiddenGames } };
+  }
+
+  // number of games that should be rendered onto screen
   const gamesPerPage = 5;
 
   try {
     queryData = await queryAndPaginate(
       Game,
-      [platformQuery, titleQuery],
+      [platformQuery, titleQuery, gamesToHideQuery],
       gamesPerPage,
-      queries.page
+      page
     );
   } catch (err) {
     return next(new DatabaseError(err.message));

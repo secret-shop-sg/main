@@ -5,6 +5,6 @@ const router = require("express").Router();
 router.post("/add", gameController.addNewGame);
 
 // used to retrieve all games that fulfil a search criteria
-router.get("/", gameController.getGames);
+router.patch("/", gameController.getGames);
 
 module.exports = router;

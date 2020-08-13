@@ -15,7 +15,7 @@ const getSearches = async (req, res, next) => {
   }
 
   //General searches keyed in by the user only searches within the title field of a game currently
-  let phraseQuery = { _id: { $ne: null } };
+  let phraseQuery = {};
   if (queries.phrase) {
     phraseQuery = {
       "hasItem.title": {
@@ -26,14 +26,14 @@ const getSearches = async (req, res, next) => {
   }
 
   // handles queries from checking the platform checkbox
-  let platformQuery = { _id: { $ne: null } };
+  let platformQuery = {};
   if (queries.platform) {
     const platforms = queries.platform.replace(/-/g, " ").split("%");
     platformQuery = { "hasItem.platform": { $in: platforms } };
   }
 
   // handles queries from checking the listingtype checkbox
-  let listingtypeQuery = { _id: { $ne: null } };
+  let listingtypeQuery = {};
   if (queries.listingtype) {
     const listingtypes = queries.listingtype.split("%");
     listingtypeQuery = [];
