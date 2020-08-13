@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./ChatMessages.css";
 import { BACKEND_ADDRESS } from "../../constants/Details";
 import { useAPI } from "../../utils/useAPI";
@@ -9,6 +9,10 @@ const ChatMessages = (props) => {
   const [sendRequest] = useAPI();
   const [chatData, setChatData] = useState();
   const [chatIsLoading, setChatIsLoading] = useState(false);
+
+  // ref for latest message
+  const latestMessage = useRef(null);
+
   // unpack user data
   const { userID, recipientID, recipientName } = props.userData;
 
@@ -48,10 +52,12 @@ const ChatMessages = (props) => {
       sendRequest("/api/chat/specific", "PATCH", { userID, recipientID }).then(
         (responseData) => {
           setChatData(responseData.chatData);
+          setChatIsLoading(false);
+
+          // scroll to bottom
+          latestMessage.current.scrollIntoView({ behavior: "auto" });
         }
       );
-
-      setChatIsLoading(false);
     }
   }, [userID, recipientID, sentMessage]);
 
@@ -68,7 +74,10 @@ const ChatMessages = (props) => {
     <div className="chat-messages-display">
       <div className="chat-messages-label">{recipientName}</div>
       <div className="chat-messages-log">
-        {chatData.messages.map(displayChatMessage)}
+        <div className="chat-message-log-flexbox">
+          <div ref={latestMessage}></div>
+          {chatData.messages.map(displayChatMessage)}
+        </div>
       </div>
       <div className="chat-message-input">
         <MessageSend

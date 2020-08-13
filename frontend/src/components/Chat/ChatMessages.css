@@ -11,10 +11,13 @@
 }
 
 .chat-messages-log {
-  display: flex;
-  flex-direction: column;
   height: 65vh;
   overflow-y: auto;
+}
+
+.chat-message-log-flexbox {
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 .chat-message-input {
