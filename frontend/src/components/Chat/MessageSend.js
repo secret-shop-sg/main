@@ -24,6 +24,14 @@ const MessageSend = (props) => {
       props.setSentMessage(messageContent);
     });
   };
+  const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+    // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      event.stopPropagation();
+      sendMessageHandler();
+    }
+  }
 
   return (
     <InputGroup>
@@ -31,6 +39,7 @@ const MessageSend = (props) => {
         placeholder="Message"
         value={messageContent}
         onChange={onMessageChangeHandler}
+        onKeyDown={onKeyDown}
       />
       <InputGroup.Append>
         <Button variant="secondary" onClick={sendMessageHandler} type="submit">
