@@ -13,7 +13,7 @@ const ChatOverview = (props) => {
     sendRequest(`/api/chat/overview/${userID}`).then((response) => {
       setChats(response.matchedChats);
     });
-  }, [userID]);
+  }, [userID, sendRequest]);
 
   return (
     <div className="chats">
@@ -24,6 +24,7 @@ const ChatOverview = (props) => {
             <ChatSummary
               chatData={chatData}
               onChatSelect={props.onChatSelect}
+              key={chatData.recipient._id}
             />
           ))}
         </ButtonGroup>

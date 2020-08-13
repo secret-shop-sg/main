@@ -25,6 +25,7 @@ const ChatSummary = (props) => {
           className="chat-summary-img"
           src={BACKEND_ADDRESS + recipient.profilePicURL}
           width="20%"
+          alt="recipient profile"
         />
         <div className="chat-summary-details">
           <div className="recipient-label">{recipient.username}</div>

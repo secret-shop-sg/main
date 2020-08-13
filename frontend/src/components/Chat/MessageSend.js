@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAPI } from "../../utils/useAPI";
-import { InputGroup, FormControl, Button } from "react-bootstrap";
+import { InputGroup, FormControl, Button, Form } from "react-bootstrap";
 
 const MessageSend = (props) => {
   const senderID = props.userID;
@@ -12,16 +12,17 @@ const MessageSend = (props) => {
     setMessageContent(event.target.value);
   };
 
-  const sendMessageHandler = async () => {
-    await sendRequest("/api/chat/add", "POST", {
+  const sendMessageHandler = () => {
+    console.log("sending message");
+    sendRequest("/api/chat/add", "POST", {
       senderID,
       recipientID,
       content: messageContent,
+    }).then((response) => {
+      setMessageContent("");
+      //re render parent
+      props.setSentMessage(messageContent);
     });
-    setMessageContent("");
-
-    //re render parent
-    props.setSentMessage(messageContent);
   };
 
   return (
@@ -32,7 +33,7 @@ const MessageSend = (props) => {
         onChange={onMessageChangeHandler}
       />
       <InputGroup.Append>
-        <Button variant="secondary" onClick={sendMessageHandler}>
+        <Button variant="secondary" onClick={sendMessageHandler} type="submit">
           Send
         </Button>
       </InputGroup.Append>

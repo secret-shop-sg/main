@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./ChatMessages.css";
 import { BACKEND_ADDRESS } from "../../constants/Details";
 import { useAPI } from "../../utils/useAPI";
-import { InputGroup, FormControl, Button } from "react-bootstrap";
+import { Spinner, Alert, Container } from "react-bootstrap";
 import MessageSend from "./MessageSend";
 
 const ChatMessages = (props) => {
@@ -63,11 +63,15 @@ const ChatMessages = (props) => {
 
   // return no chat selected if no recipientID
   if (!chatData) {
-    return <div className="chat-messages-display">No chat selected</div>;
+    return <div className="chat-message-centered">No chat selected</div>;
   }
 
   if (chatIsLoading) {
-    return <div>loading</div>;
+    return (
+      <div className="chat-message-centered">
+        <Spinner animation="border" role="status" />
+      </div>
+    );
   }
 
   return (

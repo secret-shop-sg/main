@@ -55,7 +55,7 @@ const Header = (props) => {
     <Navbar bg="light" className="justify-content-between header-container">
       <Navbar.Brand href="/">Link</Navbar.Brand>
       <Form inline>
-        <InputGroup size="lg">
+        <InputGroup>
           <FormControl
             type="text"
             placeholder="Search"
@@ -63,7 +63,11 @@ const Header = (props) => {
             onChange={searchChangeHandler}
           />
           <InputGroup.Append>
-            <Button variant="outline-success" onClick={executeSearch}>
+            <Button
+              variant="outline-success"
+              onClick={executeSearch}
+              type="submit"
+            >
               <FaSearch />
             </Button>
           </InputGroup.Append>
