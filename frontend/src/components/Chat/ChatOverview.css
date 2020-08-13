@@ -1,13 +1,15 @@
 .chats {
   width: 30%;
+  height: 85vh;
 }
 
 .chat-overview-label {
   display: flex;
   padding: 1rem 0px;
+  height: 10vh;
 }
 
 .chat-summaries {
-  height: 61vh;
+  height: 75vh;
   overflow-y: auto;
 }

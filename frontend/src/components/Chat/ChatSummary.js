@@ -12,6 +12,12 @@ const ChatSummary = (props) => {
     props.onChatSelect(recipientID, name);
   };
 
+  // cuts off last message if too long
+  const previewMessage = () => {
+    const message = latestMessage.messages[0].content;
+    return message;
+  };
+
   return (
     <Button onClick={clickChatHandler} variant="light">
       <div className="chat-summary-box">
@@ -22,9 +28,7 @@ const ChatSummary = (props) => {
         />
         <div className="chat-summary-details">
           <div className="recipient-label">{recipient.username}</div>
-          <div className="message-preview">
-            {latestMessage.messages[0].content}
-          </div>
+          <div className="message-preview">{previewMessage()}</div>
         </div>
       </div>
     </Button>
