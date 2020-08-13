@@ -167,7 +167,7 @@ const getSpecificChat = async (req, res, next) => {
       delete message.senderID;
     }
 
-    chatData.messages = chatLogs.messages;
+    chatData.messages = chatLogs.messages.reverse();
 
     res.json({ chatData });
   }

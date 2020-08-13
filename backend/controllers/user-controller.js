@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const fs = require("fs");
+const jwt = require("jsonwebtoken");
 const Listing = require("../models/listings");
 const User = require("../models/users");
 const DatabaseError = require("../models/databaseError");
@@ -26,6 +27,10 @@ const addNewUser = async (req, res, next) => {
     dateJoined: new Date(),
     lastLoggedIn: new Date(),
   });
+  /*
+  let token;
+  jwt.sign({userID})
+  */
 
   try {
     await newUser.save();

@@ -130,7 +130,15 @@ const getMostRecentListings = async (req, res, next) => {
 
   res.json({ mostRecentListings });
 };
+/*
+const deleteListing = async (req,res,next)=> {
+  const listingID = req.params.listingID;
+  try {
+    Listing.findById()
+  }
+} */
 
 exports.getListing = getListing;
 exports.addListing = addListing;
+//exports.deleteListing = deleteListing;
 exports.getMostRecentListings = getMostRecentListings;

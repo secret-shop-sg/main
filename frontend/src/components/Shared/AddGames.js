@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { BACKEND_ADDRESS, PLATFORMS_SUPPORTED } from "../../constants/Details";
 import { useAPI } from "../../utils/useAPI";
 import "./AddGames.css";
