@@ -52,6 +52,7 @@ const Signup = (props) => {
         <a href="#" onClick={showLoginHandler}>
           Login
         </a>
+        .
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-danger" onClick={props.toggleSignup}>

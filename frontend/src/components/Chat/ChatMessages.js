@@ -70,11 +70,13 @@ const ChatMessages = (props) => {
       <div className="chat-messages-log">
         {chatData.messages.map(displayChatMessage)}
       </div>
-      <MessageSend
-        userID={userID}
-        recipientID={recipientID}
-        setSentMessage={setSentMessage}
-      />
+      <div className="chat-message-input">
+        <MessageSend
+          userID={userID}
+          recipientID={recipientID}
+          setSentMessage={setSentMessage}
+        />
+      </div>
     </div>
   );
 };
