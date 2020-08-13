@@ -9,16 +9,16 @@ const Signup = (props) => {
   return (
     <Modal show={props.showSignup} onHide={props.toggleSignup}>
       <Modal.Header closeButton>
-        <Modal.Title>Signup</Modal.Title>
+        <Modal.Title>Register</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <Form id="register-form">
           <Form.Group as={Row}>
             <Form.Label column sm="5">
               Username
             </Form.Label>
             <Col>
-              <Form.Control type="text" />
+              <Form.Control type="text" required />
             </Col>
           </Form.Group>
           <Form.Group as={Row}>
@@ -26,7 +26,7 @@ const Signup = (props) => {
               Email
             </Form.Label>
             <Col>
-              <Form.Control type="email" />
+              <Form.Control type="email" required />
             </Col>
           </Form.Group>
           <Form.Group as={Row}>
@@ -34,7 +34,7 @@ const Signup = (props) => {
               Password
             </Form.Label>
             <Col>
-              <Form.Control type="password" />
+              <Form.Control type="password" required />
             </Col>
           </Form.Group>
           <Form.Group as={Row}>
@@ -42,8 +42,15 @@ const Signup = (props) => {
               Confirm Password
             </Form.Label>
             <Col>
-              <Form.Control type="password" />
+              <Form.Control type="password" required />
             </Col>
+          </Form.Group>
+          <Form.Group>
+            <Form.Check
+              required
+              label="I agree to Link's terms and conditions"
+              feedback="You must agree before submitting."
+            />
           </Form.Group>
         </Form>
       </Modal.Body>
@@ -57,6 +64,9 @@ const Signup = (props) => {
       <Modal.Footer>
         <Button variant="outline-danger" onClick={props.toggleSignup}>
           Close
+        </Button>
+        <Button variant="outline-success" form="register-form" type="submit">
+          Register
         </Button>
       </Modal.Footer>
     </Modal>

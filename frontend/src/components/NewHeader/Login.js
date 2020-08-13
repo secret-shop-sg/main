@@ -15,7 +15,7 @@ const Login = (props) => {
         <Modal.Title>Login</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <Form id="login-form">
           <Form.Group as={Row}>
             <Form.Label column sm="5">
               Username
@@ -48,7 +48,12 @@ const Login = (props) => {
         <Button variant="outline-danger" onClick={props.toggleLogin}>
           Close
         </Button>
-        <Button variant="outline-success" onClick={loginHandler}>
+        <Button
+          variant="outline-success"
+          onClick={loginHandler}
+          type="submit"
+          form="login-form"
+        >
           Login
         </Button>
       </Modal.Footer>

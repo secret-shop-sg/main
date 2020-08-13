@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./Header.css";
 import { FaSearch } from "react-icons/fa";
-import { Navbar, Form, FormControl, Button, InputGroup } from "react-bootstrap";
+import {
+  Navbar,
+  Form,
+  FormControl,
+  Button,
+  InputGroup,
+  ButtonGroup,
+} from "react-bootstrap";
 
 import Login from "./Login";
 import Signup from "./Signup";
@@ -24,9 +31,14 @@ const Header = (props) => {
       return <Navbar.Text>Signed in as: {username}</Navbar.Text>;
     } else {
       return (
-        <Button variant="outline-success" onClick={showLoginHandler}>
-          Sign In
-        </Button>
+        <ButtonGroup>
+          <Button variant="outline-success" onClick={showLoginHandler}>
+            Sign In
+          </Button>
+          <Button variant="outline-success" onClick={showSignupHandler}>
+            Register
+          </Button>
+        </ButtonGroup>
       );
     }
   };
