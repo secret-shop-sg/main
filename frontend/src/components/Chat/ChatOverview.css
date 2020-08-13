@@ -6,3 +6,8 @@
   display: flex;
   padding: 1rem 0px;
 }
+
+.chat-summaries {
+  height: 61vh;
+  overflow-y: auto;
+}

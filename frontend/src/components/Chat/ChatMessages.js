@@ -11,7 +11,6 @@ const ChatMessages = (props) => {
   const [chatIsLoading, setChatIsLoading] = useState(false);
   // unpack user data
   const { userID, recipientID, recipientName } = props.userData;
-  console.log(chatData);
 
   // this is so that we can rerender the chat messages after a message is sent
   const [sentMessage, setSentMessage] = useState("");
@@ -45,11 +44,13 @@ const ChatMessages = (props) => {
   useEffect(() => {
     if (userID && recipientID) {
       setChatIsLoading(true);
+
       sendRequest("/api/chat/specific", "PATCH", { userID, recipientID }).then(
         (responseData) => {
           setChatData(responseData.chatData);
         }
       );
+
       setChatIsLoading(false);
     }
   }, [userID, recipientID, sentMessage]);

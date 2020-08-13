@@ -10,9 +10,10 @@
 }
 
 .chat-messages-log {
-  flex: 1;
   display: flex;
   flex-direction: column;
+  height: 55vh;
+  overflow-y: auto;
 }
 
 .message-box {
