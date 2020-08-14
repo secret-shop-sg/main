@@ -135,6 +135,10 @@ const Signup = (props) => {
           });
         }
         break;
+      case "confirmedPassword":
+        if (value !== formState.inputValues.password) {
+          isValid = false;
+        }
     }
 
     // dispatch to reducer
@@ -222,7 +226,23 @@ const Signup = (props) => {
               Password
             </Form.Label>
             <Col>
-              <Form.Control type="password" required />
+              <Form.Control
+                name="password"
+                type="password"
+                value={formState.inputValues.password}
+                onChange={inputChangeHandler}
+                required
+                isValid={
+                  formState.inputValues.password &&
+                  formState.inputValues.confirmedPassword &&
+                  formState.inputValidities.confirmedPassword
+                }
+                isInvalid={
+                  formState.inputValues.password &&
+                  formState.inputValues.confirmedPassword &&
+                  !formState.inputValidities.confirmedPassword
+                }
+              />
             </Col>
           </Form.Group>
           <Form.Group as={Row}>
@@ -230,7 +250,29 @@ const Signup = (props) => {
               Confirm Password
             </Form.Label>
             <Col>
-              <Form.Control type="password" required />
+              <Form.Control
+                name="confirmedPassword"
+                type="password"
+                value={formState.inputValues.confirmedPassword}
+                onChange={inputChangeHandler}
+                isValid={
+                  formState.inputValues.password &&
+                  formState.inputValues.confirmedPassword &&
+                  formState.inputValidities.confirmedPassword
+                }
+                isInvalid={
+                  formState.inputValues.password &&
+                  formState.inputValues.confirmedPassword &&
+                  !formState.inputValidities.confirmedPassword
+                }
+                required
+              />
+              <Form.Control.Feedback type="valid">
+                Passwords match
+              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                Passwords do not match
+              </Form.Control.Feedback>
             </Col>
           </Form.Group>
           <Form.Group>
