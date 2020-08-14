@@ -10,6 +10,7 @@ import {
   FormGroup,
 } from "react-bootstrap";
 import "./SearchFilters.css";
+import { PLATFORMS_SUPPORTED, LISTINGS_TYPE } from "../../constants/Details";
 
 const SearchFilters = (props) => {
   return (
@@ -23,23 +24,23 @@ const SearchFilters = (props) => {
         <Accordion.Collapse eventKey="0">
           <Container fluid>
             <Row>
-              <Col>
+              <Col md="auto">
                 <Form>
                   <FormGroup>
                     <Form.Label>Platforms</Form.Label>
-                    <Form.Check type="checkbox" label="Xbox One" />
-                    <Form.Check type="checkbox" label="Playstation 4" />
-                    <Form.Check type="checkbox" label="Nintendo Switch" />
+                    {PLATFORMS_SUPPORTED.map((label, index) => (
+                      <Form.Check type="checkbox" label={label} key={index} />
+                    ))}
                   </FormGroup>
                 </Form>
               </Col>
-              <Col>
+              <Col md="auto">
                 <Form>
                   <FormGroup>
                     <Form.Label>Listing Type</Form.Label>
-                    <Form.Check type="checkbox" label="Trade" />
-                    <Form.Check type="checkbox" label="Rent" />
-                    <Form.Check type="checkbox" label="Buy" />
+                    {LISTINGS_TYPE.map((label, index) => (
+                      <Form.Check type="checkbox" label={label} key={index} />
+                    ))}
                   </FormGroup>
                 </Form>
               </Col>

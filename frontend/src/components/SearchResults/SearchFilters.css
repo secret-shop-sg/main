@@ -3,4 +3,9 @@
 }
 
 .filter-accordion {
+  width: 100%;
+}
+
+.red {
+  background-color: red;
 }
