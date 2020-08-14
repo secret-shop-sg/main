@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Header from "../components/Shared/Header";
+import Header from "../components/NewHeader/Header";
 import NoMatches from "../components/SearchResults/NoMatches";
 import "./styles/SearchResult.css";
 import { useAPI } from "../utils/useAPI";
+import SearchFilters from "../components/SearchResults/SearchFilters";
 import ListingsFilter from "../components/SearchResults/ListingsFilter";
 import HomeListing from "../components/Home/HomeListing";
 import { useHistory } from "react-router-dom";
@@ -36,13 +37,14 @@ const SearchResult = (props) => {
   };
 
   return (
-    <div className="screen">
+    <div className="search-results-screen">
       <Header />
+      <SearchFilters />
       <div>
         <ListingsFilter filterLabel="platform" />
         <ListingsFilter filterLabel="listingtype" />
       </div>
-      <div className="display">
+      <div className="search-results-display">
         {/* components in the div below only loads after data has been retrieved from API */}
         {!isLoading && matchedListings && matchedListings.length === 0 && (
           <NoMatches query={query.substring(1)} />
