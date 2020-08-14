@@ -65,7 +65,9 @@ const Header = (props) => {
 
   return (
     <Navbar bg="light" className="justify-content-between header-container">
-      <Navbar.Brand href="/">Link</Navbar.Brand>
+      <Navbar.Brand href="/">
+        <div className="header-name">Link</div>
+      </Navbar.Brand>
       <Form inline>
         <InputGroup>
           <FormControl

@@ -1,3 +1,7 @@
 .header-container {
   height: 15vh;
 }
+
+.header-name {
+  color: #5cb85c;
+}
