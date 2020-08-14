@@ -21,21 +21,25 @@ const Header = (props) => {
   const history = useHistory();
 
   // to be changed to get from redux
-  //const userID = "5f2faf5ad18a76073729f475";
+  // const userID = "5f2faf5ad18a76073729f475";
   const userID = "";
   const username = "billy";
 
   // display sign in options based on login state
   const signinDisplay = () => {
     if (userID) {
-      return <Navbar.Text>Signed in as: {username}</Navbar.Text>;
+      return (
+        <Navbar.Text>
+          <div className="header-name">Signed in as: {username}</div>
+        </Navbar.Text>
+      );
     } else {
       return (
         <ButtonGroup>
-          <Button variant="outline-success" onClick={showLoginHandler}>
+          <Button variant="outline-light" onClick={showLoginHandler}>
             Sign In
           </Button>
-          <Button variant="outline-success" onClick={showSignupHandler}>
+          <Button variant="outline-light" onClick={showSignupHandler}>
             Register
           </Button>
         </ButtonGroup>
@@ -64,7 +68,7 @@ const Header = (props) => {
   };
 
   return (
-    <Navbar bg="light" className="justify-content-between header-container">
+    <Navbar bg="success" className="justify-content-between header-container">
       <Navbar.Brand href="/">
         <div className="header-name">Link</div>
       </Navbar.Brand>
@@ -78,7 +82,7 @@ const Header = (props) => {
           />
           <InputGroup.Append>
             <Button
-              variant="outline-success"
+              variant="outline-light"
               onClick={executeSearch}
               type="submit"
             >
