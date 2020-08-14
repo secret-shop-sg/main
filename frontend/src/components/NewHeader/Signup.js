@@ -34,6 +34,18 @@ const formReducer = (state, action) => {
         inputValidities: updatedValidities,
         formIsValid: formIsValid,
       };
+    case "CHECK_ACCEPTED":
+      // update accepted
+      const updatedAccepted = {
+        ...state.inputAccepted,
+        [action.input]: action.value,
+      };
+
+      // return updated state
+      return {
+        ...state,
+        inputAccepted: updatedAccepted,
+      };
     default:
       return state;
   }
@@ -79,10 +91,11 @@ const Signup = (props) => {
     }
 
     // specific cases
+    let responseData;
     switch (inputIdentifier) {
       case "username":
         // check if username is already taken
-        const responseData = await sendRequest(
+        responseData = await sendRequest(
           "/api/user/validate/username",
           "POST",
           {
@@ -90,7 +103,38 @@ const Signup = (props) => {
           }
         );
 
-        isValid = responseData.isValid;
+        // handle response
+        if (responseData) {
+          // dispatch results to reducer
+          dispatchForm({
+            type: "CHECK_ACCEPTED",
+            value: responseData.isValid,
+            input: inputIdentifier,
+          });
+        }
+        break;
+      case "email":
+        //check for email format
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!re.test(String(value).toLowerCase())) {
+          isValid = false;
+        }
+
+        //check if email is already taken
+        responseData = await sendRequest("/api/user/validate/email", "POST", {
+          email: value,
+        });
+
+        // handle response
+        if (responseData) {
+          // dispatch results to reducer
+          dispatchForm({
+            type: "CHECK_ACCEPTED",
+            value: responseData.isValid,
+            input: inputIdentifier,
+          });
+        }
+        break;
     }
 
     // dispatch to reducer
@@ -124,11 +168,13 @@ const Signup = (props) => {
                 onChange={inputChangeHandler}
                 isValid={
                   formState.inputValues.username &&
-                  formState.inputValidities.username
+                  formState.inputValidities.username &&
+                  formState.inputAccepted.username
                 }
                 isInvalid={
                   formState.inputValues.username &&
-                  !formState.inputValidities.username
+                  formState.inputValidities.username &&
+                  !formState.inputAccepted.username
                 }
                 type="text"
                 required
@@ -146,7 +192,29 @@ const Signup = (props) => {
               Email
             </Form.Label>
             <Col>
-              <Form.Control type="email" required />
+              <Form.Control
+                name="email"
+                type="email"
+                required
+                value={formState.inputValues.email}
+                onChange={inputChangeHandler}
+                isValid={
+                  formState.inputValues.email &&
+                  formState.inputValidities.email &&
+                  formState.inputAccepted.email
+                }
+                isInvalid={
+                  formState.inputValues.email &&
+                  formState.inputValidities.email &&
+                  !formState.inputAccepted.email
+                }
+              />
+              <Form.Control.Feedback type="valid">
+                Email is available
+              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                Email is unavailable
+              </Form.Control.Feedback>
             </Col>
           </Form.Group>
           <Form.Group as={Row}>
