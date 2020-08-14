@@ -1,42 +1,51 @@
 import React from "react";
 import {
   Navbar,
-  NavDropdown,
   Form,
   Accordion,
-  Card,
   Button,
+  Row,
+  Col,
+  Container,
+  FormGroup,
 } from "react-bootstrap";
 import "./SearchFilters.css";
 
 const SearchFilters = (props) => {
   return (
-    <Navbar
-      bg="light"
-      className="justify-content-around search-filters-container"
-    >
-      <NavDropdown title="Platform" id="nav-dropdown">
-        <NavDropdown.Item>Xbox One</NavDropdown.Item>
-        <NavDropdown.Item>Playstation 4</NavDropdown.Item>
-        <NavDropdown.Item>Nintendo Switch</NavDropdown.Item>
-      </NavDropdown>
+    <Navbar bg="light" className="search-filters-container">
       <Accordion className="filter-accordion">
         <div>
           <Accordion.Toggle as={Button} variant="link" eventKey="0">
-            Platform
+            Search Filters
           </Accordion.Toggle>
         </div>
-        <div>
-          <Accordion.Collapse eventKey="0">
-            <Form>
-              <Form.Group>
-                <Form.Check type="checkbox" label="Xbox One" />
-                <Form.Check type="checkbox" label="Playstation 4" />
-                <Form.Check type="checkbox" label="Nintendo Switch" />
-              </Form.Group>
-            </Form>
-          </Accordion.Collapse>
-        </div>
+        <Accordion.Collapse eventKey="0">
+          <Container fluid>
+            <Row>
+              <Col>
+                <Form>
+                  <FormGroup>
+                    <Form.Label>Platforms</Form.Label>
+                    <Form.Check type="checkbox" label="Xbox One" />
+                    <Form.Check type="checkbox" label="Playstation 4" />
+                    <Form.Check type="checkbox" label="Nintendo Switch" />
+                  </FormGroup>
+                </Form>
+              </Col>
+              <Col>
+                <Form>
+                  <FormGroup>
+                    <Form.Label>Listing Type</Form.Label>
+                    <Form.Check type="checkbox" label="Trade" />
+                    <Form.Check type="checkbox" label="Rent" />
+                    <Form.Check type="checkbox" label="Buy" />
+                  </FormGroup>
+                </Form>
+              </Col>
+            </Row>
+          </Container>
+        </Accordion.Collapse>
       </Accordion>
     </Navbar>
   );
