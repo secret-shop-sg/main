@@ -150,17 +150,50 @@ const Signup = (props) => {
     });
   };
 
+  // when user submits form to signup
+  const signupHandler = async (event) => {
+    event.preventDefault();
+
+    // if form invalid, or username & email not unique, disallow submission
+    if (
+      !formState.formIsValid ||
+      !formState.inputAccepted.username ||
+      !formState.inputAccepted.email
+    ) {
+      alert("Invalid fields");
+      return;
+    }
+
+    const responseData = await sendRequest("/api/user/signup", "POST", {
+      username: formState.inputValues.username,
+      email: formState.inputValues.email,
+      password: formState.inputValues.password,
+    });
+
+    // responseData returns the user's userID
+    if (responseData) {
+      if (responseData.userID) {
+        //sign in
+
+        // success
+        alert("Sign up successful");
+        props.toggleSignup();
+      }
+    }
+  };
+
   const showLoginHandler = () => {
     props.toggleSignup();
     props.toggleLogin();
   };
+
   return (
     <Modal show={props.showSignup} onHide={props.toggleSignup}>
       <Modal.Header closeButton>
         <Modal.Title>Register</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form id="register-form">
+        <Form id="register-form" onSubmit={signupHandler}>
           <Form.Group as={Row}>
             <Form.Label column sm="5">
               Username
