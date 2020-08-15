@@ -1,7 +1,7 @@
 import React, { useState, useReducer, useCallback } from "react";
 import { useAPI } from "../utils/useAPI";
 import { BACKEND_ADDRESS } from "../constants/Details";
-import Header from "../components/Shared/Header";
+import Header from "../components/Header/Header";
 import AddGames from "../components/Shared/AddGames";
 import { GrGallery } from "react-icons/gr";
 import { GoPlus } from "react-icons/go";
@@ -132,16 +132,16 @@ function CreateListing() {
               {!formState.inputValues.listedGame[0] ? (
                 <GrGallery id="galleryimage" size={100} />
               ) : (
-                  <img
-                    className="selected-listing-game-image gallery-image "
-                    src={
-                      BACKEND_ADDRESS +
-                      formState.inputValues.listedGame[0].imageURL
-                    }
-                    alt={formState.inputValues.listedGame.title}
-                    onClick={deselectGame}
-                  />
-                )}
+                <img
+                  className="selected-listing-game-image gallery-image "
+                  src={
+                    BACKEND_ADDRESS +
+                    formState.inputValues.listedGame[0].imageURL
+                  }
+                  alt={formState.inputValues.listedGame.title}
+                  onClick={deselectGame}
+                />
+              )}
             </div>
             <div>
               <button id="uploadButton">Click here to upload an image!</button>
@@ -257,8 +257,8 @@ function CreateListing() {
           </div>
         </div>
       ) : (
-          <AntiLoginError />
-        )}
+        <AntiLoginError />
+      )}
     </div>
   );
 }

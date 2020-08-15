@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Header from "../components/NewHeader/Header";
+import Header from "../components/Header/Header";
 import NoMatches from "../components/SearchResults/NoMatches";
 import "./styles/SearchResult.css";
 import { useAPI } from "../utils/useAPI";

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer, useCallback } from "react";
-import Header from "../components/Shared/Header";
+import Header from "../components/Header/Header";
 import AddGames from "../components/Shared/AddGames";
 import { useAPI } from "../utils/useAPI";
 import { BACKEND_ADDRESS } from "../constants/Details";

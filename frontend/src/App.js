@@ -1,6 +1,7 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { combineReducers, createStore } from "redux";
+import "./constants/styles/Bootstrap.css";
 import "./App.css";
 import RoutingTable from "./RoutingTable";
 
