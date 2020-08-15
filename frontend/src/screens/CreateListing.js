@@ -45,7 +45,7 @@ function CreateListing() {
 
   const [sendRequest] = useAPI();
   const [listingAdded, setListingAdded] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const ownerID = "5f29504f0f1bc35a048e5b70";
   const owner = "test";
