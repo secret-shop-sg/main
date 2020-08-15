@@ -97,9 +97,11 @@ const SearchFilters = (props) => {
         : "";
     const typePath =
       newTypeFilters.length > 0
-        ? `&listingtype=${newTypeFilters.join("%")}`
+        ? `listingtype=${newTypeFilters.join("%")}`
         : "";
-    const newPath = `${window.location.pathname}?${platformPath}${typePath}`;
+    const newPath = `${window.location.pathname}?${platformPath}${
+      platformPath && typePath ? "&" : ""
+    }${typePath}`;
 
     history.replace(newPath);
     setFilters();
