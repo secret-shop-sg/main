@@ -2,6 +2,8 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const mongoose = require("mongoose");
 const fs = require("fs");
+const cookieParser = require("cookie-parser");
+
 const searchRoutes = require("./routes/search-routes");
 const listingRoutes = require("./routes/listing-routes");
 const userRoutes = require("./routes/user-routes");
@@ -10,22 +12,24 @@ const chatRoutes = require("./routes/chat-routes");
 
 const app = express();
 
-// Only accepts requests with data in JSON format
 app.use(bodyParser.json());
 
 app.use("/images", express.static("images"));
 
 // Boilerplate to bypass CORS
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+  res.set({
+    "Access-Control-Allow-Origin": "http://localhost:3000",
+    "Access-Control-Allow-Credentials": "true",
+    "Access-Control-Allow-Headers":
+      "Origin, X-Requested-With, Content-Type, Accept,Set-Cookie",
+    "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE",
+  });
 
   next();
 });
+
+app.use(cookieParser());
 
 // api requests for searches/filters
 app.use("/api/search", searchRoutes);

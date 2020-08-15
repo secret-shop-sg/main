@@ -3,7 +3,10 @@ const QUERY_LABELS = ["phrase", "platform", "listingtype", "page"];
 const PLATFORMS_SUPPORTED = ["Xbox One", "PlayStation 4", "Nintendo Switch"];
 const LISTING_TYPES = ["Trade", "Rent", "Buy"];
 const DEFAULT_PROFILE_PIC = "/images/profile/default_profile.png";
+// to be converted to randomly generated string
+const SECRET_JWT_HASH = "secrethashingkey";
 
+exports.SECRET_JWT_HASH = SECRET_JWT_HASH;
 exports.QUERY_LABELS = QUERY_LABELS;
 exports.PLATFORMS_SUPPORTED = PLATFORMS_SUPPORTED;
 exports.LISTING_TYPES = LISTING_TYPES;

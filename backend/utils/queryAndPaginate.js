@@ -1,8 +1,5 @@
-const queryAndPaginate = async (model, query, documentLimit, page) => {
+const queryAndPaginate = async (model, query, documentLimit, page = 1) => {
   // always first page by default
-  if (!page) {
-    page = 1;
-  }
 
   // determines start and end index of documents to be queries
   const startIndex = parseInt(page - 1) * documentLimit;

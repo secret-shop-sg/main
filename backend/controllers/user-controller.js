@@ -5,7 +5,10 @@ const jwt = require("jsonwebtoken");
 const Listing = require("../models/listings");
 const User = require("../models/users");
 const DatabaseError = require("../models/databaseError");
-const { DEFAULT_PROFILE_PIC } = require("../constants/details");
+const {
+  DEFAULT_PROFILE_PIC,
+  SECRET_JWT_HASH,
+} = require("../constants/details");
 
 const addNewUser = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -27,10 +30,6 @@ const addNewUser = async (req, res, next) => {
     dateJoined: new Date(),
     lastLoggedIn: new Date(),
   });
-  /*
-  let token;
-  jwt.sign({userID})
-  */
 
   try {
     await newUser.save();
@@ -38,7 +37,9 @@ const addNewUser = async (req, res, next) => {
     return next(new DatabaseError(err.message));
   }
 
-  res.status(201).json({ userID: newUser.id });
+  const accessToken = jwt.sign(userID, SECRET_JWT_HASH, { expiresIn: "2h" });
+
+  res.status(201).json({ accessToken });
 };
 
 // function to validate email and username
@@ -74,6 +75,7 @@ const login = async (req, res, next) => {
   let existingUser;
   let validCredentials;
   let userID;
+  let accessToken;
 
   try {
     existingUser = await User.findOne({ username });
@@ -81,7 +83,7 @@ const login = async (req, res, next) => {
     return next(new DatabaseError(err.message));
   }
 
-  // if username is wrong
+  // if user cannot be found -> username is wrong
   if (!existingUser) {
     validCredentials = false;
   } else {
@@ -92,6 +94,7 @@ const login = async (req, res, next) => {
       return next(new DatabaseError(err.message));
     }
 
+    // if password is wrong
     if (!isValidPassword) {
       validCredentials = false;
     } else {
@@ -105,9 +108,21 @@ const login = async (req, res, next) => {
 
       userID = existingUser.id;
       validCredentials = true;
+
+      // todo: Add expiry to accesstoken
+      accessToken = jwt.sign({ userID }, SECRET_JWT_HASH);
+
+      // cookie expires in 1hr
+      res.cookie("access_token", accessToken, {
+        maxAge: 3600,
+        httpOnly: true,
+        // uncomment secure in production when we switch to https
+        //secure: true
+      });
     }
   }
-  res.json({ validCredentials, userID });
+
+  res.json({ validCredentials });
 };
 
 const getUserbyID = async (req, res, next) => {

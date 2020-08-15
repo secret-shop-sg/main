@@ -109,9 +109,7 @@ function Login(props) {
         alert("Authentication failed");
       } else {
         // login in redux
-        const userID = responseData.userID;
-        dispatch(userLogin(userID, formState.inputValues.username));
-
+        //dispatch(userLogin(userID, formState.inputValues.username));
         alert("Log in successful");
       }
     }

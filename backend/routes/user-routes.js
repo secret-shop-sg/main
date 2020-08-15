@@ -2,6 +2,8 @@ const router = require("express").Router();
 const userController = require("../controllers/user-controller");
 const fileUpload = require("../utils/fileUpload");
 
+const checkAuth = require("../utils/checkAuth");
+
 router.post("/signup", userController.addNewUser);
 
 router.post("/login", userController.login);
@@ -17,6 +19,9 @@ router.post("/validate/email", userController.validateField);
 
 // checks username is unique
 router.post("/validate/username", userController.validateField);
+
+// endpoints below this line requires users to be logged in first
+//router.use(checkAuth);
 
 // updates user details including profile picture
 router.patch(
