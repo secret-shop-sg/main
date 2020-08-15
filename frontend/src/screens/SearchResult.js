@@ -4,7 +4,7 @@ import NoMatches from "../components/SearchResults/NoMatches";
 import "./styles/SearchResult.css";
 import { useAPI } from "../utils/useAPI";
 import SearchFilters from "../components/SearchResults/SearchFilters";
-import HomeListing from "../components/Home/HomeListing";
+import ListingSummary from "../components/ListingSummary/ListingSummary";
 import { useHistory } from "react-router-dom";
 import changePageHandler from "../utils/changePageHandler";
 
@@ -39,56 +39,37 @@ const SearchResult = (props) => {
     <div className="search-results-screen">
       <Header />
       <SearchFilters />
-
-      <div className="search-results-display">
-        {/* components in the div below only loads after data has been retrieved from API */}
-        {!isLoading && matchedListings && matchedListings.length === 0 && (
-          <NoMatches query={query.substring(1)} />
-        )}
-        {!isLoading && matchedListings && matchedListings.length > 0 && (
-          <div>
-            <div>
-              {matchedListings.map((listing) => (
-                <HomeListing
-                  title={listing.hasItem.title}
-                  description={listing.description}
-                  image={listing.hasItem.imageURL}
-                  id={listing._id}
-                  platform={listing.hasItem.platform}
-                  isTrading={listing.wantsItem.length > 0}
-                  isRenting={listing.rentalPrice}
-                  isSelling={listing.sellingPrice}
-                />
-              ))}
-            </div>
-            {pageData && pageData.previousPage && (
-              <div>
-                <input
-                  type="button"
-                  value="Previous page"
-                  id="previousPage"
-                  onClick={pageButtonHandler}
-                />
-              </div>
-            )}
-            {pageData && pageData.nextPage && (
-              <div>
-                <input
-                  type="button"
-                  value="Next page"
-                  id="nextPage"
-                  onClick={pageButtonHandler}
-                />
-              </div>
-            )}
-          </div>
-        )}
-        {/* Todo: Add this section when backend is included (Alot easier with backend)
-          <hr />
-          <p style={{margin:"20px"}}>Check out some of our other listings on the same platform</p>
-          Call some API here
-          */}
-      </div>
+      {!isLoading && matchedListings && matchedListings.length === 0 && (
+        <NoMatches query={query.substring(1)} />
+      )}
+      {!isLoading && matchedListings && matchedListings.length > 0 && (
+        <div className="search-results-display">
+          {matchedListings.map((listing) => {
+            console.log(listing);
+            return <ListingSummary itemData={listing.hasItem} />;
+          })}
+        </div>
+      )}
+      {pageData && pageData.previousPage && (
+        <div>
+          <input
+            type="button"
+            value="Previous page"
+            id="previousPage"
+            onClick={pageButtonHandler}
+          />
+        </div>
+      )}
+      {pageData && pageData.nextPage && (
+        <div>
+          <input
+            type="button"
+            value="Next page"
+            id="nextPage"
+            onClick={pageButtonHandler}
+          />
+        </div>
+      )}
     </div>
   );
 };
