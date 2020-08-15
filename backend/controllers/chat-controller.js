@@ -180,7 +180,9 @@ const getSpecificChat = async (req, res, next) => {
 
     // all messages that were loaded to the frontend is saved to the backend as read
     for (i = startingIndex; i < endingIndex; i++) {
-      chatLogs.messages[-1 * i].read = true;
+      if (chatLogs.message.senderID != userID) {
+        chatLogs.messages[-1 * i].read = true;
+      }
     }
 
     try {
