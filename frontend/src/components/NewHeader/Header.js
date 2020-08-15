@@ -21,8 +21,8 @@ const Header = (props) => {
   const history = useHistory();
 
   // to be changed to get from redux
-  const userID = "5f2faf5ad18a76073729f475";
-  // const userID = "";
+  // const userID = "5f2faf5ad18a76073729f475";
+  const userID = "";
   const username = "billy";
 
   // display sign in options based on login state
