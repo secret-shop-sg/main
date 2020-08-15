@@ -4,7 +4,6 @@ import NoMatches from "../components/SearchResults/NoMatches";
 import "./styles/SearchResult.css";
 import { useAPI } from "../utils/useAPI";
 import SearchFilters from "../components/SearchResults/SearchFilters";
-import ListingsFilter from "../components/SearchResults/ListingsFilter";
 import HomeListing from "../components/Home/HomeListing";
 import { useHistory } from "react-router-dom";
 import changePageHandler from "../utils/changePageHandler";
@@ -40,10 +39,7 @@ const SearchResult = (props) => {
     <div className="search-results-screen">
       <Header />
       <SearchFilters />
-      <div>
-        <ListingsFilter filterLabel="platform" />
-        <ListingsFilter filterLabel="listingtype" />
-      </div>
+
       <div className="search-results-display">
         {/* components in the div below only loads after data has been retrieved from API */}
         {!isLoading && matchedListings && matchedListings.length === 0 && (

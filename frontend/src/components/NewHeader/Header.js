@@ -53,8 +53,10 @@ const Header = (props) => {
   };
 
   // execute search after search button is pressed
-  const executeSearch = () => {
+  const executeSearch = (event) => {
+    event.preventDefault();
     history.push(`/search?phrase=${searchText.replace(/ /g, "-")}`);
+    setSearchText("");
   };
 
   // show or hide login
@@ -72,7 +74,7 @@ const Header = (props) => {
       <Navbar.Brand href="/">
         <div className="header-name">Link</div>
       </Navbar.Brand>
-      <Form inline>
+      <Form inline onSubmit={executeSearch}>
         <InputGroup>
           <FormControl
             type="text"
@@ -81,11 +83,7 @@ const Header = (props) => {
             onChange={searchChangeHandler}
           />
           <InputGroup.Append>
-            <Button
-              variant="outline-light"
-              onClick={executeSearch}
-              type="submit"
-            >
+            <Button variant="outline-light" type="submit">
               <FaSearch />
             </Button>
           </InputGroup.Append>
