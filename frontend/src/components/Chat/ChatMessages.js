@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./ChatMessages.css";
 import { BACKEND_ADDRESS } from "../../constants/Details";
 import { useAPI } from "../../utils/useAPI";
-import { InputGroup, FormControl, Button } from "react-bootstrap";
+import { Spinner, Alert, Container } from "react-bootstrap";
 import MessageSend from "./MessageSend";
 
 const ChatMessages = (props) => {
   const [sendRequest] = useAPI();
   const [chatData, setChatData] = useState();
   const [chatIsLoading, setChatIsLoading] = useState(false);
+
+  // ref for latest message
+  const latestMessage = useRef(null);
+
   // unpack user data
   const { userID, recipientID, recipientName } = props.userData;
 
@@ -48,27 +52,36 @@ const ChatMessages = (props) => {
       sendRequest("/api/chat/specific", "PATCH", { userID, recipientID }).then(
         (responseData) => {
           setChatData(responseData.chatData);
+          setChatIsLoading(false);
+
+          // scroll to bottom
+          latestMessage.current.scrollIntoView({ behavior: "auto" });
         }
       );
-
-      setChatIsLoading(false);
     }
   }, [userID, recipientID, sentMessage]);
 
   // return no chat selected if no recipientID
   if (!chatData) {
-    return <div className="chat-messages-display">No chat selected</div>;
+    return <div className="chat-message-centered">No chat selected</div>;
   }
 
   if (chatIsLoading) {
-    return <div>loading</div>;
+    return (
+      <div className="chat-message-centered">
+        <Spinner animation="border" role="status" />
+      </div>
+    );
   }
 
   return (
     <div className="chat-messages-display">
       <div className="chat-messages-label">{recipientName}</div>
       <div className="chat-messages-log">
-        {chatData.messages.map(displayChatMessage)}
+        <div className="chat-message-log-flexbox">
+          <div ref={latestMessage}></div>
+          {chatData.messages.map(displayChatMessage)}
+        </div>
       </div>
       <div className="chat-message-input">
         <MessageSend

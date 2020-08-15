@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import "./styles/Chat.css";
 import { useAPI } from "../utils/useAPI";
-import Header from "../components/NewHeader/Header";
+import Header from "../components/Header/Header";
 import ChatOverview from "../components/Chat/ChatOverview";
 import ChatMessages from "../components/Chat/ChatMessages";
 

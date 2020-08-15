@@ -1,7 +1,7 @@
 import React, { useState, useReducer, useCallback } from "react";
 import { useAPI } from "../utils/useAPI";
 import { BACKEND_ADDRESS } from "../constants/Details";
-import Header from "../components/Shared/Header";
+import Header from "../components/Header/Header";
 import AddGames from "../components/Shared/AddGames";
 import { GrGallery } from "react-icons/gr";
 import { GoPlus } from "react-icons/go";

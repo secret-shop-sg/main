@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./Header.css";
 import { FaSearch } from "react-icons/fa";
-import { Navbar, Form, FormControl, Button, InputGroup } from "react-bootstrap";
+import {
+  Navbar,
+  Form,
+  FormControl,
+  Button,
+  InputGroup,
+  ButtonGroup,
+} from "react-bootstrap";
 
 import Login from "./Login";
 import Signup from "./Signup";
@@ -14,19 +21,28 @@ const Header = (props) => {
   const history = useHistory();
 
   // to be changed to get from redux
-  //const userID = "5f2faf5ad18a76073729f475";
+  // const userID = "5f2faf5ad18a76073729f475";
   const userID = "";
   const username = "billy";
 
   // display sign in options based on login state
   const signinDisplay = () => {
     if (userID) {
-      return <Navbar.Text>Signed in as: {username}</Navbar.Text>;
+      return (
+        <Navbar.Text>
+          <div className="header-name">Signed in as: {username}</div>
+        </Navbar.Text>
+      );
     } else {
       return (
-        <Button variant="outline-success" onClick={showLoginHandler}>
-          Sign In
-        </Button>
+        <ButtonGroup>
+          <Button variant="outline-light" onClick={showLoginHandler}>
+            Sign In
+          </Button>
+          <Button variant="outline-light" onClick={showSignupHandler}>
+            Register
+          </Button>
+        </ButtonGroup>
       );
     }
   };
@@ -37,8 +53,10 @@ const Header = (props) => {
   };
 
   // execute search after search button is pressed
-  const executeSearch = () => {
+  const executeSearch = (event) => {
+    event.preventDefault();
     history.push(`/search?phrase=${searchText.replace(/ /g, "-")}`);
+    setSearchText("");
   };
 
   // show or hide login
@@ -52,10 +70,12 @@ const Header = (props) => {
   };
 
   return (
-    <Navbar bg="light" className="justify-content-between header-container">
-      <Navbar.Brand href="/">Link</Navbar.Brand>
-      <Form inline>
-        <InputGroup size="lg">
+    <Navbar bg="success" className="justify-content-between header-container">
+      <Navbar.Brand href="/">
+        <div className="header-name">Link</div>
+      </Navbar.Brand>
+      <Form inline onSubmit={executeSearch}>
+        <InputGroup>
           <FormControl
             type="text"
             placeholder="Search"
@@ -63,7 +83,7 @@ const Header = (props) => {
             onChange={searchChangeHandler}
           />
           <InputGroup.Append>
-            <Button variant="outline-success" onClick={executeSearch}>
+            <Button variant="outline-light" type="submit">
               <FaSearch />
             </Button>
           </InputGroup.Append>

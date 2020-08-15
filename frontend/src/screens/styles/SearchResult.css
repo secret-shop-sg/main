@@ -1,21 +1,17 @@
-.screen {
+.search-results-screen {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.display {
-  width: 90%;
-  margin-top: 5rem;
+.search-results-display {
+  width: 100%;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Following code is not in use*/
-.results-display {
-  width: 90%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.red {
+  background-color: red;
 }

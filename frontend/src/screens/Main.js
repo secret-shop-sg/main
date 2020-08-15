@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import { useAPI } from "../utils/useAPI";
 
-import Header from "../components/Shared/Header";
+import Header from "../components/Header/Header";
 import Platforms from "../components/Home/Platforms";
 import HomeListing from "../components/Home/HomeListing";
 
