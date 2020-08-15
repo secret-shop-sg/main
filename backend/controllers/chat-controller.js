@@ -10,6 +10,13 @@ const sendNewMessage = async (req, res, next) => {
   let recipient;
   let newChat;
 
+  const newMessage = {
+    timeSent: new Date(),
+    senderID,
+    content,
+    read: false,
+  };
+
   try {
     sender = await User.findById(senderID);
     recipient = await User.findById(recipientID);
@@ -27,20 +34,16 @@ const sendNewMessage = async (req, res, next) => {
     if (existingChatLog) {
       // if this is not the first message sent between the pair
       const existingChat = await Chat.findById(existingChatLog.chat);
-      existingChat.messages.push({
-        timeSent: new Date(),
-        senderID,
-        content,
-      });
+      existingChat.messages.push(newMessage);
+
       try {
         await existingChat.save();
       } catch (err) {
         return next(new DatabaseError(err.message));
       }
     } else {
-      newChat = Chat({
-        messages: [{ timeSent: new Date(), senderID, content }],
-      });
+      // if it is a completely new message
+      newChat = Chat({ messages: [newMessage] });
 
       try {
         const session = await mongoose.startSession();
@@ -119,7 +122,9 @@ const getChatLogsOverview = async (req, res, next) => {
 
 const getSpecificChat = async (req, res, next) => {
   const { userID, recipientID } = req.body;
-  const messagesToLoad = 20;
+  const page = req.body.page || 1;
+  // limit on how many messages are loaded at once
+  const messagesToLoad = 10;
   let existingUserData;
   let chatData = {};
 
@@ -137,37 +142,54 @@ const getSpecificChat = async (req, res, next) => {
 
   chatData.userProfilePic = existingUserData.profilePicURL;
 
+  // finds the correct chatlog based on the recipient requested
   const correctRecipient = existingUserData.chatLogs.find(
     (chatlog) => chatlog.recipientID._id == recipientID
   );
   chatData.recipientProfilePic = correctRecipient.recipientID.profilePicURL;
 
+  // index are negative to retrieve latest messages
+  const startingIndex = -1 * page * messagesToLoad;
+  const endingIndex = -1 * (page - 1) * messagesToLoad;
   if (existingUserData) {
-    const [chatLogs] = await Chat.aggregate([
-      {
-        $match: {
-          _id: correctRecipient.chat,
-        },
-      },
-      { $limit: 1 },
-      {
-        $project: {
-          messages: {
-            $slice: ["$messages", messagesToLoad],
-          },
-        },
-      },
-    ]);
+    let chatLogs;
 
-    for (message of chatLogs.messages) {
+    try {
+      // searches and loads entire chat log into memory
+      chatLogs = (await Chat.findById(correctRecipient.chat)).toObject();
+    } catch (err) {
+      return next(new DatabaseError(err.message));
+    }
+
+    // returns all remaining documents if number of documents left is less than messagesToLoad
+    if (endingIndex === 0) {
+      chatData.messages = chatLogs.messages.slice(startingIndex).reverse();
+    } else {
+      chatData.messages = chatLogs.messages
+        .slice(startingIndex, endingIndex)
+        .reverse();
+    }
+
+    // curates message so a bool representing sender instead of a userID is sent to the frontend
+    for (message of chatData.messages) {
       if (message.senderID == userID) {
         message.sentBySelf = true;
-      } else message.sentBySelf = false;
-
+      }
       delete message.senderID;
     }
 
-    chatData.messages = chatLogs.messages.reverse();
+    // all messages that were loaded to the frontend is saved to the backend as read
+    for (i = startingIndex; i < endingIndex; i++) {
+      if (chatLogs.message.senderID != userID) {
+        chatLogs.messages[-1 * i].read = true;
+      }
+    }
+
+    try {
+      await chatLogs.save();
+    } catch (err) {
+      return next(new DatabaseError(err.message));
+    }
 
     res.json({ chatData });
   }

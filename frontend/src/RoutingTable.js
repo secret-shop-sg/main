@@ -9,6 +9,7 @@ import ServerSideErrorPage from "./screens/errors/ServerSideErrorPage";
 import CreateListing from "./screens/CreateListing";
 import UpdateProfile from "./screens/UpdateProfile";
 import Chat from "./screens/Chat";
+import Test from "./screens/test";
 
 const RoutingTable = () => {
   return (
@@ -23,6 +24,7 @@ const RoutingTable = () => {
         <Route exact path="/update" component={UpdateProfile} />
         <Route path="/user" component={UserPage} />
         <Route path="/chat" component={Chat} />
+        <Route path="/test" component={Test} />
         <Route component={ClientSideErrorsPage} />
         {/* Routes client to ClientSideErrorsPage page if path does not match any of the others*/}
       </Switch>

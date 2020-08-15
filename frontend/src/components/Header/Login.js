@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useReducer } from "react";
 import "./Login.css";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
+import { useAPI } from "../../utils/useAPI";
 
 // reducer for login data
 const formReducer = (state, action) => {
@@ -12,27 +13,10 @@ const formReducer = (state, action) => {
         [action.input]: action.value,
       };
 
-      // update field validity
-      const updatedValidities = {
-        ...state.inputValidities,
-        [action.input]: action.isValid,
-      };
-
-      // check if all fields are valid
-      let formIsValid = true;
-      for (const key in updatedValidities) {
-        if (!updatedValidities[key]) {
-          formIsValid = false;
-          break;
-        }
-      }
-
       // return updated state
       return {
         ...state,
         inputValues: updatedValues,
-        inputValidities: updatedValidities,
-        formIsValid: formIsValid,
       };
     default:
       return state;
@@ -41,9 +25,43 @@ const formReducer = (state, action) => {
 
 // login component
 const Login = (props) => {
-  const loginHandler = () => {
-    alert("logged in");
+  const [sendRequest] = useAPI();
+  const [formState, dispatchForm] = useReducer(formReducer, {
+    inputValues: {
+      username: "",
+      password: "",
+      // TODO: check if handling password securely
+    },
+  });
+
+  const inputChangeHandler = (event) => {
+    dispatchForm({
+      type: "UPDATE",
+      input: event.target.name,
+      value: event.target.value,
+    });
   };
+
+  const loginHandler = async (event) => {
+    event.preventDefault();
+    const responseData = await sendRequest("/api/user/login", "POST", {
+      // change the fields below to the actual fields
+      username: formState.inputValues.username,
+      password: formState.inputValues.password,
+    });
+
+    // responseData returns the user's userID
+    if (responseData) {
+      if (!responseData.validCredentials) {
+        // means either username or password is wrong
+        alert("Authentication failed");
+      } else {
+        alert("Log in successful");
+        props.toggleLogin();
+      }
+    }
+  };
+
   const showSignupHandler = () => {
     props.toggleLogin();
     props.toggleSignup();
@@ -61,7 +79,12 @@ const Login = (props) => {
               Username
             </Form.Label>
             <Col>
-              <Form.Control type="text" required />
+              <Form.Control
+                type="text"
+                name="username"
+                required
+                onChange={inputChangeHandler}
+              />
             </Col>
           </Form.Group>
           <Form.Group as={Row}>
@@ -69,7 +92,12 @@ const Login = (props) => {
               Password
             </Form.Label>
             <Col>
-              <Form.Control type="password" required />
+              <Form.Control
+                type="password"
+                name="password"
+                required
+                onChange={inputChangeHandler}
+              />
             </Col>
           </Form.Group>
           <Form.Group>

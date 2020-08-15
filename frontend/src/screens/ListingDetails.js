@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Header from "../components/Shared/Header";
-import "../constants/styles/Bootstrap.css";
+import Header from "../components/Header/Header";
+
 import "./styles/ListingDetails.css";
 import { BsChatFill, BsHeartFill } from "react-icons/bs";
 import { useAPI } from "../utils/useAPI";
