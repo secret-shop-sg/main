@@ -21,8 +21,7 @@ app.use((req, res, next) => {
   res.set({
     "Access-Control-Allow-Origin": req.headers.origin,
     "Access-Control-Allow-Credentials": "true",
-    "Access-Control-Allow-Headers":
-      "Origin, X-Requested-With, Content-Type, Accept,Set-Cookie,Cookie",
+    "Access-Control-Allow-Headers": "Content-Type, *",
     "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE",
   });
 
