@@ -49,17 +49,18 @@ const ChatMessages = (props) => {
     if (userID && recipientID) {
       setChatIsLoading(true);
 
-      sendRequest("/api/chat/specific", "PATCH", { userID, recipientID }).then(
-        (responseData) => {
-          setChatData(responseData.chatData);
-          setChatIsLoading(false);
+      sendRequest("/api/chat/specific", "PATCH", {
+        userID,
+        recipientID,
+      }).then((responseData) => {
+        setChatData(responseData.chatData);
+        setChatIsLoading(false);
 
-          // scroll to bottom
-          latestMessage.current.scrollIntoView({ behavior: "auto" });
-        }
-      );
+        // scroll to bottom
+        latestMessage.current.scrollIntoView({ behavior: "auto" });
+      });
     }
-  }, [userID, recipientID, sentMessage]);
+  }, [recipientID, sentMessage]);
 
   // return no chat selected if no recipientID
   if (!chatData) {

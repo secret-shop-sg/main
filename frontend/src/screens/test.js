@@ -8,7 +8,8 @@ const sendRequest = async (event) => {
     response = await fetch("http://localhost:5000/api/user/login", {
       method: "POST",
       body: { username: "Joshua", password: "qwerty" },
-      headers: { "Content-Type": "application/json" },
+      mode: "cors",
+      // include cookies/ authorization headers
       credentials: "include",
     });
   } catch (err) {
