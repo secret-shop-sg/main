@@ -4,7 +4,7 @@ import { useAPI } from "../utils/useAPI";
 
 import Header from "../components/Header/Header";
 import Platforms from "../components/Home/Platforms";
-import HomeListing from "../components/Home/HomeListing";
+import ListingSummary from "../components/ListingSummary/ListingSummary";
 import { Jumbotron, Container } from "react-bootstrap";
 
 const Main = (props) => {
@@ -32,16 +32,13 @@ const Main = (props) => {
       return <div>Loading</div>;
     } else {
       return listings.map((listing) => (
-        <HomeListing
-          title={listing.hasItem.title}
+        <ListingSummary
+          itemData={listing.hasItem}
+          listingId={listing._id}
+          sellingPrice={listing.sellingPrice}
+          owner={listing.owner}
           description={listing.description}
-          image={listing.hasItem.imageURL}
-          id={listing._id}
-          key={listing._id}
-          platform={listing.hasItem.platform}
-          isTrading={listing.wantsItem.length > 0}
-          isRenting={listing.rentalPrice}
-          isSelling={listing.sellingPrice}
+          listingDate={listing.dateListed}
         />
       ));
     }
@@ -68,14 +65,14 @@ const Main = (props) => {
 const styles = {
   display: {
     width: "100%",
-    marginTop: "5rem",
+    marginTop: "1rem",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   },
   listings: {
-    marginTop: "5rem",
     width: "100%",
+    padding: "1rem",
   },
 };
 
