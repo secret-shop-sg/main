@@ -8,6 +8,8 @@ import {
   Button,
   InputGroup,
   ButtonGroup,
+  DropdownButton,
+  Dropdown,
 } from "react-bootstrap";
 import {
   AiOutlineMessage,
@@ -31,12 +33,24 @@ const Header = (props) => {
 
   // display sign in options based on login state
   const signinDisplay = () => {
+    const userIcon = () => {
+      return <AiOutlineUser size="2em" />;
+    };
     if (userID) {
       return (
         <Navbar.Text>
           <div className="header-profile-icons">
-            <AiOutlineMessage size="2em" />
-            <AiOutlineUser size="2em" />
+            <div className="header-messages">
+              <AiOutlineMessage size="2em" />
+            </div>
+            <DropdownButton
+              title={<AiOutlineUser size="2em" />}
+              variant="outline-light"
+              alignRight
+            >
+              <Dropdown.Item>View profile</Dropdown.Item>
+              <Dropdown.Item>Logout</Dropdown.Item>
+            </DropdownButton>
           </div>
         </Navbar.Text>
       );
