@@ -4,7 +4,8 @@ import { useAPI } from "../utils/useAPI";
 
 import Header from "../components/Header/Header";
 import Platforms from "../components/Home/Platforms";
-import HomeListing from "../components/Home/HomeListing";
+import ListingSummary from "../components/ListingSummary/ListingSummary";
+import { Jumbotron, Container } from "react-bootstrap";
 
 const Main = (props) => {
   const [sendRequest, isLoading] = useAPI();
@@ -31,16 +32,13 @@ const Main = (props) => {
       return <div>Loading</div>;
     } else {
       return listings.map((listing) => (
-        <HomeListing
-          title={listing.hasItem.title}
+        <ListingSummary
+          itemData={listing.hasItem}
+          listingId={listing._id}
+          sellingPrice={listing.sellingPrice}
+          owner={listing.owner}
           description={listing.description}
-          image={listing.hasItem.imageURL}
-          id={listing._id}
-          key={listing._id}
-          platform={listing.hasItem.platform}
-          isTrading={listing.wantsItem.length > 0}
-          isRenting={listing.rentalPrice}
-          isSelling={listing.sellingPrice}
+          listingDate={listing.dateListed}
         />
       ));
     }
@@ -49,6 +47,14 @@ const Main = (props) => {
   return (
     <div className="mainScreen">
       <Header />
+      <Jumbotron fluid>
+        <Container>
+          <h1>Welcome to the Secret Shop</h1>
+          <p>
+            The one-stop destination for all your second-hand video game needs.
+          </p>
+        </Container>
+      </Jumbotron>
       <div style={styles.display}>
         <Platforms />
         <div style={styles.listings}>{displayListings()}</div>
@@ -60,15 +66,15 @@ const Main = (props) => {
 // styles
 const styles = {
   display: {
-    width: "90%",
-    marginTop: "5rem",
+    width: "100%",
+    marginTop: "1rem",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   },
   listings: {
-    marginTop: "5rem",
     width: "100%",
+    padding: "1rem",
   },
 };
 

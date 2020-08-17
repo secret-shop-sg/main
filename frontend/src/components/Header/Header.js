@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import "./Header.css";
-import { FaSearch } from "react-icons/fa";
 import {
   Navbar,
   Form,
@@ -9,29 +8,57 @@ import {
   Button,
   InputGroup,
   ButtonGroup,
+  DropdownButton,
+  Dropdown,
 } from "react-bootstrap";
+import {
+  AiOutlineMessage,
+  AiOutlineUser,
+  AiOutlineSearch,
+} from "react-icons/ai";
 
 import Login from "./Login";
 import Signup from "./Signup";
 
-const Header = (props) => {
+const Header = () => {
   const [searchText, setSearchText] = useState("");
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
+  const [username, setUsername] = useState();
   const history = useHistory();
 
-  // to be changed to get from redux
-  let username;
-  if (document.cookies) {
-    username = document.cookies.split("=")[1];
-  }
+  useEffect(() => {
+    if (document.cookies) {
+      setUsername(document.cookies.split("=")[1]);
+    }
+  }, [document.cookies]);
 
   // display sign in options based on login state
   const signinDisplay = () => {
-    if (document.cookies) {
+    const userIcon = () => {
+      return <AiOutlineUser size="2em" />;
+    };
+    if (username) {
       return (
         <Navbar.Text>
-          <div className="header-name">Signed in as: {username}</div>
+          <div className="header-profile-icons">
+            <div
+              className="header-messages"
+              onClick={() => history.push("/chat")}
+            >
+              <AiOutlineMessage size="2em" />
+            </div>
+            <DropdownButton
+              title={<AiOutlineUser size="2em" />}
+              variant="outline-light"
+              alignRight
+            >
+              <Dropdown.Item onClick={() => history.push("/update")}>
+                View profile
+              </Dropdown.Item>
+              <Dropdown.Item>Logout</Dropdown.Item>
+            </DropdownButton>
+          </div>
         </Navbar.Text>
       );
     } else {
@@ -71,9 +98,9 @@ const Header = (props) => {
   };
 
   return (
-    <Navbar bg="success" className="justify-content-between header-container">
+    <Navbar bg="dark" className="justify-content-between header-container">
       <Navbar.Brand href="/">
-        <div className="header-name">Link</div>
+        <div className="header-name">Secret Shop</div>
       </Navbar.Brand>
       <Form inline onSubmit={executeSearch}>
         <InputGroup>
@@ -85,7 +112,7 @@ const Header = (props) => {
           />
           <InputGroup.Append>
             <Button variant="outline-light" type="submit">
-              <FaSearch />
+              <AiOutlineSearch />
             </Button>
           </InputGroup.Append>
         </InputGroup>

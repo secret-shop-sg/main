@@ -10,4 +10,34 @@
   object-fit: cover;
   height: 100%;
   width: 150px;
+  cursor: pointer;
+}
+
+.listing-summary-details {
+  margin-left: 1rem;
+}
+
+.listing-summary-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+
+.listing-summary-name {
+  font-size: 20px;
+  margin-right: 0.25rem;
+}
+
+.listing-summary-owner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.listing-summary-profilepic {
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  margin-right: 0.5rem;
 }
