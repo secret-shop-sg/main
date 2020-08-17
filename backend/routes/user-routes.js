@@ -8,11 +8,11 @@ router.post("/signup", userController.addNewUser);
 
 router.post("/login", userController.login);
 
-// get user info based on user ID
-router.get("/id/:userID", userController.getUserbyID);
-
-// get user info based on username
+// get user info based on username. Used for info accessible without logging in
 router.get("/username/:username", userController.getUserbyName);
+
+// only works if user is already logged in (for update and chat)
+router.get("/id", checkAuth, userController.getAuthorizedUser);
 
 // checks email is unique
 router.post("/validate/email", userController.validateField);
@@ -20,20 +20,18 @@ router.post("/validate/email", userController.validateField);
 // checks username is unique
 router.post("/validate/username", userController.validateField);
 
-// endpoints below this line requires users to be logged in first
-//router.use(checkAuth);
-
 // updates user details including profile picture
 router.patch(
-  "/update/details/:userID",
+  "/update/details",
+  checkAuth,
   fileUpload.single("image"),
   userController.updateProfileDetails
 );
 
 // updates inventory
-router.patch("/update/inventory/:userID", userController.updateInventory);
+router.patch("/update/inventory", checkAuth, userController.updateInventory);
 
 // updates wishlist
-router.patch("/update/wishlist/:userID", userController.updateWishlist);
+router.patch("/update/wishlist", checkAuth, userController.updateWishlist);
 
 module.exports = router;

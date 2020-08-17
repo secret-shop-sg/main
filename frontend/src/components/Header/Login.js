@@ -44,13 +44,17 @@ const Login = (props) => {
 
   const loginHandler = async (event) => {
     event.preventDefault();
-    const responseData = await sendRequest("/api/user/login", "POST", {
-      // change the fields below to the actual fields
-      username: formState.inputValues.username,
-      password: formState.inputValues.password,
-    });
+    const responseData = await sendRequest(
+      "/api/user/login",
+      "POST",
+      {
+        // change the fields below to the actual fields
+        username: formState.inputValues.username,
+        password: formState.inputValues.password,
+      },
+      true
+    );
 
-    // responseData returns the user's userID
     if (responseData) {
       if (!responseData.validCredentials) {
         // means either username or password is wrong

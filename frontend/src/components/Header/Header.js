@@ -21,13 +21,14 @@ const Header = (props) => {
   const history = useHistory();
 
   // to be changed to get from redux
-  // const userID = "5f2faf5ad18a76073729f475";
-  const userID = "";
-  const username = "billy";
+  let username;
+  if (document.cookies) {
+    username = document.cookies.split("=")[1];
+  }
 
   // display sign in options based on login state
   const signinDisplay = () => {
-    if (userID) {
+    if (document.cookies) {
       return (
         <Navbar.Text>
           <div className="header-name">Signed in as: {username}</div>

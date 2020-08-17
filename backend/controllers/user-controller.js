@@ -37,9 +37,24 @@ const addNewUser = async (req, res, next) => {
     return next(new DatabaseError(err.message));
   }
 
-  const accessToken = jwt.sign(userID, SECRET_JWT_HASH, { expiresIn: "2h" });
+  // todo: Add expiry to accesstoken
+  accessToken = jwt.sign({ userID }, SECRET_JWT_HASH);
 
-  res.status(201).json({ accessToken });
+  // for log out -> maxAge:0
+  // cookie expires in 3hrs
+  // secure cookie meant for user authentication
+  res.cookie("access_token", accessToken, {
+    maxAge: 10800000,
+    httpOnly: true,
+    // uncomment secure in production when we switch to https
+    //secure: true
+  });
+
+  // cookie expires in 3hrs
+  // cookie for frontend to know username. Deleted if not needed
+  res.cookie("username", username, { maxAge: 10800000 });
+
+  res.status(201).json({ signedIn: true });
 };
 
 // function to validate email and username
@@ -113,21 +128,27 @@ const login = async (req, res, next) => {
       accessToken = jwt.sign({ userID }, SECRET_JWT_HASH);
 
       // for log out -> maxAge:0
-      // cookie expires in 1hr
+      // cookie expires in 3hrs
+      // secure cookie meant for user authentication
       res.cookie("access_token", accessToken, {
-        maxAge: 3600,
+        maxAge: 10800000,
         httpOnly: true,
         // uncomment secure in production when we switch to https
         //secure: true
       });
+
+      // cookie expires in 3hrs
+      // cookie for frontend to know username. Deleted if not needed
+      res.cookie("username", username, { maxAge: 10800000 });
     }
   }
 
   res.json({ validCredentials });
 };
 
-const getUserbyID = async (req, res, next) => {
-  const userID = req.params.userID;
+const getAuthorizedUser = async (req, res, next) => {
+  const userID = req.body.userID;
+
   let matchedUser;
 
   // todo: add error handling in the event that id sent is not 24 chars
@@ -141,6 +162,8 @@ const getUserbyID = async (req, res, next) => {
       return next(new DatabaseError(err.message));
     }
   }
+
+  matchedUser.password;
 
   res.json({ matchedUser });
 };
@@ -162,14 +185,18 @@ const getUserbyName = async (req, res, next) => {
 };
 
 const updateProfileDetails = async (req, res, next) => {
-  const userID = req.params.userID;
+  const userID = req.body.userID;
   const updatedInfo = req.body;
   let fileToUnlink;
   let error;
 
   // remove all fields with null or undefined values
   for (var property in updatedInfo) {
-    if (updatedInfo[property] === null || updatedInfo[property] === undefined) {
+    if (
+      updatedInfo[property] === null ||
+      updatedInfo[property] === undefined ||
+      property == "userID"
+    ) {
       delete updatedInfo[property];
     }
   }
@@ -237,8 +264,8 @@ const updateProfileDetails = async (req, res, next) => {
 };
 
 const updateInventory = async (req, res, next) => {
-  const userID = req.params.userID;
   const inventory = req.body.inventory;
+  const userID = req.userID;
 
   // even if inventory is empty, it would be an empty array
   if (inventory) {
@@ -259,13 +286,13 @@ const updateInventory = async (req, res, next) => {
     } catch (err) {
       return next(new DatabaseError(err.message));
     }
-    res.json({ userID });
+    res.json({ dataUpdated: true });
   }
 };
 
 const updateWishlist = async (req, res, next) => {
-  const userID = req.params.userID;
   const wishlist = req.body.wishlist;
+  const userID = req.userID;
 
   if (wishlist) {
     // finds the user to update
@@ -280,20 +307,22 @@ const updateWishlist = async (req, res, next) => {
     if (matchedUser) {
       matchedUser.wishlist = wishlist;
     }
+    // todo: throw some error
     try {
       await matchedUser.save();
     } catch (err) {
       return next(new DatabaseError(err.message));
     }
   }
-  res.json({ userID });
+  // todo: proper status handling
+  res.json({ dataUpdated: true });
 };
 
 exports.updateInventory = updateInventory;
 exports.updateWishlist = updateWishlist;
 exports.updateProfileDetails = updateProfileDetails;
 exports.addNewUser = addNewUser;
-exports.getUserbyID = getUserbyID;
+exports.getAuthorizedUser = getAuthorizedUser;
 exports.getUserbyName = getUserbyName;
 exports.validateField = validateField;
 exports.login = login;

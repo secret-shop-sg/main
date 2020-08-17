@@ -14,6 +14,7 @@ export const useAPI = () => {
       url,
       method = "GET",
       body = null,
+      withCookie = false,
       isFormData = false,
       headers = { "Content-Type": "application/json" }
     ) => {
@@ -22,6 +23,12 @@ export const useAPI = () => {
       if (body && !isFormData) {
         body = JSON.stringify(body);
       }
+
+      let credentials;
+
+      if (withCookie) {
+        credentials = "include";
+      } else credentials = "omit";
 
       // create an abortController object which can be used to cancel request later on
       const httpAbortController = new AbortController();
@@ -33,6 +40,7 @@ export const useAPI = () => {
             method,
             body,
             headers,
+            credentials,
             signal: httpAbortController.signal,
           });
         } else {
@@ -40,6 +48,7 @@ export const useAPI = () => {
           response = await fetch((url = BACKEND_ADDRESS + url), {
             method,
             body,
+            credentials,
             signal: httpAbortController.signal,
           });
         }

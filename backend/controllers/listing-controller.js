@@ -54,8 +54,7 @@ const addListing = async (req, res, next) => {
   const {
     hasItem,
     description,
-    ownerID,
-    owner,
+    userID,
     wantsItem,
     sellingPrice,
     rentalPrice,
@@ -64,25 +63,11 @@ const addListing = async (req, res, next) => {
   if (description) {
     description = "";
   }
-
-  const dateListed = new Date();
   let user;
-
-  // new listing to be pushed to db
-  const newListing = Listing({
-    hasItem,
-    description,
-    ownerID,
-    owner,
-    wantsItem,
-    sellingPrice,
-    rentalPrice,
-    dateListed,
-  });
 
   // finds the owner of listing to add listing to his data
   try {
-    user = await User.findById(ownerID);
+    user = await User.findById(userID);
   } catch (err) {
     return next(new DatabaseError(err.message));
   }
@@ -94,6 +79,18 @@ const addListing = async (req, res, next) => {
     error.status = 404;
     return next(error);
   }
+
+  // new listing to be pushed to db
+  const newListing = Listing({
+    hasItem,
+    description,
+    ownerID: userID,
+    owner: user.username,
+    wantsItem,
+    sellingPrice,
+    rentalPrice,
+    dateListed: new Date(),
+  });
 
   try {
     const session = await mongoose.startSession();

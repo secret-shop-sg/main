@@ -7,10 +7,8 @@ router.get("/id/:listingID", listingController.getListing);
 // get the 5 most recent listings on the platform
 router.get("/recent", listingController.getMostRecentListings);
 
-// middleware protection. Only users which are logged in can access subsequent middlewares
-//router.use(checkAuth);
-
-router.post("/add", listingController.addListing);
+// add new listing
+router.post("/add", checkAuth, listingController.addListing);
 
 //router.patch("/id/:listingID",listingController.patchListing);
 

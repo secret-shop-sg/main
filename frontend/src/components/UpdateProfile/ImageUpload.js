@@ -4,28 +4,30 @@ import { FiEdit2 } from "react-icons/fi";
 import "./ImageUpload.css";
 import { useAPI } from "../../utils/useAPI";
 
-const ImageUpload = (props) => {
+const ImageUpload = () => {
   // Todo: Block files that are too big from being uploaded
   const [previewURL, setPreviewURL] = useState();
   const filePickerRef = useRef();
-
-  const userID = props.userID;
   const [sendRequest] = useAPI();
   const [profilePic, setProfilePic] = useState("");
 
   // initalize image
   useEffect(() => {
     const getUserData = async () => {
-      const responseData = await sendRequest(`/api/user/id/${userID}`);
+      const responseData = await sendRequest(
+        `/api/user/id`,
+        undefined,
+        undefined,
+        true
+      );
       if (responseData) {
         if (responseData.matchedUser) {
-          const user = responseData.matchedUser;
-          setProfilePic(user.profilePicURL);
+          setProfilePic(responseData.matchedUser.profilePicURL);
         }
       }
     };
     getUserData();
-  }, [userID]);
+  }, [sendRequest]);
 
   // file is chosen
   const pickedHandler = (event) => {
@@ -36,21 +38,17 @@ const ImageUpload = (props) => {
 
     //update details async function
     let formData = new FormData();
-    formData.append("username", props.username);
     formData.append("image", event.target.files[0]);
 
-    sendRequest(
-      `/api/user/update/details/${userID}`,
-      "PATCH",
-      formData,
-      true
-    ).then((responseData) => {
-      if (responseData) {
-        if (responseData.userID === userID) {
-          alert("Update successful");
+    sendRequest(`/api/user/update`, "PATCH", formData, true, true).then(
+      (responseData) => {
+        if (responseData) {
+          if (responseData.dataUpdated) {
+            alert("Update successful");
+          }
         }
       }
-    });
+    );
   };
 
   // creates a url for the image so it can be previewed
