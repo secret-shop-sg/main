@@ -40,7 +40,10 @@ const Header = (props) => {
       return (
         <Navbar.Text>
           <div className="header-profile-icons">
-            <div className="header-messages">
+            <div
+              className="header-messages"
+              onClick={() => history.push("/chat")}
+            >
               <AiOutlineMessage size="2em" />
             </div>
             <DropdownButton
@@ -48,7 +51,9 @@ const Header = (props) => {
               variant="outline-light"
               alignRight
             >
-              <Dropdown.Item>View profile</Dropdown.Item>
+              <Dropdown.Item onClick={() => history.push("/update")}>
+                View profile
+              </Dropdown.Item>
               <Dropdown.Item>Logout</Dropdown.Item>
             </DropdownButton>
           </div>
