@@ -46,7 +46,16 @@ const SearchResult = (props) => {
         <div className="search-results-display">
           {matchedListings.map((listing) => {
             console.log(listing);
-            return <ListingSummary itemData={listing.hasItem} />;
+            return (
+              <ListingSummary
+                itemData={listing.hasItem}
+                listingId={listing._id}
+                sellingPrice={listing.sellingPrice}
+                owner={listing.owner}
+                description={listing.description}
+                listingDate={listing.dateListed}
+              />
+            );
           })}
         </div>
       )}

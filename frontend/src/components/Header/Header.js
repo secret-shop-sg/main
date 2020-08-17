@@ -70,9 +70,9 @@ const Header = (props) => {
   };
 
   return (
-    <Navbar bg="success" className="justify-content-between header-container">
+    <Navbar bg="dark" className="justify-content-between header-container">
       <Navbar.Brand href="/">
-        <div className="header-name">Link</div>
+        <div className="header-name">Secret Shop</div>
       </Navbar.Brand>
       <Form inline onSubmit={executeSearch}>
         <InputGroup>

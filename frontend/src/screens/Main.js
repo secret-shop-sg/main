@@ -5,6 +5,7 @@ import { useAPI } from "../utils/useAPI";
 import Header from "../components/Header/Header";
 import Platforms from "../components/Home/Platforms";
 import HomeListing from "../components/Home/HomeListing";
+import { Jumbotron, Container } from "react-bootstrap";
 
 const Main = (props) => {
   const [sendRequest, isLoading] = useAPI();
@@ -49,6 +50,12 @@ const Main = (props) => {
   return (
     <div className="mainScreen">
       <Header />
+      <Jumbotron fluid>
+        <Container>
+          <h1>Welcome to the Secret Shop</h1>
+          <p>The one-stop destination for all your video game needs.</p>
+        </Container>
+      </Jumbotron>
       <div style={styles.display}>
         <Platforms />
         <div style={styles.listings}>{displayListings()}</div>
@@ -60,7 +67,7 @@ const Main = (props) => {
 // styles
 const styles = {
   display: {
-    width: "90%",
+    width: "100%",
     marginTop: "5rem",
     display: "flex",
     flexDirection: "column",
