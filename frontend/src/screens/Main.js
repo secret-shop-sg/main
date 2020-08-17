@@ -50,7 +50,9 @@ const Main = (props) => {
       <Jumbotron fluid>
         <Container>
           <h1>Welcome to the Secret Shop</h1>
-          <p>The one-stop destination for all your video game needs.</p>
+          <p>
+            The one-stop destination for all your second-hand video game needs.
+          </p>
         </Container>
       </Jumbotron>
       <div style={styles.display}>

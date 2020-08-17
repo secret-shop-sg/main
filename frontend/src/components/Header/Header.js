@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./Header.css";
-import { FaSearch } from "react-icons/fa";
 import {
   Navbar,
   Form,
@@ -10,6 +9,11 @@ import {
   InputGroup,
   ButtonGroup,
 } from "react-bootstrap";
+import {
+  AiOutlineMessage,
+  AiOutlineUser,
+  AiOutlineSearch,
+} from "react-icons/ai";
 
 import Login from "./Login";
 import Signup from "./Signup";
@@ -21,8 +25,8 @@ const Header = (props) => {
   const history = useHistory();
 
   // to be changed to get from redux
-  // const userID = "5f2faf5ad18a76073729f475";
-  const userID = "";
+  const userID = "5f2faf5ad18a76073729f475";
+  // const userID = "";
   const username = "billy";
 
   // display sign in options based on login state
@@ -30,7 +34,10 @@ const Header = (props) => {
     if (userID) {
       return (
         <Navbar.Text>
-          <div className="header-name">Signed in as: {username}</div>
+          <div className="header-profile-icons">
+            <AiOutlineMessage size="2em" />
+            <AiOutlineUser size="2em" />
+          </div>
         </Navbar.Text>
       );
     } else {
@@ -84,7 +91,7 @@ const Header = (props) => {
           />
           <InputGroup.Append>
             <Button variant="outline-light" type="submit">
-              <FaSearch />
+              <AiOutlineSearch />
             </Button>
           </InputGroup.Append>
         </InputGroup>
