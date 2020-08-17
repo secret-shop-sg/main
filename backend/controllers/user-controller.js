@@ -112,6 +112,7 @@ const login = async (req, res, next) => {
       // todo: Add expiry to accesstoken
       accessToken = jwt.sign({ userID }, SECRET_JWT_HASH);
 
+      // for log out -> maxAge:0
       // cookie expires in 1hr
       res.cookie("access_token", accessToken, {
         maxAge: 3600,

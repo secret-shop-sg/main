@@ -19,10 +19,9 @@ app.use("/images", express.static("images"));
 // Boilerplate to bypass CORS
 app.use((req, res, next) => {
   res.set({
-    "Access-Control-Allow-Origin": "http://localhost:3000",
+    "Access-Control-Allow-Origin": req.headers.origin,
     "Access-Control-Allow-Credentials": "true",
-    "Access-Control-Allow-Headers":
-      "Origin, X-Requested-With, Content-Type, Accept,Set-Cookie",
+    "Access-Control-Allow-Headers": "Content-Type, *",
     "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE",
   });
 
@@ -77,7 +76,13 @@ app.use((error, req, res, next) => {
 mongoose
   .connect(
     "mongodb+srv://admin:8cfrMF1Y6UCM5nc0@linkdb.f9q9h.mongodb.net/users?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }
+    // avoid some deprecation warnings
+    {
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+    }
   )
   .then(() => app.listen(5000))
   .catch((err) => {

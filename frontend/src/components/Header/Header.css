@@ -3,6 +3,18 @@
   width: 100%;
 }
 
+.header-profile-icons {
+  color: #f7f7f7;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .header-name {
   color: #f7f7f7;
+}
+
+.header-messages {
+  cursor: pointer;
+  margin-right: 0.5rem;
 }

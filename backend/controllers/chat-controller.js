@@ -120,6 +120,7 @@ const getChatLogsOverview = async (req, res, next) => {
   res.json({ matchedChats });
 };
 
+// todo: look into it to see if you can optimize
 const getSpecificChat = async (req, res, next) => {
   const { userID, recipientID } = req.body;
   const page = req.body.page || 1;
@@ -129,6 +130,7 @@ const getSpecificChat = async (req, res, next) => {
   let chatData = {};
 
   try {
+    // find user and recipient, storing their IDs
     existingUserData = await User.findById(userID, {
       chatLogs: 1,
       profilePicURL: 1,
@@ -149,10 +151,10 @@ const getSpecificChat = async (req, res, next) => {
   chatData.recipientProfilePic = correctRecipient.recipientID.profilePicURL;
 
   // index are negative to retrieve latest messages
-  const startingIndex = -1 * page * messagesToLoad;
+  let startingIndex = -1 * page * messagesToLoad;
   const endingIndex = -1 * (page - 1) * messagesToLoad;
   if (existingUserData) {
-    let chatLogs;
+    let chatLogs; //
 
     try {
       // searches and loads entire chat log into memory
@@ -163,9 +165,13 @@ const getSpecificChat = async (req, res, next) => {
 
     // returns all remaining documents if number of documents left is less than messagesToLoad
     if (endingIndex === 0) {
-      chatData.messages = chatLogs.messages.slice(startingIndex).reverse();
+      // pass by value because the original copy still has to be saved
+      chatData.messages = JSON.parse(JSON.stringify(chatLogs.messages))
+        .slice(startingIndex)
+        .reverse();
+      chatData.lastPage = true;
     } else {
-      chatData.messages = chatLogs.messages
+      chatData.messages = JSON.parse(JSON.stringify(chatLogs.messages))
         .slice(startingIndex, endingIndex)
         .reverse();
     }
@@ -178,15 +184,22 @@ const getSpecificChat = async (req, res, next) => {
       delete message.senderID;
     }
 
-    // all messages that were loaded to the frontend is saved to the backend as read
+    const numberOfMessages = chatLogs.messages.length;
+
+    if (startingIndex < -1 * numberOfMessages) {
+      startingIndex = -1 * numberOfMessages;
+    }
+
+    // all messages that were loaded to the frontend are saved to the backend as read
     for (i = startingIndex; i < endingIndex; i++) {
-      if (chatLogs.message.senderID != userID) {
-        chatLogs.messages[-1 * i].read = true;
+      let currentMessage = chatLogs.messages[numberOfMessages + i];
+      if (currentMessage.senderID != userID) {
+        currentMessage.read = true;
       }
     }
 
     try {
-      await chatLogs.save();
+      await Chat.findByIdAndUpdate(correctRecipient.chat, chatLogs);
     } catch (err) {
       return next(new DatabaseError(err.message));
     }

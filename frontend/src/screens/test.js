@@ -7,8 +7,10 @@ const sendRequest = async (event) => {
   try {
     response = await fetch("http://localhost:5000/api/user/login", {
       method: "POST",
-      body: { username: "Joshua", password: "qwerty" },
       headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: "Joshua", password: "qwerty" }),
+      mode: "cors",
+      // include cookies/ authorization headers
       credentials: "include",
     });
   } catch (err) {
