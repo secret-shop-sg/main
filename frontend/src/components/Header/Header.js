@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import "./Header.css";
 import {
@@ -20,23 +20,25 @@ import {
 import Login from "./Login";
 import Signup from "./Signup";
 
-const Header = (props) => {
+const Header = () => {
   const [searchText, setSearchText] = useState("");
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
+  const [username, setUsername] = useState();
   const history = useHistory();
 
-  // to be changed to get from redux
-  const userID = "5f2faf5ad18a76073729f475";
-  // const userID = "";
-  const username = "billy";
+  useEffect(() => {
+    if (document.cookies) {
+      setUsername(document.cookies.split("=")[1]);
+    }
+  }, [document.cookies]);
 
   // display sign in options based on login state
   const signinDisplay = () => {
     const userIcon = () => {
       return <AiOutlineUser size="2em" />;
     };
-    if (userID) {
+    if (username) {
       return (
         <Navbar.Text>
           <div className="header-profile-icons">

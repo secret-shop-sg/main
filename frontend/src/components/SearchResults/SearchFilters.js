@@ -53,6 +53,8 @@ const SearchFilters = (props) => {
         case "listingtype":
           setTypeFilters(filterValues);
           break;
+        default:
+          break;
       }
     }
   };
@@ -87,6 +89,8 @@ const SearchFilters = (props) => {
           // add
           newTypeFilters = [...newTypeFilters, label];
         }
+        break;
+      default:
         break;
     }
 

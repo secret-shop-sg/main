@@ -5,20 +5,20 @@ const Chat = require("../models/chats");
 
 // todo: differentiate between a new message on an existing chat or a new chat
 const sendNewMessage = async (req, res, next) => {
-  const { senderID, recipientID, content } = req.body;
+  const { userID, recipientID, content } = req.body;
   let sender;
   let recipient;
   let newChat;
 
   const newMessage = {
     timeSent: new Date(),
-    senderID,
+    senderID: userID,
     content,
     read: false,
   };
 
   try {
-    sender = await User.findById(senderID);
+    sender = await User.findById(userID);
     recipient = await User.findById(recipientID);
   } catch (err) {
     return next(new DatabaseError(err.message));
@@ -51,7 +51,7 @@ const sendNewMessage = async (req, res, next) => {
         await newChat.save({ session });
         sender.chatLogs.push({ recipientID, chat: newChat._id });
         await sender.save({ session });
-        recipient.chatLogs.push({ recipientID: senderID, chat: newChat._id });
+        recipient.chatLogs.push({ recipientID: userID, chat: newChat._id });
         await recipient.save({ session });
         await session.commitTransaction();
       } catch (err) {
@@ -63,7 +63,7 @@ const sendNewMessage = async (req, res, next) => {
 };
 
 const getChatLogsOverview = async (req, res, next) => {
-  const userID = req.params.userID;
+  const userID = req.body.userID;
   let matchedChats = [];
 
   // todo: add error handling in the event that id sent is not 24 chars
@@ -94,7 +94,6 @@ const getChatLogsOverview = async (req, res, next) => {
               _id: existingChatLog.chat,
             },
           },
-          { $limit: 1 },
           {
             $project: {
               messages: {
@@ -104,11 +103,13 @@ const getChatLogsOverview = async (req, res, next) => {
           },
         ]);
 
-        if (latestMessage.messages[0].senderID == userID) {
-          latestMessage.messages[0].sentBySelf = true;
-        } else latestMessage.messages[0].sentBySelf = false;
+        let message = latestMessage.messages[0];
 
-        delete latestMessage.messages[0].senderID;
+        if (message.senderID == userID) {
+          message.sentBySelf = true;
+        } else message.sentBySelf = false;
+
+        delete message.senderID;
 
         matchedChats.push({ recipient, latestMessage });
       }

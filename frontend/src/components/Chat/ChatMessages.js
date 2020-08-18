@@ -14,7 +14,7 @@ const ChatMessages = (props) => {
   const latestMessage = useRef(null);
 
   // unpack user data
-  const { userID, recipientID, recipientName } = props.userData;
+  const { recipientID, recipientName } = props.userData;
 
   // this is so that we can rerender the chat messages after a message is sent
   const [sentMessage, setSentMessage] = useState("");
@@ -46,13 +46,17 @@ const ChatMessages = (props) => {
 
   // get chat data if user/recipient changes or on page load
   useEffect(() => {
-    if (userID && recipientID) {
+    if (recipientID) {
       setChatIsLoading(true);
 
-      sendRequest("/api/chat/specific", "PATCH", {
-        userID,
-        recipientID,
-      }).then((responseData) => {
+      sendRequest(
+        "/api/chat/specific",
+        "PATCH",
+        {
+          recipientID,
+        },
+        true
+      ).then((responseData) => {
         setChatData(responseData.chatData);
         setChatIsLoading(false);
 
@@ -86,7 +90,6 @@ const ChatMessages = (props) => {
       </div>
       <div className="chat-message-input">
         <MessageSend
-          userID={userID}
           recipientID={recipientID}
           setSentMessage={setSentMessage}
         />

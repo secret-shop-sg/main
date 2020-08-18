@@ -3,7 +3,6 @@ import { useAPI } from "../../utils/useAPI";
 import { InputGroup, FormControl, Button, Form } from "react-bootstrap";
 
 const MessageSend = (props) => {
-  const senderID = props.userID;
   const recipientID = props.recipientID;
   const [messageContent, setMessageContent] = useState("");
   const [sendRequest] = useAPI();
@@ -14,11 +13,15 @@ const MessageSend = (props) => {
 
   const sendMessageHandler = () => {
     console.log("sending message");
-    sendRequest("/api/chat/add", "POST", {
-      senderID,
-      recipientID,
-      content: messageContent,
-    }).then((response) => {
+    sendRequest(
+      "/api/chat/add",
+      "POST",
+      {
+        recipientID,
+        content: messageContent,
+      },
+      true
+    ).then((response) => {
       setMessageContent("");
       //re render parent
       props.setSentMessage(messageContent);

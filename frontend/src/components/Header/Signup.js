@@ -170,9 +170,8 @@ const Signup = (props) => {
       password: formState.inputValues.password,
     });
 
-    // responseData returns the user's userID
     if (responseData) {
-      if (responseData.userID) {
+      if (responseData.signedIn) {
         //sign in
 
         // success

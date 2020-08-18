@@ -47,12 +47,6 @@ function CreateListing() {
   const [listingAdded, setListingAdded] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const ownerID = "5f29504f0f1bc35a048e5b70";
-  const owner = "test";
-
-  //const owner = useSelector((state) => state.user.userId);
-  /* uncomment after page completed*/
-
   // set listed game
   const setListedGame = useCallback(
     (games) => {
@@ -89,18 +83,19 @@ function CreateListing() {
   // function that triggers when user submits the form.
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    const responseData = await sendRequest("/api/listing/add", "POST", {
-      // change the fields below to the actual fields
-      hasItem: formState.inputValues.listedGame[0],
-      ownerID,
-      owner,
-      description: formState.inputValues.description,
-      sellingPrice: formState.inputValues.sellingPrice,
-      rentalPrice: formState.inputValues.rentalPrice,
-      wantsItem: formState.inputValues.gamesWanted,
-    });
+    const responseData = await sendRequest(
+      "/api/listing/add",
+      "POST",
+      {
+        hasItem: formState.inputValues.listedGame[0],
+        description: formState.inputValues.description,
+        sellingPrice: formState.inputValues.sellingPrice,
+        rentalPrice: formState.inputValues.rentalPrice,
+        wantsItem: formState.inputValues.gamesWanted,
+      },
+      true
+    );
 
-    // responseData returns the user's userID
     if (responseData) {
       if (responseData.listingID) {
         alert("listing created");

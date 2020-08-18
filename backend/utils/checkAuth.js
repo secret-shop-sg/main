@@ -6,15 +6,15 @@ module.exports = (req, res, next) => {
     // obtain web token from the string set in the header of the req
     const token = req.cookies.access_token;
     if (!token) {
-      const error = new Error("Authentication failed");
+      const error = new Error("Authentication failed. Please log in first");
       error.status = 401;
       throw error;
     }
 
-    jwt.verify(token, SECRET_JWT_HASH, (err, userID) => {
+    jwt.verify(token, SECRET_JWT_HASH, (err, data) => {
       if (err) return res.sendStatus(403);
-      req.userID = userID;
-      next();
+      // data.iat = time cookie was issued at;
+      req.body.userID = data.userID;
     });
 
     next();
