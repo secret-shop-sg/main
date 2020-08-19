@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./Header.css";
 import {
@@ -24,14 +24,8 @@ const Header = () => {
   const [searchText, setSearchText] = useState("");
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
-  const [username, setUsername] = useState();
+  const [username, setUsername] = useState(document.cookie.split("=")[1]);
   const history = useHistory();
-
-  useEffect(() => {
-    if (document.cookies) {
-      setUsername(document.cookies.split("=")[1]);
-    }
-  }, [document.cookies]);
 
   // display sign in options based on login state
   const signinDisplay = () => {
@@ -89,11 +83,13 @@ const Header = () => {
 
   // show or hide login
   const showLoginHandler = () => {
+    setUsername(document.cookie.split("=")[1]);
     setShowLogin(!showLogin);
   };
 
   // show or hide signup
   const showSignupHandler = () => {
+    setUsername(document.cookie.split("=")[1]);
     setShowSignup(!showSignup);
   };
 
