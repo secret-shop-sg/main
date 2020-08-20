@@ -8,6 +8,8 @@ router.post("/signup", userController.addNewUser);
 
 router.post("/login", userController.login);
 
+router.get("/logout", userController.logout);
+
 // get user info based on username. Used for info accessible without logging in
 router.get("/username/:username", userController.getUserbyName);
 

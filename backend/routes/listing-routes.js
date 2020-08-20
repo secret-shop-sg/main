@@ -12,6 +12,6 @@ router.post("/add", checkAuth, listingController.addListing);
 
 //router.patch("/id/:listingID",listingController.patchListing);
 
-//router.delete("/id/:listingID", listingController.deleteListing);
+router.delete("/id/:listingID", listingController.deleteListing);
 
 module.exports = router;

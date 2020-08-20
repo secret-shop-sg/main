@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useAPI } from "../../utils/useAPI";
 import "./Header.css";
 import {
   Navbar,
@@ -25,7 +26,23 @@ const Header = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [username, setUsername] = useState(document.cookie.split("=")[1]);
+  const [sendRequest] = useAPI();
   const history = useHistory();
+
+  const logOut = async () => {
+    const responseData = await sendRequest(
+      "/api/user/logout",
+      undefined,
+      undefined,
+      true
+    );
+    if (responseData) {
+      if (responseData.loggedOut) {
+        setUsername(null);
+      }
+    }
+    // Todo. fetch request to log out
+  };
 
   // display sign in options based on login state
   const signinDisplay = () => {
@@ -50,7 +67,7 @@ const Header = () => {
               <Dropdown.Item onClick={() => history.push("/update")}>
                 View profile
               </Dropdown.Item>
-              <Dropdown.Item>Logout</Dropdown.Item>
+              <Dropdown.Item onClick={logOut}>Logout</Dropdown.Item>
             </DropdownButton>
           </div>
         </Navbar.Text>
@@ -83,6 +100,7 @@ const Header = () => {
 
   // show or hide login
   const showLoginHandler = () => {
+    // Todo: what happens if user manually deletes the username cookie and not the httponly cookie??
     setUsername(document.cookie.split("=")[1]);
     setShowLogin(!showLogin);
   };

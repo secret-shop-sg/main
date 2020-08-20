@@ -7,7 +7,7 @@ import Platforms from "../components/Home/Platforms";
 import ListingSummary from "../components/ListingSummary/ListingSummary";
 import { Jumbotron, Container } from "react-bootstrap";
 
-const Main = (props) => {
+const Main = () => {
   const [sendRequest, isLoading] = useAPI();
   const [listings, setListings] = useState([]);
 
@@ -39,6 +39,7 @@ const Main = (props) => {
           owner={listing.owner}
           description={listing.description}
           listingDate={listing.dateListed}
+          profilePic={listing.ownerID.profilePicURL}
         />
       ));
     }

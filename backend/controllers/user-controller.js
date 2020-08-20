@@ -8,7 +8,26 @@ const DatabaseError = require("../models/databaseError");
 const {
   DEFAULT_PROFILE_PIC,
   SECRET_JWT_HASH,
+  LOG_IN_DURATION,
 } = require("../constants/details");
+
+// not middleware but called when creating cookie
+const newCookie = (res, userID, username) => {
+  const accessToken = jwt.sign({ userID }, SECRET_JWT_HASH);
+
+  // cookie expires in 3hrs
+  // secure cookie meant for user authentication
+  res.cookie("access_token", accessToken, {
+    maxAge: LOG_IN_DURATION,
+    httpOnly: true,
+    // uncomment secure in production when we switch to https
+    //secure: true
+  });
+
+  // cookie expires in 3hrs
+  // cookie for frontend to know username. Deleted if not needed
+  res.cookie("username", username, { maxAge: LOG_IN_DURATION });
+};
 
 const addNewUser = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -37,22 +56,7 @@ const addNewUser = async (req, res, next) => {
     return next(new DatabaseError(err.message));
   }
 
-  // todo: Add expiry to accesstoken
-  accessToken = jwt.sign({ userID }, SECRET_JWT_HASH);
-
-  // for log out -> maxAge:0
-  // cookie expires in 3hrs
-  // secure cookie meant for user authentication
-  res.cookie("access_token", accessToken, {
-    maxAge: 10800000,
-    httpOnly: true,
-    // uncomment secure in production when we switch to https
-    //secure: true
-  });
-
-  // cookie expires in 3hrs
-  // cookie for frontend to know username. Deleted if not needed
-  res.cookie("username", username, { maxAge: 10800000 });
+  newCookie(res, userID, username);
 
   res.status(201).json({ signedIn: true });
 };
@@ -90,7 +94,6 @@ const login = async (req, res, next) => {
   let existingUser;
   let validCredentials;
   let userID;
-  let accessToken;
 
   try {
     existingUser = await User.findOne({ username });
@@ -124,26 +127,18 @@ const login = async (req, res, next) => {
       userID = existingUser.id;
       validCredentials = true;
 
-      // todo: Add expiry to accesstoken
-      accessToken = jwt.sign({ userID }, SECRET_JWT_HASH);
-
-      // for log out -> maxAge:0
-      // cookie expires in 3hrs
-      // secure cookie meant for user authentication
-      res.cookie("access_token", accessToken, {
-        maxAge: 10800000,
-        httpOnly: true,
-        // uncomment secure in production when we switch to https
-        //secure: true
-      });
-
-      // cookie expires in 3hrs
-      // cookie for frontend to know username. Deleted if not needed
-      res.cookie("username", username, { maxAge: 10800000 });
+      newCookie(res, userID, username);
     }
   }
 
   res.json({ validCredentials });
+};
+
+const logout = async (req, res) => {
+  res.clearCookie("access_token");
+  res.clearCookie("username");
+
+  res.json({ loggedOut: true });
 };
 
 const getAuthorizedUser = async (req, res, next) => {
@@ -151,19 +146,14 @@ const getAuthorizedUser = async (req, res, next) => {
 
   let matchedUser;
 
-  // todo: add error handling in the event that id sent is not 24 chars
-  if (userID.match(/^[0-9a-fA-F]{24}$/)) {
-    try {
-      matchedUser = await User.findById(userID, { __v: 0 }).populate({
-        path: "listings",
-        select: { __v: 0 },
-      });
-    } catch (err) {
-      return next(new DatabaseError(err.message));
-    }
+  try {
+    matchedUser = await User.findById(userID, { __v: 0 }).populate({
+      path: "listings",
+      select: { __v: 0 },
+    });
+  } catch (err) {
+    return next(new DatabaseError(err.message));
   }
-
-  matchedUser.password;
 
   res.json({ matchedUser });
 };
@@ -184,6 +174,7 @@ const getUserbyName = async (req, res, next) => {
   res.json({ matchedUser });
 };
 
+// does not work because of fileupload middleware
 const updateProfileDetails = async (req, res, next) => {
   const userID = req.body.userID;
   const updatedInfo = req.body;
@@ -192,11 +183,7 @@ const updateProfileDetails = async (req, res, next) => {
 
   // remove all fields with null or undefined values
   for (var property in updatedInfo) {
-    if (
-      updatedInfo[property] === null ||
-      updatedInfo[property] === undefined ||
-      property == "userID"
-    ) {
+    if (!updatedInfo[property] || property == "userID") {
       delete updatedInfo[property];
     }
   }
@@ -210,54 +197,59 @@ const updateProfileDetails = async (req, res, next) => {
     return next(new DatabaseError(err.message));
   }
 
-  if (matchedUser) {
-    try {
-      const session = await mongoose.startSession();
-      session.startTransaction();
+  if (!matchedUser) {
+    return next(new DatabaseError("UserID not found in database"));
+  }
 
-      if (req.file) {
-        // queues the old profile pic for deletion if there is a new pic exists
-        if (matchedUser.profilePicURL != DEFAULT_PROFILE_PIC) {
-          fileToUnlink = matchedUser.profilePicURL.substring(1);
-        }
-        // creates a new file path to where the user profile pic is stored
-        matchedUser.profilePicURL = "/" + req.file.path;
+  try {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    if (req.file) {
+      // queues the old profile pic for deletion if there is a new pic exists
+      if (matchedUser.profilePicURL != DEFAULT_PROFILE_PIC) {
+        fileToUnlink = matchedUser.profilePicURL.substring(1);
       }
-
-      // iterates through whatever fields have updates and update them in the matchedUser
-      Object.keys(updatedInfo).forEach(
-        (key) => (matchedUser[key] = updatedInfo[key])
-      );
-
-      await matchedUser.save({ session });
-
-      // if the username updated, find all of the user's listing and update the owner field
-      if (updatedInfo.username !== matchedUser.username) {
-        for (listingID of matchedUser.listings) {
-          const listing = await Listing.findById(listingID);
-          listing.owner = updatedInfo.username;
-          await listing.save({ session });
-        }
-      }
-
-      await session.commitTransaction();
-    } catch (err) {
-      // if transaction fail, queue the image file that has been uploaded for deletion instead
-      if (req.file) {
-        fileToUnlink = req.file.path;
-      }
-      error = err;
+      // creates a new file path to where the user profile pic is stored
+      matchedUser.profilePicURL = "/" + req.file.path;
     }
 
-    if (fileToUnlink) {
-      fs.unlink(fileToUnlink, function (err) {
-        console.log("Error while deleting files", err);
-      });
+    // iterates through whatever fields have updates and update them in the matchedUser
+    Object.keys(updatedInfo).forEach(
+      (key) => (matchedUser[key] = updatedInfo[key])
+    );
+
+    await matchedUser.save({ session });
+
+    // if the username updated, find all of the user's listing and update the owner field
+    if (updatedInfo.username !== matchedUser.username) {
+      for (listingID of matchedUser.listings) {
+        const listing = await Listing.findById(listingID);
+        listing.owner = updatedInfo.username;
+        await listing.save({ session });
+      }
+
+      // change the cookies that the user is used to log in with
+      newCookie(res, userID, updatedInfo.username);
     }
 
-    if (error) {
-      return next(new DatabaseError(error.message));
+    await session.commitTransaction();
+  } catch (err) {
+    // if transaction fail, queue the image file that has been uploaded for deletion instead
+    if (req.file) {
+      fileToUnlink = req.file.path;
     }
+    error = err;
+  }
+
+  if (fileToUnlink) {
+    fs.unlink(fileToUnlink, function (err) {
+      console.log("Error while deleting files", err);
+    });
+  }
+
+  if (error) {
+    return next(new DatabaseError(error.message));
   }
 
   res.json({ userID });
@@ -280,6 +272,8 @@ const updateInventory = async (req, res, next) => {
 
     if (matchedUser) {
       matchedUser.inventory = inventory;
+    } else {
+      return next(new DatabaseError("UserID not found in database"));
     }
     try {
       await matchedUser.save();
@@ -306,8 +300,10 @@ const updateWishlist = async (req, res, next) => {
 
     if (matchedUser) {
       matchedUser.wishlist = wishlist;
+    } else {
+      return next(new DatabaseError("UserID not found in database"));
     }
-    // todo: throw some error
+
     try {
       await matchedUser.save();
     } catch (err) {
@@ -326,3 +322,4 @@ exports.getAuthorizedUser = getAuthorizedUser;
 exports.getUserbyName = getUserbyName;
 exports.validateField = validateField;
 exports.login = login;
+exports.logout = logout;
