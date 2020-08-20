@@ -18,7 +18,7 @@ import "./styles/Main.css";
 const Main = () => {
   const [sendRequest, isLoading] = useAPI();
   const [listings, setListings] = useState([]);
-  const [sortKey, setSortKey] = useState("");
+  const [sortKey, setSortKey] = useState("1");
 
   // function to set label of sort by dropdown
   const sortLabel = () => {
@@ -78,7 +78,7 @@ const Main = () => {
       <Header />
       <Jumbotron fluid>
         <Container>
-          <h1>Welcome to the Secret Shop</h1>
+          <h1 className="display-4">Welcome to the Secret Shop</h1>
           <p>
             The one-stop destination for all your second-hand video game needs.
           </p>
@@ -88,22 +88,25 @@ const Main = () => {
         <Platforms />
         <hr />
         <div className="main-page-listings-label">
-          <div>Browse through some of our listings</div>
-          <Dropdown as={ButtonGroup} alignRight>
-            <Button variant="outline-dark">{sortLabel()}</Button>
-            <Dropdown.Toggle split variant="outline-dark" />
-            <Dropdown.Menu>
-              <Dropdown.Item eventKey="1" onSelect={onSortSelect}>
-                Relevance
-              </Dropdown.Item>
-              <Dropdown.Item eventKey="2" onSelect={onSortSelect}>
-                Popularity
-              </Dropdown.Item>
-              <Dropdown.Item eventKey="3" onSelect={onSortSelect}>
-                Recent
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <h3 className="display-4">Browse</h3>
+          <div className="d-flex flex-row align-items-center">
+            <div className="mr-2">Sort by</div>
+            <Dropdown as={ButtonGroup} alignRight>
+              <Button variant="outline-dark">{sortLabel()}</Button>
+              <Dropdown.Toggle split variant="outline-dark" />
+              <Dropdown.Menu>
+                <Dropdown.Item eventKey="1" onSelect={onSortSelect}>
+                  Relevance
+                </Dropdown.Item>
+                <Dropdown.Item eventKey="2" onSelect={onSortSelect}>
+                  Popularity
+                </Dropdown.Item>
+                <Dropdown.Item eventKey="3" onSelect={onSortSelect}>
+                  Recent
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
         </div>
         <div className="main-page-listings">{displayListings()}</div>
       </div>

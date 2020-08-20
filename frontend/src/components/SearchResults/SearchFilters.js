@@ -18,7 +18,7 @@ import { PLATFORMS_SUPPORTED, LISTINGS_TYPE } from "../../constants/Details";
 const SearchFilters = (props) => {
   const [platformFilters, setPlatformFilters] = useState([]);
   const [typeFilters, setTypeFilters] = useState([]);
-  const [sortKey, setSortKey] = useState("");
+  const [sortKey, setSortKey] = useState("1");
   const history = useHistory();
 
   // function to set label of sort by dropdown
@@ -197,21 +197,24 @@ const SearchFilters = (props) => {
           </Accordion.Collapse>
         </Accordion>
       </div>
-      <Dropdown as={ButtonGroup} alignRight>
-        <Button variant="outline-dark">{sortLabel()}</Button>
-        <Dropdown.Toggle split variant="outline-dark" />
-        <Dropdown.Menu>
-          <Dropdown.Item eventKey="1" onSelect={onSortSelect}>
-            Relevance
-          </Dropdown.Item>
-          <Dropdown.Item eventKey="2" onSelect={onSortSelect}>
-            Popularity
-          </Dropdown.Item>
-          <Dropdown.Item eventKey="3" onSelect={onSortSelect}>
-            Recent
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      <div className="d-flex flex-row align-items-center">
+        <div className="mr-2">Sort by</div>
+        <Dropdown as={ButtonGroup} alignRight>
+          <Button variant="outline-dark">{sortLabel()}</Button>
+          <Dropdown.Toggle split variant="outline-dark" />
+          <Dropdown.Menu>
+            <Dropdown.Item eventKey="1" onSelect={onSortSelect}>
+              Relevance
+            </Dropdown.Item>
+            <Dropdown.Item eventKey="2" onSelect={onSortSelect}>
+              Popularity
+            </Dropdown.Item>
+            <Dropdown.Item eventKey="3" onSelect={onSortSelect}>
+              Recent
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
     </Navbar>
   );
 };
