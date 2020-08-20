@@ -39,6 +39,7 @@ const Header = () => {
     if (responseData) {
       if (responseData.loggedOut) {
         setUsername(null);
+        history.push("/");
       }
     }
     // Todo. fetch request to log out
