@@ -18,7 +18,7 @@ import { PLATFORMS_SUPPORTED, LISTINGS_TYPE } from "../../constants/Details";
 const SearchFilters = (props) => {
   const [platformFilters, setPlatformFilters] = useState([]);
   const [typeFilters, setTypeFilters] = useState([]);
-  const [sortKey, setSortKey] = useState(0);
+  const [sortKey, setSortKey] = useState("");
   const history = useHistory();
 
   // function to set label of sort by dropdown

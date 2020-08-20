@@ -5,11 +5,39 @@ import { useAPI } from "../utils/useAPI";
 import Header from "../components/Header/Header";
 import Platforms from "../components/Home/Platforms";
 import ListingSummary from "../components/ListingSummary/ListingSummary";
-import { Jumbotron, Container } from "react-bootstrap";
+import {
+  Jumbotron,
+  Container,
+  Dropdown,
+  Button,
+  ButtonGroup,
+} from "react-bootstrap";
+
+import "./styles/Main.css";
 
 const Main = () => {
   const [sendRequest, isLoading] = useAPI();
   const [listings, setListings] = useState([]);
+  const [sortKey, setSortKey] = useState("");
+
+  // function to set label of sort by dropdown
+  const sortLabel = () => {
+    switch (sortKey) {
+      case "1":
+        return "Relevance";
+      case "2":
+        return "Popularity";
+      case "3":
+        return "Recent";
+      default:
+        return "Sort by";
+    }
+  };
+
+  // function for setting sort by after dropdown is selected
+  const onSortSelect = (key, _) => {
+    setSortKey(key);
+  };
 
   // get listings to display on front page
   useEffect(() => {
@@ -58,7 +86,26 @@ const Main = () => {
       </Jumbotron>
       <div style={styles.display}>
         <Platforms />
-        <div style={styles.listings}>{displayListings()}</div>
+        <hr />
+        <div className="main-page-listings-label">
+          <div>Browse through some of our listings</div>
+          <Dropdown as={ButtonGroup} alignRight>
+            <Button variant="outline-dark">{sortLabel()}</Button>
+            <Dropdown.Toggle split variant="outline-dark" />
+            <Dropdown.Menu>
+              <Dropdown.Item eventKey="1" onSelect={onSortSelect}>
+                Relevance
+              </Dropdown.Item>
+              <Dropdown.Item eventKey="2" onSelect={onSortSelect}>
+                Popularity
+              </Dropdown.Item>
+              <Dropdown.Item eventKey="3" onSelect={onSortSelect}>
+                Recent
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+        <div className="main-page-listings">{displayListings()}</div>
       </div>
     </div>
   );
@@ -72,10 +119,6 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-  },
-  listings: {
-    width: "100%",
-    padding: "1rem",
   },
 };
 
