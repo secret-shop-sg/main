@@ -38,7 +38,9 @@ const ChatMessages = (props) => {
             className="chat-message-img"
             src={BACKEND_ADDRESS + chatData.recipientProfilePic}
           />
-          <div>{message.content}</div>
+          <div className={message.read ? "" : "unread-chat-msgs"}>
+            {message.content}
+          </div>
         </div>
       );
     }

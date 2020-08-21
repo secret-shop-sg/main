@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
     const token = req.cookies.access_token;
     if (!token) {
       // todo: change to special status code and direct all requests to a certain page
-      const error = new Error("Authentication failed. Please log in first");
+      const error = new Error("Authentication failed");
       error.status = 401;
       throw error;
     }
