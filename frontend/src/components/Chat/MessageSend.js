@@ -12,7 +12,6 @@ const MessageSend = (props) => {
   };
 
   const sendMessageHandler = () => {
-    console.log("sending message");
     sendRequest(
       "/api/chat/add",
       "POST",

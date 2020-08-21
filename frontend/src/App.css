@@ -2,3 +2,12 @@
   height: 100%;
   width: 100%;
 }
+
+hr {
+  border: 0;
+  clear: both;
+  display: block;
+  width: 96%;
+  background-color: transparent;
+  height: 1px;
+}

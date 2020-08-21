@@ -59,3 +59,8 @@
   height: auto;
   margin: 0px 1rem;
 }
+
+.unread-chat-msgs {
+  font-size: large;
+  font-weight: bold;
+}

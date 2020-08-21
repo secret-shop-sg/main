@@ -3,7 +3,6 @@ const DatabaseError = require("../models/databaseError");
 const User = require("../models/users");
 const Chat = require("../models/chats");
 
-// todo: differentiate between a new message on an existing chat or a new chat
 const sendNewMessage = async (req, res, next) => {
   const { userID, recipientID, content } = req.body;
   let sender;
@@ -66,56 +65,57 @@ const getChatLogsOverview = async (req, res, next) => {
   const userID = req.body.userID;
   let matchedChats = [];
 
-  // todo: add error handling in the event that id sent is not 24 chars
-  if (userID.match(/^[0-9a-fA-F]{24}$/)) {
-    let existingUserData;
+  // Error handler in the event that id sent is not 24 chars
+  if (!userID.match(/^[0-9a-fA-F]{24}$/)) {
+    return next(new DatabaseError());
+  }
+  let existingUserData;
 
-    try {
-      // find all existing chatLogs of this particular user
-      existingUserData = await User.findById(userID, {
-        chatLogs: 1,
+  try {
+    // find all existing chatLogs of this particular user
+    existingUserData = await User.findById(userID, {
+      chatLogs: 1,
+    });
+  } catch (err) {
+    return next(new DatabaseError(err.message));
+  }
+
+  try {
+    for (existingChatLog of existingUserData.chatLogs) {
+      // collecting data from recipient
+      const recipient = await User.findById(existingChatLog.recipientID, {
+        username: 1,
+        profilePicURL: 1,
       });
-    } catch (err) {
-      return next(new DatabaseError(err.message));
-    }
 
-    try {
-      for (existingChatLog of existingUserData.chatLogs) {
-        // collecting data from recipient
-        const recipient = await User.findById(existingChatLog.recipientID, {
-          username: 1,
-          profilePicURL: 1,
-        });
-
-        // collecting data for latest message
-        let [latestMessage] = await Chat.aggregate([
-          {
-            $match: {
-              _id: existingChatLog.chat,
+      // collecting data for latest message
+      let [latestMessage] = await Chat.aggregate([
+        {
+          $match: {
+            _id: existingChatLog.chat,
+          },
+        },
+        {
+          $project: {
+            messages: {
+              $slice: ["$messages", -1],
             },
           },
-          {
-            $project: {
-              messages: {
-                $slice: ["$messages", -1],
-              },
-            },
-          },
-        ]);
+        },
+      ]);
 
-        let message = latestMessage.messages[0];
+      let message = latestMessage.messages[0];
 
-        if (message.senderID == userID) {
-          message.sentBySelf = true;
-        } else message.sentBySelf = false;
+      if (message.senderID == userID) {
+        message.sentBySelf = true;
+      } else message.sentBySelf = false;
 
-        delete message.senderID;
+      delete message.senderID;
 
-        matchedChats.push({ recipient, latestMessage });
-      }
-    } catch (err) {
-      return next(new DatabaseError(err.message));
+      matchedChats.push({ recipient, latestMessage });
     }
+  } catch (err) {
+    return next(new DatabaseError(err.message));
   }
 
   res.json({ matchedChats });

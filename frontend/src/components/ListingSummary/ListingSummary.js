@@ -53,7 +53,10 @@ const ListingSummary = (props) => {
           <div className="text-muted">for {itemData.platform}</div>
         </div>
         <div className="listing-summary-owner">
-          <img className="listing-summary-profilepic" />
+          <img
+            className="listing-summary-profilepic"
+            src={BACKEND_ADDRESS + props.profilePic}
+          />
           <div className="text-muted">
             {props.owner} listed {getListingDate()}
           </div>

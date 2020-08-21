@@ -1,4 +1,5 @@
-import React, { useState, useReducer, useCallback } from "react";
+import React, { useState, useReducer, useCallback, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { useAPI } from "../utils/useAPI";
 import { BACKEND_ADDRESS } from "../constants/Details";
 import Header from "../components/Header/Header";
@@ -44,8 +45,15 @@ function CreateListing() {
   });
 
   const [sendRequest] = useAPI();
+  const history = useHistory();
   const [listingAdded, setListingAdded] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    if (!document.cookie || document.cookie.split["="] !== "username") {
+      history.push("/login=false");
+    }
+  }, []);
 
   // set listed game
   const setListedGame = useCallback(

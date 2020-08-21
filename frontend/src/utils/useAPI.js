@@ -67,9 +67,16 @@ export const useAPI = () => {
       } catch (err) {
         // 503 when cannot connect to server
         error.current = { message: err.message, status: err.status || 503 };
-        if (400 <= err.status && err.status < 500) {
-          history.replace("/error/400", error);
-        } else history.replace("/error/500", error);
+
+        // fetch is aborted is thrown when page changes. Should not throw error as app still functions as per normal
+        if (err.message !== "Fetch is aborted") {
+          if (err.status === 401) {
+            // user is accessing a site without logging in first
+            history.push("/login=false");
+          } else if (400 <= err.status && err.status < 500) {
+            history.replace("/error/400", error);
+          } else history.replace("/error/500", error);
+        }
       }
     },
     [history]

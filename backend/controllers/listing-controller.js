@@ -5,7 +5,6 @@ const DatabaseError = require("../models/databaseError");
 
 // To be eventually added
 // const updateListing
-// const deleteLising
 
 const getListing = async (req, res, next) => {
   const listingID = req.params.listingID;
@@ -119,6 +118,7 @@ const getMostRecentListings = async (req, res, next) => {
 
   try {
     mostRecentListings = await Listing.find({}, { __v: 0 })
+      .populate("ownerID", "profilePicURL")
       .sort({ dateListed: "descending" })
       .limit(documentCount);
   } catch (err) {
@@ -127,15 +127,51 @@ const getMostRecentListings = async (req, res, next) => {
 
   res.json({ mostRecentListings });
 };
-/*
-const deleteListing = async (req,res,next)=> {
+
+// not functioning properly
+const deleteListing = async (req, res, next) => {
   const listingID = req.params.listingID;
+  const userID = req.body.userID;
+  let listing;
+  let owner;
+
   try {
-    Listing.findById()
+    listing = await Listing.findById(listingID);
+  } catch (err) {
+    return next(new DatabaseError(err.message));
   }
-} */
+
+  // if listing to delete does not exist
+  if (!listing) {
+    return next(new DatabaseError("No listings found"));
+  }
+
+  try {
+    owner = await User.findById(listing.ownerID);
+  } catch (err) {
+    return next(new DatabaseError("UserID not found in database"));
+  }
+
+  if (owner._id != userID) {
+    return next(
+      new DatabaseError("User is not authorized to delete this listing")
+    );
+  }
+
+  try {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    await Listing.findByIdAndDelete(listingID, { session });
+    owner.listings.pull(listingID);
+    await owner.save({ session });
+    await session.commitTransaction;
+  } catch (err) {
+    return next(new DatabaseError(err.message));
+  }
+  res.json({ listingDeleted: true });
+};
 
 exports.getListing = getListing;
 exports.addListing = addListing;
-//exports.deleteListing = deleteListing;
+exports.deleteListing = deleteListing;
 exports.getMostRecentListings = getMostRecentListings;

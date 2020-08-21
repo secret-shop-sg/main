@@ -9,6 +9,8 @@ import {
   Col,
   Container,
   FormGroup,
+  Dropdown,
+  ButtonGroup,
 } from "react-bootstrap";
 import "./SearchFilters.css";
 import { PLATFORMS_SUPPORTED, LISTINGS_TYPE } from "../../constants/Details";
@@ -16,7 +18,27 @@ import { PLATFORMS_SUPPORTED, LISTINGS_TYPE } from "../../constants/Details";
 const SearchFilters = (props) => {
   const [platformFilters, setPlatformFilters] = useState([]);
   const [typeFilters, setTypeFilters] = useState([]);
+  const [sortKey, setSortKey] = useState("1");
   const history = useHistory();
+
+  // function to set label of sort by dropdown
+  const sortLabel = () => {
+    switch (sortKey) {
+      case "1":
+        return "Relevance";
+      case "2":
+        return "Popularity";
+      case "3":
+        return "Recent";
+      default:
+        return "Sort by";
+    }
+  };
+
+  // function for setting sort by after dropdown is selected
+  const onSortSelect = (key, _) => {
+    setSortKey(key);
+  };
 
   // function for setting filters
   const setFilters = () => {
@@ -112,62 +134,87 @@ const SearchFilters = (props) => {
   };
 
   return (
-    <Navbar bg="light" className="search-filters-container">
-      <Accordion className="filter-accordion">
-        <div>
-          <Accordion.Toggle as={Button} variant="link" eventKey="0">
-            Search Filters
-          </Accordion.Toggle>
-        </div>
-        <Accordion.Collapse eventKey="0">
-          <Container fluid>
-            <Row>
-              <Col md="auto">
-                <Form>
-                  <FormGroup>
-                    <Form.Label>Platforms</Form.Label>
-                    {PLATFORMS_SUPPORTED.map((label, index) => (
-                      <Form.Check
-                        type="checkbox"
-                        label={label}
-                        key={index}
-                        checked={platformFilters.includes(
-                          label.replace(/ /g, "-")
-                        )}
-                        name="platform"
-                        onChange={checkChangeHandler.bind(
-                          this,
-                          label.replace(/ /g, "-")
-                        )}
-                      />
-                    ))}
-                  </FormGroup>
-                </Form>
-              </Col>
-              <Col md="auto">
-                <Form>
-                  <FormGroup>
-                    <Form.Label>Listing Type</Form.Label>
-                    {LISTINGS_TYPE.map((label, index) => (
-                      <Form.Check
-                        type="checkbox"
-                        label={label}
-                        key={index}
-                        checked={typeFilters.includes(label.replace(/ /g, "-"))}
-                        name="listingtype"
-                        onChange={checkChangeHandler.bind(
-                          this,
-                          label.replace(/ /g, "-")
-                        )}
-                      />
-                    ))}
-                  </FormGroup>
-                </Form>
-              </Col>
-            </Row>
-          </Container>
-        </Accordion.Collapse>
-      </Accordion>
+    <Navbar
+      bg="light"
+      className="search-filters-container justify-content-between"
+    >
+      <div>
+        <Accordion className="filter-accordion">
+          <div>
+            <Accordion.Toggle as={Button} variant="link" eventKey="0">
+              Search Filters
+            </Accordion.Toggle>
+          </div>
+          <Accordion.Collapse eventKey="0">
+            <Container fluid>
+              <Row>
+                <Col md="auto">
+                  <Form>
+                    <FormGroup>
+                      <Form.Label>Platforms</Form.Label>
+                      {PLATFORMS_SUPPORTED.map((label, index) => (
+                        <Form.Check
+                          type="checkbox"
+                          label={label}
+                          key={index}
+                          checked={platformFilters.includes(
+                            label.replace(/ /g, "-")
+                          )}
+                          name="platform"
+                          onChange={checkChangeHandler.bind(
+                            this,
+                            label.replace(/ /g, "-")
+                          )}
+                        />
+                      ))}
+                    </FormGroup>
+                  </Form>
+                </Col>
+                <Col md="auto">
+                  <Form>
+                    <FormGroup>
+                      <Form.Label>Listing Type</Form.Label>
+                      {LISTINGS_TYPE.map((label, index) => (
+                        <Form.Check
+                          type="checkbox"
+                          label={label}
+                          key={index}
+                          checked={typeFilters.includes(
+                            label.replace(/ /g, "-")
+                          )}
+                          name="listingtype"
+                          onChange={checkChangeHandler.bind(
+                            this,
+                            label.replace(/ /g, "-")
+                          )}
+                        />
+                      ))}
+                    </FormGroup>
+                  </Form>
+                </Col>
+              </Row>
+            </Container>
+          </Accordion.Collapse>
+        </Accordion>
+      </div>
+      <div className="d-flex flex-row align-items-center">
+        <div className="mr-2">Sort by</div>
+        <Dropdown as={ButtonGroup} alignRight>
+          <Button variant="outline-dark">{sortLabel()}</Button>
+          <Dropdown.Toggle split variant="outline-dark" />
+          <Dropdown.Menu>
+            <Dropdown.Item eventKey="1" onSelect={onSortSelect}>
+              Relevance
+            </Dropdown.Item>
+            <Dropdown.Item eventKey="2" onSelect={onSortSelect}>
+              Popularity
+            </Dropdown.Item>
+            <Dropdown.Item eventKey="3" onSelect={onSortSelect}>
+              Recent
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
     </Navbar>
   );
 };
