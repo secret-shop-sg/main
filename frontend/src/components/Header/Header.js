@@ -42,7 +42,6 @@ const Header = () => {
         history.push("/");
       }
     }
-    // Todo. fetch request to log out
   };
 
   // display sign in options based on login state

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { AiOutlineWarning } from "react-icons/ai";
-import CombinedLoginSignup from "./CombinedLoginSignup";
-import "./AntiLoginError.css";
+import CombinedLoginSignup from "../../components/Shared/CombinedLoginSignup";
+import "./styles/AntiLoginError.css";
 function AntiLoginError() {
   const [loginActive, setLoginActive] = useState(false);
   const [signupActive, setSignupActive] = useState(false);

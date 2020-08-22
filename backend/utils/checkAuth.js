@@ -6,8 +6,8 @@ module.exports = (req, res, next) => {
   try {
     // obtain web token from the string set in the header of the req
     const token = req.cookies.access_token;
-    if (!token) {
-      // todo: change to special status code and direct all requests to a certain page
+    const username = req.cookies.username;
+    if (!token || !username) {
       const error = new Error("Authentication failed");
       error.status = 401;
       throw error;

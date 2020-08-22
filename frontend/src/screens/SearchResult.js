@@ -14,6 +14,7 @@ const SearchResult = (props) => {
   const [pageData, setPageData] = useState();
   const history = useHistory();
   const query = props.location.search;
+
   useEffect(() => {
     // call express api to get search results
     const getListings = async () => {
@@ -45,7 +46,6 @@ const SearchResult = (props) => {
       {!isLoading && matchedListings && matchedListings.length > 0 && (
         <div className="search-results-display">
           {matchedListings.map((listing) => {
-            console.log(listing);
             return (
               <ListingSummary
                 itemData={listing.hasItem}
@@ -54,6 +54,7 @@ const SearchResult = (props) => {
                 owner={listing.owner}
                 description={listing.description}
                 listingDate={listing.dateListed}
+                profilePic={listing.ownerProfilePic[0].profilePicURL}
               />
             );
           })}

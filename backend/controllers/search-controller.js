@@ -56,13 +56,27 @@ const getSearches = async (req, res, next) => {
   }
 
   const listingPerPage = 5;
+  // query to retrieve owner's profile pic by performing a left join
+  const ownerPicQuery = {
+    $lookup: {
+      from: "users",
+      let: { ownerID: "$ownerID" },
+      pipeline: [
+        { $match: { $expr: { $eq: ["$_id", "$$ownerID"] } } },
+        { $project: { profilePicURL: 1, _id: 0 } },
+      ],
+      as: "ownerProfilePic",
+    },
+  };
 
   try {
+    // include pagination in returned results
     queryData = await queryAndPaginate(
       Listing,
       [phraseQuery, platformQuery, listingtypeQuery],
       listingPerPage,
-      queries.page
+      queries.page,
+      ownerPicQuery
     );
   } catch (err) {
     // error handling alr included in queryAndPaginate function

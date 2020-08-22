@@ -16,6 +16,8 @@ const ListingSummary = (props) => {
   // history for router
   let history = useHistory();
 
+  console.log(props.profilePic);
+
   // go to specific listing
   const goToListing = () => {
     history.push({

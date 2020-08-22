@@ -9,7 +9,7 @@ import ServerSideErrorPage from "./screens/errors/ServerSideErrorPage";
 import CreateListing from "./screens/CreateListing";
 import UpdateProfile from "./screens/UpdateProfile";
 import Chat from "./screens/Chat";
-import UnauthorizedAccess from "./screens/errors/UnauthorizedAccess";
+import AntiLoginError from "./screens/errors/AntiLoginError";
 
 const RoutingTable = () => {
   return (
@@ -23,7 +23,7 @@ const RoutingTable = () => {
         <Route exact path="/update" component={UpdateProfile} />
         <Route path="/user" component={UserPage} />
         <Route exact path="/chat" component={Chat} />
-        <Route exact path="/login=false" component={UnauthorizedAccess} />
+        <Route exact path="/login=false" component={AntiLoginError} />
         <Route component={ClientSideErrorsPage} />
         {/* Routes client to ClientSideErrorsPage page if path does not match any of the others*/}
       </Switch>

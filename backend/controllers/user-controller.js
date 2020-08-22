@@ -13,7 +13,9 @@ const {
 
 // not middleware but called when creating cookie
 const newCookie = (res, userID, username) => {
-  const accessToken = jwt.sign({ userID }, SECRET_JWT_HASH);
+  const accessToken = jwt.sign({ userID }, SECRET_JWT_HASH, {
+    expiresIn: "3h",
+  });
 
   // cookie expires in 3hrs
   // secure cookie meant for user authentication

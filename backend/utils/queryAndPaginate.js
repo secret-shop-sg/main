@@ -1,4 +1,10 @@
-const queryAndPaginate = async (model, query, documentLimit, page = 1) => {
+const queryAndPaginate = async (
+  model,
+  query,
+  documentLimit,
+  page = 1,
+  additionalQueries = { $match: {} } // default param does nothing
+) => {
   // always first page by default
 
   // determines start and end index of documents to be queries
@@ -13,7 +19,11 @@ const queryAndPaginate = async (model, query, documentLimit, page = 1) => {
       },
       {
         $facet: {
-          matchedData: [{ $skip: startIndex }, { $limit: documentLimit }],
+          matchedData: [
+            { $skip: startIndex },
+            { $limit: documentLimit },
+            additionalQueries,
+          ],
           pageData: [{ $count: "count" }],
         },
       },

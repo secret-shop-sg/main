@@ -16,7 +16,7 @@ const ChatOverview = (props) => {
         undefined,
         true
       );
-      if (responseData) {
+      if (responseData && responseData.matchedChats) {
         setChats(responseData.matchedChats);
       }
     };
