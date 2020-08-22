@@ -9,6 +9,7 @@ const MIME_TYPE_MAP = {
 const fileUpload = multer({
   limits: 500000, // 500kb upload size
   storage: multer.diskStorage({
+    // where to store image in server
     destination: (req, file, callback) => {
       callback(null, "images/profile");
     },

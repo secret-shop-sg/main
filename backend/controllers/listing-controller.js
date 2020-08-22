@@ -53,11 +53,11 @@ const addListing = async (req, res, next) => {
   const {
     hasItem,
     description,
-    userID,
     wantsItem,
     sellingPrice,
     rentalPrice,
   } = req.body;
+  const userID = req.userID;
 
   if (description) {
     description = "";
@@ -131,7 +131,7 @@ const getMostRecentListings = async (req, res, next) => {
 // not functioning properly
 const deleteListing = async (req, res, next) => {
   const listingID = req.params.listingID;
-  const userID = req.body.userID;
+  const userID = req.userID;
   let listing;
   let owner;
 

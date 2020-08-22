@@ -4,7 +4,8 @@ const User = require("../models/users");
 const Chat = require("../models/chats");
 
 const sendNewMessage = async (req, res, next) => {
-  const { userID, recipientID, content } = req.body;
+  const { recipientID, content } = req.body;
+  const userID = req.userID;
   let sender;
   let recipient;
   let newChat;
@@ -62,7 +63,7 @@ const sendNewMessage = async (req, res, next) => {
 };
 
 const getChatLogsOverview = async (req, res, next) => {
-  const userID = req.body.userID;
+  const userID = req.userID;
   let matchedChats = [];
 
   // Error handler in the event that id sent is not 24 chars
@@ -123,7 +124,8 @@ const getChatLogsOverview = async (req, res, next) => {
 
 // todo: look into it to see if you can optimize
 const getSpecificChat = async (req, res, next) => {
-  const { userID, recipientID } = req.body;
+  const recipientID = req.body.recipientID;
+  const userID = req.userID;
   const page = req.body.page || 1;
   // limit on how many messages are loaded at once
   const messagesToLoad = 10;

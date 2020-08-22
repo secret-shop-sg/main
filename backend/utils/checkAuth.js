@@ -18,9 +18,8 @@ module.exports = (req, res, next) => {
         throw new DatabaseError(err.message);
       }
       // data.iat = time cookie was issued at;
-      req.body.userID = data.userID;
+      req.userID = data.userID;
     });
-
     next();
   } catch (err) {
     return next(err);

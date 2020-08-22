@@ -144,7 +144,7 @@ const logout = async (req, res) => {
 };
 
 const getAuthorizedUser = async (req, res, next) => {
-  const userID = req.body.userID;
+  const userID = req.userID;
 
   let matchedUser;
 
@@ -178,14 +178,14 @@ const getUserbyName = async (req, res, next) => {
 
 // does not work because of fileupload middleware
 const updateProfileDetails = async (req, res, next) => {
-  const userID = req.body.userID;
+  const userID = req.userID;
   const updatedInfo = req.body;
   let fileToUnlink;
   let error;
 
   // remove all fields with null or undefined values
   for (var property in updatedInfo) {
-    if (!updatedInfo[property] || property == "userID") {
+    if (!updatedInfo[property]) {
       delete updatedInfo[property];
     }
   }
@@ -254,7 +254,7 @@ const updateProfileDetails = async (req, res, next) => {
     return next(new DatabaseError(error.message));
   }
 
-  res.json({ userID });
+  res.json({ dataUpdated: true });
 };
 
 const updateInventory = async (req, res, next) => {
