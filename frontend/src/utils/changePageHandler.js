@@ -15,11 +15,42 @@ const changePageHandler = (currentApiPath, currentPage, buttonType) => {
     let symbol;
     if (currentApiPath.includes("?")) {
       symbol = "&";
-    } else symbol = "?";
+    } else {
+      symbol = "?";
+    }
     newApiPath = currentApiPath + symbol + `page=${currentPage + value}`;
   } else {
     newApiPath =
       currentApiPath.substring(0, startingIndex + 5) + (currentPage + value);
+
+    // checks if apiPath ends with page=x
+    const lengthOfNumber = currentApiPath
+      .substring(startingIndex + 5)
+      .indexOf("&");
+    if (lengthOfNumber !== -1) {
+      newApiPath =
+        newApiPath +
+        currentApiPath.substring(startingIndex + 5 + lengthOfNumber);
+    }
+  }
+
+  return newApiPath;
+};
+
+export const goToPage = (currentApiPath, newPage) => {
+  let newApiPath;
+
+  const startingIndex = currentApiPath.indexOf(`page=`);
+
+  // checks if page is indicated in the current apiPath
+  if (startingIndex === -1) {
+    let symbol;
+    if (currentApiPath.includes("?")) {
+      symbol = "&";
+    } else symbol = "?";
+    newApiPath = currentApiPath + symbol + `page=${newPage}`;
+  } else {
+    newApiPath = currentApiPath.substring(0, startingIndex + 5) + newPage;
 
     // checks if apiPath ends with page=x
     const lengthOfNumber = currentApiPath

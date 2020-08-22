@@ -6,7 +6,8 @@ import { useAPI } from "../utils/useAPI";
 import SearchFilters from "../components/SearchResults/SearchFilters";
 import ListingSummary from "../components/ListingSummary/ListingSummary";
 import { useHistory } from "react-router-dom";
-import changePageHandler from "../utils/changePageHandler";
+import changePageHandler, { goToPage } from "../utils/changePageHandler";
+import { Pagination } from "react-bootstrap";
 
 const SearchResult = (props) => {
   const [sendRequest, isLoading] = useAPI();
@@ -23,6 +24,7 @@ const SearchResult = (props) => {
         setMatchedListings(responseData.queryData.matchedData);
         setPageData(responseData.queryData.pageData);
       }
+      console.log(responseData);
     };
     getListings();
   }, [query, sendRequest]);
@@ -34,6 +36,32 @@ const SearchResult = (props) => {
       event.target.id
     );
     history.push(props.location.pathname + newURL);
+  };
+
+  // function to go to new page
+  const onPaginationClick = (key, e) => {
+    const newURL = goToPage(query, key);
+    history.push(props.location.pathname + newURL);
+  };
+
+  // function to get pages
+  const getPages = () => {
+    const totalPages = Math.ceil(pageData.count / 5);
+    const pages = [];
+
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(
+        <Pagination.Item
+          key={i}
+          active={i === pageData.currentPage}
+          onClick={onPaginationClick.bind(this, i)}
+        >
+          {i}
+        </Pagination.Item>
+      );
+    }
+
+    return pages;
   };
 
   return (
@@ -60,6 +88,7 @@ const SearchResult = (props) => {
           })}
         </div>
       )}
+      {pageData && <Pagination>{getPages()}</Pagination>}
       {pageData && pageData.previousPage && (
         <div>
           <input

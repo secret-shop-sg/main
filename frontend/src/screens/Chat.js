@@ -16,12 +16,20 @@ const Chat = () => {
     setSelectedChatRecipientName(name);
   };
 
+  // handler for scrolling through messages
+  const onMessagesScroll = (e) => {
+    // if reached top
+    if (e.target.scrollTop === 0) {
+      alert("top");
+    }
+  };
+
   return (
     <div className="chat-screen">
       <Header />
       <div className="chat-interface">
         <ChatOverview onChatSelect={onChatSelect} />
-        <div className="messages">
+        <div className="messages" onScroll={onMessagesScroll}>
           <ChatMessages
             userData={{
               recipientID: selectedChatRecipient,
