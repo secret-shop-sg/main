@@ -63,63 +63,120 @@ const sendNewMessage = async (req, res, next) => {
 };
 
 const getChatLogsOverview = async (req, res, next) => {
-  const userID = req.userID;
-  let matchedChats = [];
+  let userID = req.userID;
+  let chatData;
 
   // Error handler in the event that id sent is not 24 chars
   if (!userID.match(/^[0-9a-fA-F]{24}$/)) {
     return next(new DatabaseError());
   }
-  let existingUserData;
 
   try {
-    // find all existing chatLogs of this particular user
-    existingUserData = await User.findById(userID, {
-      chatLogs: 1,
-    });
-  } catch (err) {
-    return next(new DatabaseError(err.message));
-  }
-
-  try {
-    for (existingChatLog of existingUserData.chatLogs) {
-      // collecting data from recipient
-      const recipient = await User.findById(existingChatLog.recipientID, {
-        username: 1,
-        profilePicURL: 1,
-      });
-
-      // collecting data for latest message
-      let [latestMessage] = await Chat.aggregate([
-        {
-          $match: {
-            _id: existingChatLog.chat,
-          },
-        },
-        {
-          $project: {
-            messages: {
-              $slice: ["$messages", -1],
+    [chatData] = await User.aggregate([
+      // find existing user in database and retrieve relevant information
+      { $match: { _id: mongoose.Types.ObjectId(userID) } },
+      {
+        $project: { chatLogs: 1, username: 1, profilePicURL: 1 },
+      },
+      { $unwind: "$chatLogs" },
+      // search recipient to obtain recipient profile pic
+      {
+        $lookup: {
+          from: "users",
+          let: { recipientID: "$chatLogs.recipientID" },
+          pipeline: [
+            {
+              $match: { $expr: { $eq: ["$_id", "$$recipientID"] } },
             },
-          },
+            { $project: { profilePicURL: 1 } },
+          ],
+          as: "chatLogs.recipientID",
         },
-      ]);
-
-      let message = latestMessage.messages[0];
-
-      if (message.senderID == userID) {
-        message.sentBySelf = true;
-      } else message.sentBySelf = false;
-
-      delete message.senderID;
-
-      matchedChats.push({ recipient, latestMessage });
-    }
+      },
+      {
+        // left join to data in the chats collection
+        $lookup: {
+          from: "chats",
+          let: { chatID: "$chatLogs.chat" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$_id", "$$chatID"] } } },
+            {
+              $facet: {
+                // finds the latest chat message in each chat
+                latestMessage: [
+                  {
+                    $project: {
+                      messages: {
+                        $slice: ["$messages", -1],
+                      },
+                    },
+                  },
+                ],
+                // counts number of unread msgs in each chat
+                newMessageCount: [
+                  {
+                    $project: {
+                      newMsgCount: {
+                        $size: {
+                          $filter: {
+                            input: "$messages",
+                            as: "message",
+                            cond: { $eq: ["message.read", false] },
+                          },
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+              // possible areas to explore -> how to include 2 variables in projects
+            },
+          ],
+          as: "chatLogs.chat",
+        },
+      },
+      // formating to remove redundant arrays
+      { $unwind: "$chatLogs.recipientID" },
+      { $unwind: "$chatLogs.chat" },
+      { $unwind: "$chatLogs.chat.latestMessage" },
+      { $unwind: "$chatLogs.chat.newMessageCount" },
+      { $unwind: "$chatLogs.chat.latestMessage.messages" },
+      {
+        $group: {
+          _id: "$_id",
+          chatLogs: { $push: "$chatLogs" },
+          username: { $first: "$username" },
+          profilePicURL: { $first: "$profilePicURL" },
+        },
+      },
+    ]);
   } catch (err) {
     return next(new DatabaseError(err.message));
   }
 
-  res.json({ matchedChats });
+  const chats = chatData.chatLogs;
+
+  // loops through senderID to determine who sent the msg + number of new msgs
+  for (index = 0; index < chats.length; index++) {
+    // reformatting documents collected from mongodb so frontend has an easier time
+    const chat = chats[index];
+    chat.recipientProfilePic = chat.recipientID.profilePicURL;
+    chat.recipientID = chat.recipientID._id;
+
+    chat.latestMessage = chat.chat.latestMessage.messages;
+
+    chat.newMessageCount = chat.chat.newMessageCount.newMsgCount;
+    delete chat.chat;
+
+    // checks if user is the one who send the message
+    const latestMessage = chat.latestMessage;
+    if (latestMessage.senderID == userID) {
+      latestMessage.sentBySelf = true;
+    } else latestMessage.sentBySelf = false;
+    delete latestMessage.senderID;
+  }
+
+  res.json({ chatData });
 };
 
 // todo: look into it to see if you can optimize
