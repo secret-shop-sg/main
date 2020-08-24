@@ -7,7 +7,7 @@ import Main from "./screens/Main";
 import UserPage from "./screens/UserPage";
 import ServerSideErrorPage from "./screens/errors/ServerSideErrorPage";
 import CreateListing from "./screens/CreateListing";
-import UpdateProfile from "./screens/UpdateProfile";
+import UpdateProfile from "./screens/UpdateProfile2";
 import Chat from "./screens/Chat";
 import AntiLoginError from "./screens/errors/AntiLoginError";
 
