@@ -1,9 +1,9 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import "./styles/UpdateProfile.css";
 import { useAPI } from "../utils/useAPI";
 import { BACKEND_ADDRESS } from "../constants/Details";
 import Header from "../components/Header/Header";
-import { Image } from "react-bootstrap";
+import { Image, Form, Button } from "react-bootstrap";
 
 // reducer for update profile data
 const formReducer = (state, action) => {
@@ -36,6 +36,7 @@ const formReducer = (state, action) => {
 
 const UpdateProfile = (props) => {
   const [sendRequest] = useAPI();
+  const [isEditing, setIsEditing] = useState(false);
 
   // use reducer for profile data
   const [formState, dispatchForm] = useReducer(formReducer, {
@@ -86,12 +87,33 @@ const UpdateProfile = (props) => {
     <div>
       <Header />
       <div className="update-profile-screen">
-        <Image
-          src={BACKEND_ADDRESS + formState.inputValues.profilePic}
-          rounded
-          className="update-profile-img"
-        />
-        <div className="update-profile-fields"></div>
+        <div className="update-profile-img">
+          <Image
+            src={BACKEND_ADDRESS + formState.inputValues.profilePic}
+            rounded
+            style={{ height: "40vh" }}
+          />
+          <Button variant="outline-dark mt-1">Update picture</Button>
+        </div>
+        <div>
+          <h1 class="display-4">Update Profile</h1>
+          <Form>
+            <Form.Group>
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                readOnly={!isEditing}
+                value={formState.inputValues.username}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                readOnly={!isEditing}
+                value={formState.inputValues.description}
+              />
+            </Form.Group>
+          </Form>
+        </div>
       </div>
     </div>
   );

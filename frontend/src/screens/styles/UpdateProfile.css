@@ -54,8 +54,10 @@
   display: flex;
   flex-direction: row;
   padding: 1rem;
+  justify-content: space-around;
 }
 
 .update-profile-img {
-  height: 20vh;
+  display: flex;
+  flex-direction: column;
 }
