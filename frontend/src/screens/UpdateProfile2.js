@@ -145,12 +145,34 @@ const UpdateProfile = (props) => {
           </div>
         </div>
         <hr></hr>
-        <div className="update-profile-games">
-          <h1 class="display-4">Inventory</h1>
-          <Button variant="outline-dark">Update inventory</Button>
-
-          <h1 class="display-4">Wishlist</h1>
-          <Button variant="outline-dark">Update wishlist</Button>
+        <div className="p-3">
+          <div className="update-profile-games-label">
+            <h1 class="display-4">Inventory</h1>
+            <Button variant="outline-dark">Update inventory</Button>
+          </div>
+          <div>
+            {formState.inputValues.inventory &&
+              formState.inputValues.inventory.map((game, index) => (
+                <div className="selected-inventory-games" key={index}>
+                  <img src={BACKEND_ADDRESS + game.imageURL} alt={game.title} />
+                </div>
+              ))}
+          </div>
+        </div>
+        <hr></hr>
+        <div className="p-3">
+          <div className="update-profile-games-label">
+            <h1 class="display-4">Wishlist</h1>
+            <Button variant="outline-dark">Update wishlist</Button>
+          </div>
+          <div>
+            {formState.inputValues.wishlist &&
+              formState.inputValues.wishlist.map((game, index) => (
+                <div className="selected-inventory-games" key={index}>
+                  <img src={BACKEND_ADDRESS + game.imageURL} alt={game.title} />
+                </div>
+              ))}
+          </div>
         </div>
       </div>
     </div>

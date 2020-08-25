@@ -73,6 +73,8 @@
   flex-direction: column;
 }
 
-.update-profile-games {
-  padding: 1rem;
+.update-profile-games-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
