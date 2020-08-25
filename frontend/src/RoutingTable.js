@@ -7,7 +7,8 @@ import Main from "./screens/Main";
 import UserPage from "./screens/UserPage";
 import ServerSideErrorPage from "./screens/errors/ServerSideErrorPage";
 import CreateListing from "./screens/CreateListing";
-import UpdateProfile from "./screens/UpdateProfile2";
+import UpdateProfile from "./screens/UpdateProfile";
+import UpdateProfile2 from "./screens/UpdateProfile2";
 import Chat from "./screens/Chat";
 import AntiLoginError from "./screens/errors/AntiLoginError";
 
@@ -21,6 +22,7 @@ const RoutingTable = () => {
         <Route exact path="/error/500" component={ServerSideErrorPage} />
         <Route exact path="/create" component={CreateListing} />
         <Route exact path="/update" component={UpdateProfile} />
+        <Route exact path="/update2" component={UpdateProfile2} />
         <Route path="/user" component={UserPage} />
         <Route exact path="/chat" component={Chat} />
         <Route exact path="/login=false" component={AntiLoginError} />

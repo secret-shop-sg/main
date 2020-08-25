@@ -3,7 +3,7 @@ import "./styles/UpdateProfile.css";
 import { useAPI } from "../utils/useAPI";
 import { BACKEND_ADDRESS } from "../constants/Details";
 import Header from "../components/Header/Header";
-import { Image, Form, Button } from "react-bootstrap";
+import { Image, Form, Button, ButtonGroup } from "react-bootstrap";
 
 // reducer for update profile data
 const formReducer = (state, action) => {
@@ -83,36 +83,74 @@ const UpdateProfile = (props) => {
     getUserData();
   }, [sendRequest]);
 
+  // if update details is pressed
+  const updateDetailsHandler = () => {
+    setIsEditing(true);
+  };
+
+  // sending details (username & description only)
+  const confirmDetailsHandler = () => {
+    setIsEditing(false);
+    // TODO: validation + send to backend
+  };
+
   return (
     <div>
       <Header />
       <div className="update-profile-screen">
-        <div className="update-profile-img">
-          <Image
-            src={BACKEND_ADDRESS + formState.inputValues.profilePic}
-            rounded
-            style={{ height: "40vh" }}
-          />
-          <Button variant="outline-dark mt-1">Update picture</Button>
+        <div className="update-profile-general-details">
+          <div className="update-profile-img">
+            <Image
+              src={BACKEND_ADDRESS + formState.inputValues.profilePic}
+              rounded
+              style={{ height: "40vh" }}
+            />
+            <Button variant="outline-dark mt-1">Update picture</Button>
+          </div>
+          <div className="update-profile-details">
+            <h1 class="display-4">Update Profile</h1>
+            <div>
+              <Form>
+                <Form.Group>
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control
+                    readOnly={!isEditing}
+                    value={formState.inputValues.username}
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    readOnly={!isEditing}
+                    value={formState.inputValues.description}
+                  />
+                </Form.Group>
+              </Form>
+            </div>
+            <div className="align-self-center">
+              {!isEditing && (
+                <ButtonGroup>
+                  <Button variant="outline-dark" onClick={updateDetailsHandler}>
+                    Update details
+                  </Button>
+                  <Button variant="outline-dark">Change password</Button>
+                </ButtonGroup>
+              )}
+              {isEditing && (
+                <Button variant="outline-dark" onClick={confirmDetailsHandler}>
+                  Confirm changes
+                </Button>
+              )}
+            </div>
+          </div>
         </div>
-        <div>
-          <h1 class="display-4">Update Profile</h1>
-          <Form>
-            <Form.Group>
-              <Form.Label>Username</Form.Label>
-              <Form.Control
-                readOnly={!isEditing}
-                value={formState.inputValues.username}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                readOnly={!isEditing}
-                value={formState.inputValues.description}
-              />
-            </Form.Group>
-          </Form>
+        <hr></hr>
+        <div className="update-profile-games">
+          <h1 class="display-4">Inventory</h1>
+          <Button variant="outline-dark">Update inventory</Button>
+
+          <h1 class="display-4">Wishlist</h1>
+          <Button variant="outline-dark">Update wishlist</Button>
         </div>
       </div>
     </div>
