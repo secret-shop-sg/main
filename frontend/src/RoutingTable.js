@@ -21,8 +21,8 @@ const RoutingTable = () => {
         <Route path="/listing" component={ListingDetails} />
         <Route exact path="/error/500" component={ServerSideErrorPage} />
         <Route exact path="/create" component={CreateListing} />
-        <Route exact path="/update" component={UpdateProfile} />
-        <Route exact path="/update2" component={UpdateProfile2} />
+        <Route exact path="/update2" component={UpdateProfile} />
+        <Route exact path="/update" component={UpdateProfile2} />
         <Route path="/user" component={UserPage} />
         <Route exact path="/chat" component={Chat} />
         <Route exact path="/login=false" component={AntiLoginError} />

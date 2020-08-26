@@ -92,9 +92,28 @@ const UpdateProfile = (props) => {
   };
 
   // sending details (username & description only)
-  const confirmDetailsHandler = () => {
-    setIsEditing(false);
-    // TODO: validation + send to backend
+  const confirmDetailsHandler = async () => {
+    // TODO: validation
+
+    // send to backend
+    let formData = new FormData();
+    formData.append("username", formState.inputValues.username);
+    formData.append("description", formState.inputValues.description);
+    const responseData = await sendRequest(
+      `/api/user/update/details/`,
+      "PATCH",
+      formData,
+      true,
+      true
+    );
+
+    if (responseData) {
+      if (responseData.dataUpdated) {
+        setIsEditing(false);
+        alert("Update successful");
+        return;
+      }
+    }
   };
 
   // toggle visibility of inventory modal
@@ -105,6 +124,15 @@ const UpdateProfile = (props) => {
   // toggle visibility of wishlist modal
   const toggleWishlistModal = () => {
     setShowWishlistModal(!showWishlistModal);
+  };
+
+  // when input value of any input field changes
+  const inputChangeHandler = (event) => {
+    dispatchForm({
+      type: "UPDATE",
+      value: event.target.value,
+      input: event.target.name,
+    });
   };
 
   return (
@@ -136,6 +164,8 @@ const UpdateProfile = (props) => {
                   <Form.Control
                     readOnly={!isEditing}
                     value={formState.inputValues.description}
+                    name="description"
+                    onChange={inputChangeHandler}
                   />
                 </Form.Group>
               </Form>
