@@ -192,8 +192,18 @@ const UpdateProfile = (props) => {
           </div>
         </div>
       </div>
-      <ConfigureGames show={showInventoryModal} toggle={toggleInventoryModal} />
-      <ConfigureGames show={showWishlistModal} toggle={toggleWishlistModal} />
+      <ConfigureGames
+        label="Inventory"
+        show={showInventoryModal}
+        toggle={toggleInventoryModal}
+        selectedGames={formState.inputValues.inventory}
+      />
+      <ConfigureGames
+        label="Wishlist"
+        show={showWishlistModal}
+        toggle={toggleWishlistModal}
+        selectedGames={formState.inputValues.wishlist}
+      />
     </div>
   );
 };
