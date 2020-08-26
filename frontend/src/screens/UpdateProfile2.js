@@ -4,6 +4,7 @@ import { useAPI } from "../utils/useAPI";
 import { BACKEND_ADDRESS } from "../constants/Details";
 import Header from "../components/Header/Header";
 import { Image, Form, Button, ButtonGroup } from "react-bootstrap";
+import ConfigureGames from "../components/Shared/ConfigureGames";
 
 // reducer for update profile data
 const formReducer = (state, action) => {
@@ -37,6 +38,8 @@ const formReducer = (state, action) => {
 const UpdateProfile = (props) => {
   const [sendRequest] = useAPI();
   const [isEditing, setIsEditing] = useState(false);
+  const [showInventoryModal, setShowInventoryModal] = useState(false);
+  const [showWishlistModal, setShowWishlistModal] = useState(false);
 
   // use reducer for profile data
   const [formState, dispatchForm] = useReducer(formReducer, {
@@ -94,6 +97,16 @@ const UpdateProfile = (props) => {
     // TODO: validation + send to backend
   };
 
+  // toggle visibility of inventory modal
+  const toggleInventoryModal = () => {
+    setShowInventoryModal(!showInventoryModal);
+  };
+
+  // toggle visibility of wishlist modal
+  const toggleWishlistModal = () => {
+    setShowWishlistModal(!showWishlistModal);
+  };
+
   return (
     <div>
       <Header />
@@ -148,7 +161,9 @@ const UpdateProfile = (props) => {
         <div className="p-3">
           <div className="update-profile-games-label">
             <h1 class="display-4">Inventory</h1>
-            <Button variant="outline-dark">Update inventory</Button>
+            <Button variant="outline-dark" onClick={toggleInventoryModal}>
+              Update inventory
+            </Button>
           </div>
           <div>
             {formState.inputValues.inventory &&
@@ -163,7 +178,9 @@ const UpdateProfile = (props) => {
         <div className="p-3">
           <div className="update-profile-games-label">
             <h1 class="display-4">Wishlist</h1>
-            <Button variant="outline-dark">Update wishlist</Button>
+            <Button variant="outline-dark" onClick={toggleWishlistModal}>
+              Update wishlist
+            </Button>
           </div>
           <div>
             {formState.inputValues.wishlist &&
@@ -175,6 +192,8 @@ const UpdateProfile = (props) => {
           </div>
         </div>
       </div>
+      <ConfigureGames show={showInventoryModal} toggle={toggleInventoryModal} />
+      <ConfigureGames show={showWishlistModal} toggle={toggleWishlistModal} />
     </div>
   );
 };
