@@ -1,20 +1,51 @@
 import React, { useState, useEffect } from "react";
 import "./ConfigureGames.css";
-import { Modal, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { BACKEND_ADDRESS } from "../../constants/Details";
+import {
+  Modal,
+  Button,
+  OverlayTrigger,
+  Tooltip,
+  InputGroup,
+  FormControl,
+} from "react-bootstrap";
+import { BACKEND_ADDRESS, PLATFORMS_SUPPORTED } from "../../constants/Details";
+import { useAPI } from "../../utils/useAPI";
 
 const ConfigureGames = (props) => {
+  const [sendRequest, isLoading] = useAPI();
   const dispatch = props.dispatchUpdate;
-  const [games, setGames] = useState([]);
+  const [selectedGames, setSelectedGames] = useState([]);
+  const [availableGames, setAvailableGames] = useState([]);
+  const [query, setQuery] = useState([]);
 
-  // set up initial games on load
+  // set up initial selected games based on props
   useEffect(() => {
-    setGames(props.selectedGames);
+    setSelectedGames(props.selectedGames);
   }, [props]);
+
+  // get games for selection from backend
+  useEffect(() => {
+    const selectedGamesID = selectedGames.map((game) => game._id);
+
+    const getGames = async () => {
+      const responseData = await sendRequest("/api/game", "PATCH", {
+        title: query.title,
+        platform: query.platform,
+        gamesToHide: selectedGamesID,
+        page: query.page,
+      });
+      if (responseData) {
+        setAvailableGames(responseData.queryData.matchedData);
+        // setPageData(responseData.queryData.pageData);
+      }
+    };
+
+    getGames();
+  }, [query]);
 
   // deselect game when clicked
   const deselect = (deselectedGame) => {
-    setGames(games.filter((game) => game !== deselectedGame));
+    setSelectedGames(selectedGames.filter((game) => game !== deselectedGame));
   };
 
   return (
@@ -25,7 +56,7 @@ const ConfigureGames = (props) => {
       <Modal.Body>
         <p>Your {props.label}</p>
         <div className="d-flex">
-          {games.map((game, index) => (
+          {selectedGames.map((game, index) => (
             <div key={index} onClick={() => deselect(game)}>
               <OverlayTrigger
                 placement="top"
@@ -41,7 +72,27 @@ const ConfigureGames = (props) => {
           ))}
         </div>
         <hr></hr>
-        <p>Add Games</p>
+        <p className="d-flex align-items-center justify-content-between">
+          <InputGroup className="w-75">
+            <FormControl placeholder="Add games" />
+          </InputGroup>
+        </p>
+        <div className="d-flex">
+          {availableGames.map((game, index) => (
+            <div key={index} onClick={() => {}}>
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>{game.title}</Tooltip>}
+              >
+                <img
+                  src={BACKEND_ADDRESS + game.imageURL}
+                  alt={game.title}
+                  className="configure-games-img"
+                />
+              </OverlayTrigger>
+            </div>
+          ))}
+        </div>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-danger" onClick={props.toggle}>
