@@ -41,11 +41,38 @@ const ConfigureGames = (props) => {
     };
 
     getGames();
-  }, [query]);
+  }, [query, selectedGames]);
 
   // deselect game when clicked
   const deselect = (deselectedGame) => {
     setSelectedGames(selectedGames.filter((game) => game !== deselectedGame));
+  };
+
+  // save changes
+  const saveChanges = async () => {
+    const responseData = await sendRequest(
+      `/api/user/update/${props.name}/`,
+      "PATCH",
+      { [props.name]: selectedGames },
+      true
+    );
+
+    if (responseData) {
+      if (responseData.dataUpdated) {
+        // update data in parent page
+        dispatch({
+          type: "UPDATE",
+          value: selectedGames,
+          input: props.name,
+        });
+
+        alert("Update successful");
+        props.toggle();
+        return;
+      }
+    }
+
+    alert("failed");
   };
 
   return (
@@ -79,7 +106,12 @@ const ConfigureGames = (props) => {
         </p>
         <div className="d-flex">
           {availableGames.map((game, index) => (
-            <div key={index} onClick={() => {}}>
+            <div
+              key={index}
+              onClick={() => {
+                setSelectedGames(selectedGames.concat(game));
+              }}
+            >
               <OverlayTrigger
                 placement="top"
                 overlay={<Tooltip>{game.title}</Tooltip>}
@@ -98,7 +130,9 @@ const ConfigureGames = (props) => {
         <Button variant="outline-danger" onClick={props.toggle}>
           Close
         </Button>
-        <Button variant="outline-dark">Save Changes</Button>
+        <Button variant="outline-dark" onClick={saveChanges}>
+          Save Changes
+        </Button>
       </Modal.Footer>
     </Modal>
   );
