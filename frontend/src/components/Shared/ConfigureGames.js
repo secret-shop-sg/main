@@ -7,6 +7,8 @@ import {
   Tooltip,
   InputGroup,
   FormControl,
+  DropdownButton,
+  Dropdown,
 } from "react-bootstrap";
 import { BACKEND_ADDRESS, PLATFORMS_SUPPORTED } from "../../constants/Details";
 import { useAPI } from "../../utils/useAPI";
@@ -109,6 +111,28 @@ const ConfigureGames = (props) => {
               }}
             />
           </InputGroup>
+          <DropdownButton title="Platforms" variant="outline-dark" alignRight>
+            <Dropdown.Item
+              onSelect={() => {
+                const newQuery = { ...query };
+                delete newQuery.platform;
+                setQuery(newQuery);
+              }}
+            >
+              All Platforms
+            </Dropdown.Item>
+            {PLATFORMS_SUPPORTED.map((platform, index) => (
+              <Dropdown.Item
+                key={index}
+                eventKey={platform}
+                onSelect={(ek, _) => {
+                  setQuery({ ...query, platform: ek });
+                }}
+              >
+                {platform}
+              </Dropdown.Item>
+            ))}
+          </DropdownButton>
         </p>
         <div className="d-flex">
           {availableGames.map((game, index) => (
