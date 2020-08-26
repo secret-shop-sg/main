@@ -100,8 +100,14 @@ const ConfigureGames = (props) => {
         </div>
         <hr></hr>
         <p className="d-flex align-items-center justify-content-between">
-          <InputGroup className="w-75">
-            <FormControl placeholder="Add games" />
+          <InputGroup className="w-50">
+            <FormControl
+              placeholder="Add games"
+              value={query.title}
+              onChange={(e) => {
+                setQuery({ ...query, title: e.target.value });
+              }}
+            />
           </InputGroup>
         </p>
         <div className="d-flex">
