@@ -194,15 +194,19 @@ const UpdateProfile = (props) => {
       </div>
       <ConfigureGames
         label="Inventory"
+        name="inventory"
         show={showInventoryModal}
         toggle={toggleInventoryModal}
         selectedGames={formState.inputValues.inventory}
+        dispatchUpdate={dispatchForm}
       />
       <ConfigureGames
         label="Wishlist"
+        name="wishlist"
         show={showWishlistModal}
         toggle={toggleWishlistModal}
         selectedGames={formState.inputValues.wishlist}
+        dispatchUpdate={dispatchForm}
       />
     </div>
   );

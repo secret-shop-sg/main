@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./ConfigureGames.css";
 import { Modal, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { BACKEND_ADDRESS } from "../../constants/Details";
 
 const ConfigureGames = (props) => {
+  const dispatch = props.dispatchUpdate;
+  const [games, setGames] = useState([]);
+
+  // set up initial games on load
+  useEffect(() => {
+    setGames(props.selectedGames);
+  }, [props]);
+
+  // deselect game when clicked
+  const deselect = (deselectedGame) => {
+    setGames(games.filter((game) => game !== deselectedGame));
+  };
+
   return (
     <Modal show={props.show} onHide={props.toggle} size="lg">
       <Modal.Header closeButton>
@@ -12,8 +25,8 @@ const ConfigureGames = (props) => {
       <Modal.Body>
         <p>Your {props.label}</p>
         <div className="d-flex">
-          {props.selectedGames.map((game, index) => (
-            <div key={index}>
+          {games.map((game, index) => (
+            <div key={index} onClick={() => deselect(game)}>
               <OverlayTrigger
                 placement="top"
                 overlay={<Tooltip>{game.title}</Tooltip>}
