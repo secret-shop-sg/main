@@ -6,6 +6,7 @@ import Header from "../components/Header/Header";
 import { Image, Form, Button, ButtonGroup } from "react-bootstrap";
 import ConfigureGames from "../components/Shared/ConfigureGames";
 import ChangePassword from "../components/UpdateProfile/ChangePassword";
+import ChangePicture from "../components/UpdateProfile/ChangePicture";
 
 // reducer for update profile data
 const formReducer = (state, action) => {
@@ -47,6 +48,7 @@ const UpdateProfile = (props) => {
   const [showInventoryModal, setShowInventoryModal] = useState(false);
   const [showWishlistModal, setShowWishlistModal] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const [showChangePic, setShowChangePic] = useState(false);
 
   // use reducer for profile data
   const [formState, dispatchForm] = useReducer(formReducer, {
@@ -141,6 +143,11 @@ const UpdateProfile = (props) => {
     setShowChangePassword(!showChangePassword);
   };
 
+  // toggle visibility of profile pic modal
+  const toggleChangePic = () => {
+    setShowChangePic(!showChangePic);
+  };
+
   // when input value of any input field changes
   const inputChangeHandler = async (event) => {
     let isAccepted = false;
@@ -179,7 +186,9 @@ const UpdateProfile = (props) => {
               rounded
               style={{ height: "40vh" }}
             />
-            <Button variant="outline-dark mt-1">Update picture</Button>
+            <Button variant="outline-dark mt-1" onClick={toggleChangePic}>
+              Update picture
+            </Button>
           </div>
           <div className="update-profile-details">
             <h1 class="display-4">Update Profile</h1>
@@ -291,6 +300,7 @@ const UpdateProfile = (props) => {
         dispatchUpdate={dispatchForm}
       />
       <ChangePassword show={showChangePassword} toggle={toggleChangePassword} />
+      <ChangePicture show={showChangePic} toggle={toggleChangePic} />
     </div>
   );
 };
