@@ -5,6 +5,7 @@ import { BACKEND_ADDRESS } from "../constants/Details";
 import Header from "../components/Header/Header";
 import { Image, Form, Button, ButtonGroup } from "react-bootstrap";
 import ConfigureGames from "../components/Shared/ConfigureGames";
+import ChangePassword from "../components/UpdateProfile/ChangePassword";
 
 // reducer for update profile data
 const formReducer = (state, action) => {
@@ -40,6 +41,7 @@ const UpdateProfile = (props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showInventoryModal, setShowInventoryModal] = useState(false);
   const [showWishlistModal, setShowWishlistModal] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
   // use reducer for profile data
   const [formState, dispatchForm] = useReducer(formReducer, {
@@ -126,6 +128,11 @@ const UpdateProfile = (props) => {
     setShowWishlistModal(!showWishlistModal);
   };
 
+  // toggle visibility of password modal
+  const toggleChangePassword = () => {
+    setShowChangePassword(!showChangePassword);
+  };
+
   // when input value of any input field changes
   const inputChangeHandler = (event) => {
     dispatchForm({
@@ -176,7 +183,9 @@ const UpdateProfile = (props) => {
                   <Button variant="outline-dark" onClick={updateDetailsHandler}>
                     Update details
                   </Button>
-                  <Button variant="outline-dark">Change password</Button>
+                  <Button variant="outline-dark" onClick={toggleChangePassword}>
+                    Change password
+                  </Button>
                 </ButtonGroup>
               )}
               {isEditing && (
@@ -238,6 +247,7 @@ const UpdateProfile = (props) => {
         selectedGames={formState.inputValues.wishlist}
         dispatchUpdate={dispatchForm}
       />
+      <ChangePassword show={showChangePassword} toggle={toggleChangePassword} />
     </div>
   );
 };
