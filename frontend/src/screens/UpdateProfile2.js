@@ -17,12 +17,17 @@ const formReducer = (state, action) => {
         [action.input]: action.value,
       };
 
-      // validity?
+      // accepted
+      const updatedAccepted = {
+        ...state.inputAccepted,
+        [action.input]: action.accepted,
+      };
 
       // return updated state
       return {
         ...state,
         inputValues: updatedValues,
+        inputAccepted: updatedAccepted,
       };
     case "SET_VALUES":
       // set initial values
@@ -52,6 +57,9 @@ const UpdateProfile = (props) => {
       inventory: [],
       wishlist: [],
       profilePic: "",
+    },
+    inputAccepted: {
+      username: true,
     },
   });
 
@@ -134,11 +142,29 @@ const UpdateProfile = (props) => {
   };
 
   // when input value of any input field changes
-  const inputChangeHandler = (event) => {
+  const inputChangeHandler = async (event) => {
+    let isAccepted = false;
+
+    if (event.target.name === "username") {
+      // check if username is already taken
+      const responseData = await sendRequest(
+        "/api/user/validate/username",
+        "POST",
+        {
+          username: event.target.value,
+        }
+      );
+
+      if (responseData) {
+        isAccepted = responseData.isValid;
+      }
+    }
+
     dispatchForm({
       type: "UPDATE",
       value: event.target.value,
       input: event.target.name,
+      accepted: isAccepted,
     });
   };
 
@@ -164,7 +190,24 @@ const UpdateProfile = (props) => {
                   <Form.Control
                     readOnly={!isEditing}
                     value={formState.inputValues.username}
+                    onChange={inputChangeHandler}
+                    isValid={
+                      isEditing &&
+                      formState.inputValues.username &&
+                      formState.inputAccepted.username
+                    }
+                    isInvalid={
+                      isEditing &&
+                      formState.inputValues.username &&
+                      !formState.inputAccepted.username
+                    }
                   />
+                  <Form.Control.Feedback type="valid">
+                    Username is available
+                  </Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">
+                    Username is unavailable
+                  </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group>
                   <Form.Label>Description</Form.Label>
