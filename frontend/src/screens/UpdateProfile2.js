@@ -175,6 +175,32 @@ const UpdateProfile = (props) => {
     });
   };
 
+  // save changes for the configuregames component
+  const saveGameChanges = async (name, selectedGames) => {
+    const responseData = await sendRequest(
+      `/api/user/update/${name}/`,
+      "PATCH",
+      { [name]: selectedGames },
+      true
+    );
+
+    if (responseData) {
+      if (responseData.dataUpdated) {
+        // update data in parent page
+        dispatchForm({
+          type: "UPDATE",
+          value: selectedGames,
+          input: name,
+        });
+
+        alert("Update successful");
+        return;
+      }
+    }
+
+    alert("failed");
+  };
+
   return (
     <div>
       <Header />
@@ -290,6 +316,7 @@ const UpdateProfile = (props) => {
         toggle={toggleInventoryModal}
         selectedGames={formState.inputValues.inventory}
         dispatchUpdate={dispatchForm}
+        saveChanges={saveGameChanges.bind(this, "inventory")}
       />
       <ConfigureGames
         label="Wishlist"
@@ -298,6 +325,7 @@ const UpdateProfile = (props) => {
         toggle={toggleWishlistModal}
         selectedGames={formState.inputValues.wishlist}
         dispatchUpdate={dispatchForm}
+        saveChanges={saveGameChanges.bind(this, "wishlist")}
       />
       <ChangePassword show={showChangePassword} toggle={toggleChangePassword} />
       <ChangePicture show={showChangePic} toggle={toggleChangePic} />

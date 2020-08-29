@@ -52,29 +52,8 @@ const ConfigureGames = (props) => {
 
   // save changes
   const saveChanges = async () => {
-    const responseData = await sendRequest(
-      `/api/user/update/${props.name}/`,
-      "PATCH",
-      { [props.name]: selectedGames },
-      true
-    );
-
-    if (responseData) {
-      if (responseData.dataUpdated) {
-        // update data in parent page
-        dispatch({
-          type: "UPDATE",
-          value: selectedGames,
-          input: props.name,
-        });
-
-        alert("Update successful");
-        props.toggle();
-        return;
-      }
-    }
-
-    alert("failed");
+    props.saveChanges(selectedGames);
+    props.toggle();
   };
 
   return (
