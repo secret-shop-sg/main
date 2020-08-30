@@ -182,7 +182,7 @@ const getChatLogsOverview = async (req, res, next) => {
 // todo: look into it to see if you can optimize
 const getSpecificChat = async (req, res, next) => {
   const recipientID = req.body.recipientID;
-  const userID = req.userID;
+  const userID = "5f2faf5ad18a76073729f475"; //req.userID;
   const page = req.body.page || 1;
   // limit on how many messages are loaded at once
   const messagesToLoad = 10;
@@ -190,7 +190,7 @@ const getSpecificChat = async (req, res, next) => {
   let chatData = {};
 
   try {
-    // find user and recipient, storing their IDs
+    // find user and recipient profile
     existingUserData = await User.findById(userID, {
       chatLogs: 1,
       profilePicURL: 1,
@@ -236,12 +236,19 @@ const getSpecificChat = async (req, res, next) => {
         .reverse();
     }
 
-    // curates message so a bool representing sender instead of a userID is sent to the frontend
-    for (message of chatData.messages) {
+    const messageList = chatData.messages;
+    for (index = 0; index < messageList.length; index++) {
+      const message = messageList[index];
+      // curates message so a bool representing sender instead of a userID is sent to the frontend
       if (message.senderID == userID) {
         message.sentBySelf = true;
       }
       delete message.senderID;
+
+      // if new message + not the first message, mark the previous msg
+      if (!message.read && index - 1 !== 0) {
+        messageList[index - 1].latestReadMessage = true;
+      }
     }
 
     const numberOfMessages = chatLogs.messages.length;

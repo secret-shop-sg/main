@@ -1,8 +1,9 @@
 const { SECRET_JWT_HASH } = require("../constants/details");
 const jwt = require("jsonwebtoken");
 const DatabaseError = require("../models/databaseError");
+const mongoose = require("mongoose");
 
-module.exports = (req, res, next) => {
+const checkAuth = (req, res, next) => {
   try {
     // obtain web token from the string set in the header of the req
     const token = req.cookies.access_token;
@@ -25,3 +26,36 @@ module.exports = (req, res, next) => {
     return next(err);
   }
 };
+/*
+const checkNotif = (req,res,next)=> {
+  const token = req.cookies.access_token;
+
+  // skips if user is not currently logged in
+  if(token){
+    
+    jwt.verify(token,SECRET_JWT_HASH, (err, data) => {
+      if (err) {
+        throw new DatabaseError(err.message);
+      }
+
+      const userID = data.userID;
+      let newMessages;
+
+        // checks if user received new messages
+        // todo: destructure
+        mongoose.find(userID,{newMessages:1, _id:0}).exec(function(err,data){
+          if (err) throw new DatabaseError(err.message);
+          else{
+            newMessages = data.newMessages;
+          }
+        });
+      
+      req.body.newMessages = newMessages;
+    });
+  }
+  next();
+}
+*/
+
+module.exports = checkAuth;
+//exports.checkNotif = checkNotif;

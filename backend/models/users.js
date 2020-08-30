@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
   wishlist: [gameSchema],
   description: String,
   listings: [{ type: mongoose.Types.ObjectId, ref: "Listing" }],
+  newMessages: Number,
 });
 
 // throws error if fields marked as unique are not unique

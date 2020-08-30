@@ -9,6 +9,6 @@ router.post("/add", checkAuth, chatController.sendNewMessage);
 router.get("/overview", checkAuth, chatController.getChatLogsOverview);
 
 // get entire chat log with another user
-router.patch("/specific", checkAuth, chatController.getSpecificChat);
+router.patch("/specific", chatController.getSpecificChat);
 
 module.exports = router;

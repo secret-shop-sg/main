@@ -4,24 +4,22 @@ const fileUpload = require("../utils/fileUpload");
 
 const checkAuth = require("../utils/checkAuth");
 
+// endpoints that deal with logging in
 router.post("/signup", userController.addNewUser);
-
 router.post("/login", userController.login);
-
 router.get("/logout", userController.logout);
 
-// get user info based on username. Used for info accessible without logging in
-router.get("/username/:username", userController.getUserbyName);
+// endpoints that deal with validating unique fields
+router.post("/validate/email", userController.validateField);
+router.post("/validate/username", userController.validateField);
 
+// endpoints that deal with accessing user info
+// works without logging in (viewing someone else's profile)
+router.get("/username/:username", userController.getUserbyName);
 // only works if user is already logged in (for update and chat)
 router.get("/id", checkAuth, userController.getAuthorizedUser);
 
-// checks email is unique
-router.post("/validate/email", userController.validateField);
-
-// checks username is unique
-router.post("/validate/username", userController.validateField);
-
+// endpoints that deal with updating user data
 // updates user details including profile picture
 router.patch(
   "/update/details",
@@ -29,11 +27,9 @@ router.patch(
   fileUpload.single("image"),
   userController.updateProfileDetails
 );
-
 // updates inventory
 router.patch("/update/inventory", checkAuth, userController.updateInventory);
-
-// updates wishlist
 router.patch("/update/wishlist", checkAuth, userController.updateWishlist);
+router.patch("/update/password", userController.updatePassword);
 
 module.exports = router;
