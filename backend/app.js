@@ -15,14 +15,17 @@ const listingRoutes = require("./routes/listing-routes");
 const userRoutes = require("./routes/user-routes");
 const gameRoutes = require("./routes/game-routes");
 const chatRoutes = require("./routes/chat-routes");
-
+/*
 io.sockets.on("connection", function (socket) {
   // runs when the user goes to the chat page
   socket.on("pageLoad", function (data, callback) {
     //usersOnChatPage.username = socket
   });
-  socket.on("newMessage", function (data, callback) {});
+  socket.on("newMessage", function (data, callback) {
+    //
+  });
 });
+*/
 
 app.use(bodyParser.json());
 

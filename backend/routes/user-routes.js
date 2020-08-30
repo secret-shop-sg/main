@@ -30,6 +30,6 @@ router.patch(
 // updates inventory
 router.patch("/update/inventory", checkAuth, userController.updateInventory);
 router.patch("/update/wishlist", checkAuth, userController.updateWishlist);
-//router.patch("/update/password", userController.updatePassword);
+router.patch("/update/password", checkAuth, userController.updatePassword);
 
 module.exports = router;

@@ -316,6 +316,37 @@ const updateWishlist = async (req, res, next) => {
   res.json({ dataUpdated: true });
 };
 
+const updatePassword = async (req, res, next) => {
+  const userID = req.userID;
+  const { oldPassword, newPassword } = req.body;
+  let dataUpdated = false; // by default not valid password
+  let existingPassword;
+  let hashedPassword;
+
+  try {
+    existingPassword = (
+      await User.findById(userID, {
+        password: 1,
+        _id: 0,
+      })
+    ).password;
+  } catch (err) {
+    return next(new DatabaseError(err.message));
+  }
+
+  const isValidPassword = await bcrypt.compare(oldPassword, existingPassword);
+  if (isValidPassword) {
+    hashedPassword = await bcrypt.hash(newPassword, 12);
+    try {
+      await User.findByIdAndUpdate(userID, { password: hashedPassword });
+    } catch (err) {
+      return next(new DatabaseError(err.message));
+    }
+    dataUpdated = true;
+  }
+  res.json({ dataUpdated });
+};
+
 exports.updateInventory = updateInventory;
 exports.updateWishlist = updateWishlist;
 exports.updateProfileDetails = updateProfileDetails;
@@ -325,3 +356,4 @@ exports.getUserbyName = getUserbyName;
 exports.validateField = validateField;
 exports.login = login;
 exports.logout = logout;
+exports.updatePassword = updatePassword;
