@@ -49,3 +49,32 @@
   height: 180px;
   margin: 10px;
 }
+
+.update-profile-screen {
+  display: flex;
+  flex-direction: column;
+}
+
+.update-profile-general-details {
+  display: flex;
+  flex-direction: row;
+  padding: 1rem;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.update-profile-img {
+  display: flex;
+  flex-direction: column;
+}
+
+.update-profile-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.update-profile-games-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
