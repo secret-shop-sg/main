@@ -19,7 +19,12 @@ const ListingDetails = (props) => {
 
   useEffect(() => {
     const getListing = async () => {
-      const responseData = await sendRequest(`/api/listing/id/${listingID}`);
+      const responseData = await sendRequest(
+        `/api/listing/id/${listingID}`,
+        undefined,
+        undefined,
+        true
+      );
       if (responseData) {
         setListingToDisplay(responseData.listingToDisplay);
         setSimilarListings(responseData.similarListings);
@@ -69,6 +74,8 @@ const ListingDetails = (props) => {
               </button>
             </span>
             <span>
+              {/*Small white box if user is logged in + he is the one who posted the listing */}
+              {listingToDisplay.userIsOwner && <button value="edit" />}
               <button
                 onClick={likehandler}
                 className={liked ? "btn-liked" : "btn-like"}

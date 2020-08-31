@@ -11,6 +11,7 @@ const listingSchema = new mongoose.Schema({
   wantsItem: [gameSchema],
   sellingPrice: Number,
   rentalPrice: Number,
+  additionalImages: String,
 });
 
 listingSchema.plugin(uniqueValidator);

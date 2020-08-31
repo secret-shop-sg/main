@@ -8,41 +8,51 @@ const DatabaseError = require("../models/databaseError");
 
 const getListing = async (req, res, next) => {
   const listingID = req.params.listingID;
+  const userID = req.userID;
   const similarListingsCount = 3;
   let listingToDisplay;
   let platform;
   let similarListings;
 
   try {
-    listingToDisplay = await Listing.findById(listingID, { __v: 0 }).populate(
-      "ownerID",
-      "profilePicURL"
-    );
+    listingToDisplay = (
+      await Listing.findById(listingID, { __v: 0 }).populate(
+        "ownerID",
+        "profilePicURL"
+      )
+    ).toObject();
+
+    if (!listingToDisplay) {
+      throw new DatabaseError();
+    }
   } catch (err) {
     return next(new DatabaseError(err.message));
   }
 
-  if (listingToDisplay) {
-    platform = listingToDisplay.hasItem.platform;
-    try {
-      similarListings = await Listing.aggregate([
-        {
-          $match: {
-            $and: [
-              { "hasItem.platform": platform },
-              { _id: { $ne: mongoose.Types.ObjectId(listingID) } },
-            ],
-          },
+  // indicates current listing belongs to user so he has the option to edit it
+  if (userID === listingToDisplay.ownerID._id.toString()) {
+    listingToDisplay.userIsOwner = true;
+  }
+
+  platform = listingToDisplay.hasItem.platform;
+  try {
+    similarListings = await Listing.aggregate([
+      {
+        $match: {
+          $and: [
+            { "hasItem.platform": platform },
+            { _id: { $ne: mongoose.Types.ObjectId(listingID) } },
+          ],
         },
-        { $sample: { size: similarListingsCount } },
-      ]);
-      await User.populate(similarListings, {
-        path: "ownerID",
-        select: "profilePicURL",
-      });
-    } catch (err) {
-      return next(new DatabaseError(err.message));
-    }
+      },
+      { $sample: { size: similarListingsCount } },
+    ]);
+    await User.populate(similarListings, {
+      path: "ownerID",
+      select: "profilePicURL",
+    });
+  } catch (err) {
+    return next(new DatabaseError(err.message));
   }
 
   res.json({ listingToDisplay, similarListings });

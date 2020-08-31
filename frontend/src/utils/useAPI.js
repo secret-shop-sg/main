@@ -33,26 +33,24 @@ export const useAPI = () => {
       // create an abortController object which can be used to cancel request later on
       const httpAbortController = new AbortController();
       activeRequests.current.push(httpAbortController);
-      try {
-        let response;
-        if (!isFormData) {
-          response = await fetch((url = BACKEND_ADDRESS + url), {
-            method,
-            body,
-            headers,
-            credentials,
-            signal: httpAbortController.signal,
-          });
-        } else {
-          // cannot send header for formData or it wont work
-          response = await fetch((url = BACKEND_ADDRESS + url), {
-            method,
-            body,
-            credentials,
-            signal: httpAbortController.signal,
-          });
-        }
 
+      // data to be sent to backend
+      let requestData = {
+        method,
+        body,
+        headers,
+        credentials,
+        signal: httpAbortController.signal,
+      };
+
+      // form data do not need headers
+      if (isFormData) {
+        delete requestData.headers;
+      }
+
+      let response;
+      try {
+        response = await fetch(BACKEND_ADDRESS + url, requestData);
         const responseData = await response.json();
 
         // response.ok = response with status code of 200+ = no errors

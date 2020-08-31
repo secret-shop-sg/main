@@ -13,7 +13,7 @@ const ChangePicture = (props) => {
           Close
         </Button>
         <Button variant="outline-dark" onClick={() => {}}>
-          Change Password
+          Change Picture
         </Button>
       </Modal.Footer>
     </Modal>

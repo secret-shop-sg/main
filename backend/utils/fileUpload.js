@@ -1,15 +1,15 @@
-const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
+const multer = require("multer");
 const MIME_TYPE_MAP = {
   "image/png": ".png",
   "image/jpeg": ".jepg",
   "image/jpg": ".jpg",
 };
 
-const fileUpload = multer({
+module.exports = multer({
   limits: 500000, // 500kb upload size
   storage: multer.diskStorage({
-    // where to store image in server
+    // where to store incoming images in server
     destination: (req, file, callback) => {
       callback(null, "images/profile");
     },
@@ -27,5 +27,3 @@ const fileUpload = multer({
     callback(error, isValid);
   },
 });
-
-module.exports = fileUpload;

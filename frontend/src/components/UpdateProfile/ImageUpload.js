@@ -11,24 +11,6 @@ const ImageUpload = () => {
   const [sendRequest] = useAPI();
   const [profilePic, setProfilePic] = useState("");
 
-  // initalize image
-  useEffect(() => {
-    const getUserData = async () => {
-      const responseData = await sendRequest(
-        `/api/user/id`,
-        undefined,
-        undefined,
-        true
-      );
-      if (responseData) {
-        if (responseData.matchedUser) {
-          setProfilePic(responseData.matchedUser.profilePicURL);
-        }
-      }
-    };
-    getUserData();
-  }, [sendRequest]);
-
   // file is chosen
   const pickedHandler = (event) => {
     if (event.target.files && event.target.files.length === 1) {

@@ -24,7 +24,6 @@ const SearchResult = (props) => {
         setMatchedListings(responseData.queryData.matchedData);
         setPageData(responseData.queryData.pageData);
       }
-      console.log(responseData);
     };
     getListings();
   }, [query, sendRequest]);

@@ -75,24 +75,21 @@ const UpdateProfile = (props) => {
         undefined,
         true
       );
-      console.log(responseData);
-      if (responseData) {
-        if (responseData.matchedUser) {
-          const user = responseData.matchedUser;
+      if (responseData && responseData.matchedUser) {
+        const user = responseData.matchedUser;
 
-          // initalize values in reducer
-          dispatchForm({
-            type: "SET_VALUES",
-            values: {
-              username: user.username,
-              password: user.password,
-              description: user.description,
-              inventory: user.inventory,
-              wishlist: user.wishlist,
-              profilePic: user.profilePicURL,
-            },
-          });
-        }
+        // initalize values in reducer
+        dispatchForm({
+          type: "SET_VALUES",
+          values: {
+            username: user.username,
+            password: user.password,
+            description: user.description,
+            inventory: user.inventory,
+            wishlist: user.wishlist,
+            profilePic: user.profilePicURL,
+          },
+        });
       }
     };
     getUserData();
@@ -108,14 +105,13 @@ const UpdateProfile = (props) => {
     // TODO: validation
 
     // send to backend
-    let formData = new FormData();
-    formData.append("username", formState.inputValues.username);
-    formData.append("description", formState.inputValues.description);
     const responseData = await sendRequest(
       `/api/user/update/details/`,
       "PATCH",
-      formData,
-      true,
+      {
+        username: formState.inputValues.username,
+        description: formState.inputValues.description,
+      },
       true
     );
 
@@ -328,7 +324,11 @@ const UpdateProfile = (props) => {
         saveChanges={saveGameChanges.bind(this, "wishlist")}
       />
       <ChangePassword show={showChangePassword} toggle={toggleChangePassword} />
-      <ChangePicture show={showChangePic} toggle={toggleChangePic} />
+      <ChangePicture
+        show={showChangePic}
+        toggle={toggleChangePic}
+        currentPic={formState.inputValues.profilePicURL}
+      />
     </div>
   );
 };

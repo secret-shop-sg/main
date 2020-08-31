@@ -31,7 +31,7 @@ const newCookie = (res, userID, username) => {
   res.cookie("username", username, { maxAge: LOG_IN_DURATION });
 };
 
-const addNewUser = async (req, res, next) => {
+const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
 
   let hashedPassword;
@@ -179,16 +179,9 @@ const getUserbyName = async (req, res, next) => {
 // does not work because of fileupload middleware
 const updateProfileDetails = async (req, res, next) => {
   const userID = req.userID;
-  const updatedInfo = req.body;
+  const { username, description } = req.body;
   let fileToUnlink;
   let error;
-
-  // remove all fields with null or undefined values
-  for (var property in updatedInfo) {
-    if (!updatedInfo[property]) {
-      delete updatedInfo[property];
-    }
-  }
 
   // finds the user to update
   let matchedUser;
@@ -197,10 +190,6 @@ const updateProfileDetails = async (req, res, next) => {
     matchedUser = await User.findById(userID);
   } catch (err) {
     return next(new DatabaseError(err.message));
-  }
-
-  if (!matchedUser) {
-    return next(new DatabaseError("UserID not found in database"));
   }
 
   try {
@@ -216,24 +205,23 @@ const updateProfileDetails = async (req, res, next) => {
       matchedUser.profilePicURL = "/" + req.file.path;
     }
 
-    // iterates through whatever fields have updates and update them in the matchedUser
-    Object.keys(updatedInfo).forEach(
-      (key) => (matchedUser[key] = updatedInfo[key])
-    );
-
-    await matchedUser.save({ session });
-
     // if the username updated, find all of the user's listing and update the owner field
-    if (updatedInfo.username !== matchedUser.username) {
+    if (username !== matchedUser.username) {
       for (listingID of matchedUser.listings) {
         const listing = await Listing.findById(listingID);
-        listing.owner = updatedInfo.username;
+        listing.owner = username;
         await listing.save({ session });
       }
 
       // change the cookies that the user is used to log in with
-      newCookie(res, userID, updatedInfo.username);
+      newCookie(res, userID, username);
+      matchedUser.username = username;
     }
+
+    if (matchedUser.description !== description) {
+      matchedUser.description = description;
+    }
+    await matchedUser.save({ session });
 
     await session.commitTransaction();
   } catch (err) {
@@ -347,10 +335,12 @@ const updatePassword = async (req, res, next) => {
   res.json({ dataUpdated });
 };
 
+const addNewBookmark = (req, res, next) => {};
+
 exports.updateInventory = updateInventory;
 exports.updateWishlist = updateWishlist;
 exports.updateProfileDetails = updateProfileDetails;
-exports.addNewUser = addNewUser;
+exports.signup = signup;
 exports.getAuthorizedUser = getAuthorizedUser;
 exports.getUserbyName = getUserbyName;
 exports.validateField = validateField;

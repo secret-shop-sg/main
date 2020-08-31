@@ -7,8 +7,8 @@ const cookieParser = require("cookie-parser");
 // set up socket.io for live chat
 const app = express();
 const server = require("http").createServer(app);
-const io = require("socket.io").listen(server);
-let usersOnChatPage = [];
+/*const io = require("socket.io").listen(server);
+let usersOnChatPage = []; */
 
 const searchRoutes = require("./routes/search-routes");
 const listingRoutes = require("./routes/listing-routes");
