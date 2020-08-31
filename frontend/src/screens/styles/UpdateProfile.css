@@ -78,3 +78,14 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.update-profile-games-display {
+  display: flex;
+  overflow-y: auto;
+}
+
+.update-profile-games-display img {
+  width: 150px;
+  height: 180px;
+  margin: 10px;
+}

@@ -278,10 +278,10 @@ const UpdateProfile = (props) => {
               Update inventory
             </Button>
           </div>
-          <div>
+          <div className="update-profile-games-display">
             {formState.inputValues.inventory &&
               formState.inputValues.inventory.map((game, index) => (
-                <div className="selected-inventory-games" key={index}>
+                <div key={index}>
                   <img src={BACKEND_ADDRESS + game.imageURL} alt={game.title} />
                 </div>
               ))}
@@ -295,10 +295,10 @@ const UpdateProfile = (props) => {
               Update wishlist
             </Button>
           </div>
-          <div>
+          <div className="update-profile-games-display">
             {formState.inputValues.wishlist &&
               formState.inputValues.wishlist.map((game, index) => (
-                <div className="selected-inventory-games" key={index}>
+                <div key={index}>
                   <img src={BACKEND_ADDRESS + game.imageURL} alt={game.title} />
                 </div>
               ))}

@@ -63,7 +63,7 @@ const ConfigureGames = (props) => {
       </Modal.Header>
       <Modal.Body>
         <p>Your {props.label}</p>
-        <div className="d-flex">
+        <div className="d-flex configure-games-selected-display">
           {selectedGames.map((game, index) => (
             <div key={index} onClick={() => deselect(game)}>
               <OverlayTrigger
