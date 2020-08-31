@@ -4,6 +4,7 @@ import { BACKEND_ADDRESS } from "../../constants/Details";
 
 const ChangePicture = (props) => {
   const [picURL, setPicURL] = useState("");
+  const [previewURL, setPreviewURL] = useState();
   const chooseFileRef = useRef();
 
   useEffect(() => {
@@ -11,7 +12,20 @@ const ChangePicture = (props) => {
     console.log(props.currentPic);
   }, [props]);
 
-  const chooseFileHandler = () => {
+  // picking photos
+  const chooseFileHandler = (event) => {
+    if (event.target.files && event.target.files.length === 1) {
+      console.log(event.target.files[0]);
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(event.target.files[0]);
+      fileReader.onload = () => {
+        setPreviewURL(fileReader.result);
+      };
+    }
+  };
+
+  // click to choose
+  const clickChooseHandler = () => {
     chooseFileRef.current.click();
   };
 
@@ -22,8 +36,11 @@ const ChangePicture = (props) => {
       </Modal.Header>
       <Modal.Body>
         <div className="d-flex flex-column align-items-center">
-          <Image src={BACKEND_ADDRESS + picURL} style={{ height: "40vh" }} />
-          <Button variant="link" onClick={chooseFileHandler}>
+          <Image
+            src={previewURL ? previewURL : BACKEND_ADDRESS + picURL}
+            style={{ height: "40vh" }}
+          />
+          <Button variant="link" onClick={clickChooseHandler}>
             Choose file
           </Button>
           <input
@@ -32,6 +49,7 @@ const ChangePicture = (props) => {
             style={{ display: "none" }}
             accept=".jpg, .png, .jepg"
             ref={chooseFileRef}
+            onChange={chooseFileHandler}
           />
         </div>
       </Modal.Body>
