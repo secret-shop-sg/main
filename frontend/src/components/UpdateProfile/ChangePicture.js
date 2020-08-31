@@ -4,13 +4,19 @@ import { BACKEND_ADDRESS } from "../../constants/Details";
 
 const ChangePicture = (props) => {
   const [picURL, setPicURL] = useState("");
-  const [previewURL, setPreviewURL] = useState();
+  const [previewURL, setPreviewURL] = useState("");
   const chooseFileRef = useRef();
 
   useEffect(() => {
     setPicURL(props.currentPic);
     console.log(props.currentPic);
   }, [props]);
+
+  // close handler (clear preview)
+  const closeHandler = () => {
+    setPreviewURL("");
+    props.toggle();
+  };
 
   // picking photos
   const chooseFileHandler = (event) => {
@@ -30,7 +36,7 @@ const ChangePicture = (props) => {
   };
 
   return (
-    <Modal show={props.show} onHide={props.toggle}>
+    <Modal show={props.show} onHide={closeHandler}>
       <Modal.Header closeButton>
         <Modal.Title>Change Profile Picture</Modal.Title>
       </Modal.Header>
@@ -54,7 +60,7 @@ const ChangePicture = (props) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-danger" onClick={props.toggle}>
+        <Button variant="outline-danger" onClick={closeHandler}>
           Close
         </Button>
         <Button variant="outline-dark" onClick={() => {}}>
