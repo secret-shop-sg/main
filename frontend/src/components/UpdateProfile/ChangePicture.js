@@ -1,27 +1,30 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Modal, Button, Image } from "react-bootstrap";
 import { BACKEND_ADDRESS } from "../../constants/Details";
+import { useAPI } from "../../utils/useAPI";
 
 const ChangePicture = (props) => {
   const [picURL, setPicURL] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
   const [previewURL, setPreviewURL] = useState("");
   const chooseFileRef = useRef();
+  const [sendRequest] = useAPI();
 
   useEffect(() => {
     setPicURL(props.currentPic);
-    console.log(props.currentPic);
   }, [props]);
 
   // close handler (clear preview)
   const closeHandler = () => {
     setPreviewURL("");
+    setSelectedFile(null);
     props.toggle();
   };
 
   // picking photos
   const chooseFileHandler = (event) => {
     if (event.target.files && event.target.files.length === 1) {
-      console.log(event.target.files[0]);
+      setSelectedFile(event.target.files[0]);
       const fileReader = new FileReader();
       fileReader.readAsDataURL(event.target.files[0]);
       fileReader.onload = () => {
@@ -33,6 +36,28 @@ const ChangePicture = (props) => {
   // click to choose
   const clickChooseHandler = () => {
     chooseFileRef.current.click();
+  };
+
+  // submit new photo
+  const submitHandler = () => {
+    if (selectedFile) {
+      //update details async function
+      console.log(selectedFile);
+
+      sendRequest(
+        `/api/user/update/details`,
+        "PATCH",
+        { username: props.username, profilePic: selectedFile },
+        true,
+        true
+      ).then((responseData) => {
+        if (responseData) {
+          if (responseData.dataUpdated) {
+            alert("Update successful");
+          }
+        }
+      });
+    }
   };
 
   return (
@@ -63,7 +88,7 @@ const ChangePicture = (props) => {
         <Button variant="outline-danger" onClick={closeHandler}>
           Close
         </Button>
-        <Button variant="outline-dark" onClick={() => {}}>
+        <Button variant="outline-dark" onClick={submitHandler}>
           Change Picture
         </Button>
       </Modal.Footer>

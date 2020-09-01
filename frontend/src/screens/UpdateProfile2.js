@@ -328,6 +328,7 @@ const UpdateProfile = (props) => {
         show={showChangePic}
         toggle={toggleChangePic}
         currentPic={formState.inputValues.profilePic}
+        username={formState.inputValues.username}
       />
     </div>
   );
