@@ -34,4 +34,7 @@ router.patch(
 router.patch("/update/wishlist", checkAuth.auth, userController.updateWishlist);
 router.patch("/update/password", checkAuth.auth, userController.updatePassword);
 
+// endpoints that deal with bookmarks
+router.post("/bookmark/add", checkAuth.auth, userController.addNewBookmark);
+
 module.exports = router;

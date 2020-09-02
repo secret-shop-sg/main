@@ -12,6 +12,7 @@ const listingSchema = new mongoose.Schema({
   sellingPrice: Number,
   rentalPrice: Number,
   additionalImages: String,
+  bookmarkCount: Number,
 });
 
 listingSchema.plugin(uniqueValidator);

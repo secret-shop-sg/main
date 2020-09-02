@@ -10,8 +10,9 @@ import { BACKEND_ADDRESS } from "../constants/Details";
 
 const ListingDetails = (props) => {
   // todo: Check listing title
-  const listingID = props.location.search.substring(1);
+  const listingToSearch = props.location.search.substring(1);
   const [sendRequest, isLoading] = useAPI();
+  const [liked, setliked] = useState(false);
   // listingToDisplay = Main listing
   const [listingToDisplay, setListingToDisplay] = useState();
   // similarListings = An array of max 3 listings on the same platform as main listing
@@ -20,7 +21,7 @@ const ListingDetails = (props) => {
   useEffect(() => {
     const getListing = async () => {
       const responseData = await sendRequest(
-        `/api/listing/id/${listingID}`,
+        `/api/listing/id/${listingToSearch}`,
         undefined,
         undefined,
         true
@@ -31,13 +32,28 @@ const ListingDetails = (props) => {
       }
     };
     getListing();
-  }, [listingID, sendRequest]);
+  }, [listingToSearch, sendRequest]);
 
-  const [liked, setliked] = useState(false);
+  useEffect(() => {
+    if (listingToDisplay && listingToDisplay.wasBookmarked) {
+      setliked(true);
+    }
+  }, [listingToDisplay]);
 
-  function likehandler() {
+  const likehandler = async (event) => {
+    event.preventDefault();
+    const listingID = listingToDisplay._id;
     setliked(!liked);
-  }
+    const responseData = await sendRequest(
+      `/api/user/bookmark/add`,
+      "POST",
+      { bookmark: listingID },
+      true
+    );
+    if (responseData && responseData.bookmarkSaved) {
+      alert("liked");
+    }
+  };
 
   return (
     <div>

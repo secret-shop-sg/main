@@ -7,8 +7,10 @@ const DatabaseError = require("../models/databaseError");
 // const updateListing
 
 const getListing = async (req, res, next) => {
-  const listingID = req.params.listingID;
-  const userID = req.userID;
+  //const listingID = req.params.listingID;
+  const listingID = "5f3a7a9834597ec054fa0046";
+  const userID = "5f33ad3f2e507a110615b5f2";
+  //const userID = req.userID;
   const similarListingsCount = 3;
   let listingToDisplay;
   let platform;
@@ -18,7 +20,7 @@ const getListing = async (req, res, next) => {
     listingToDisplay = (
       await Listing.findById(listingID, { __v: 0 }).populate(
         "ownerID",
-        "profilePicURL"
+        "profilePicURL bookmarks"
       )
     ).toObject();
 
@@ -29,12 +31,19 @@ const getListing = async (req, res, next) => {
     return next(new DatabaseError(err.message));
   }
 
-  // indicates current listing belongs to user so he has the option to edit it
-  if (userID === listingToDisplay.ownerID._id.toString()) {
+  const user = listingToDisplay.ownerID;
+  // indicates if current listing belongs to user so he has the option to edit it
+  if (userID === user._id.toString()) {
     listingToDisplay.userIsOwner = true;
   }
+  delete user._id;
 
-  platform = listingToDisplay.hasItem.platform;
+  if (user.bookmarks.some((bookmark) => bookmark == listingID)) {
+    listingToDisplay.wasBookmarked = true;
+  }
+  delete user.bookmarks;
+
+  //platform = listingToDisplay.hasItem.platform;
   try {
     similarListings = await Listing.aggregate([
       {

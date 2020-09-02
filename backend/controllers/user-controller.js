@@ -335,8 +335,40 @@ const updatePassword = async (req, res, next) => {
   res.json({ dataUpdated });
 };
 
-const addNewBookmark = (req, res, next) => {};
+// todo: optimize
+const addNewBookmark = async (req, res, next) => {
+  const userID = req.userID;
+  const bookmark = req.body.bookmark;
+  let existingUser;
+  let existingListing;
 
+  try {
+    existingUser = await User.findById(userID);
+    existingListing = await Listing.findById(bookmark);
+  } catch (err) {
+    return next(new DatabaseError(err.message));
+  }
+
+  try {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    existingUser.bookmarks.push(bookmark);
+    await existingUser.save({ session });
+
+    if (!existingListing.bookmarkCount) {
+      existingListing.bookmarkCount = 0;
+    }
+    existingListing.bookmarkCount += 1;
+    await existingListing.save({ session });
+    await session.commitTransaction();
+  } catch (err) {
+    return next(new DatabaseError(err.message));
+  }
+  // todo: return status code so frontend knows like is not saved
+  res.json({ bookmarkSaved: true });
+};
+
+exports.addNewBookmark = addNewBookmark;
 exports.updateInventory = updateInventory;
 exports.updateWishlist = updateWishlist;
 exports.updateProfileDetails = updateProfileDetails;

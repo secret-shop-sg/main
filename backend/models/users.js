@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
   description: String,
   listings: [{ type: mongoose.Types.ObjectId, ref: "Listing" }],
   newMessages: Number,
+  bookmarks: [{ type: mongoose.Types.ObjectId, ref: "Listing" }],
 });
 
 // throws error if fields marked as unique are not unique
