@@ -13,12 +13,13 @@ const getListing = async (req, res, next) => {
   let listingToDisplay;
   let platform;
   let similarListings;
+  let userBookmarks;
 
   try {
     listingToDisplay = (
       await Listing.findById(listingID, { __v: 0 }).populate(
         "ownerID",
-        "profilePicURL bookmarks"
+        "profilePicURL"
       )
     ).toObject();
 
@@ -29,19 +30,24 @@ const getListing = async (req, res, next) => {
     return next(new DatabaseError(err.message));
   }
 
-  const user = listingToDisplay.ownerID;
+  try {
+    const data = await User.findById(userID, { bookmarks: 1 });
+    userBookmarks = data.toObject().bookmarks;
+  } catch (err) {
+    return next(new DatabaseError(err.message));
+  }
+
+  const owner = listingToDisplay.ownerID;
   // indicates if current listing belongs to user so he has the option to edit it
-  if (userID === user._id.toString()) {
+  if (userID === owner._id.toString()) {
     listingToDisplay.userIsOwner = true;
   }
-  delete user._id;
+  delete owner._id;
 
-  if (user.bookmarks.some((bookmark) => bookmark == listingID)) {
+  if (userBookmarks.some((bookmark) => bookmark == listingID)) {
     listingToDisplay.wasBookmarked = true;
   }
-  delete user.bookmarks;
 
-  //platform = listingToDisplay.hasItem.platform;
   try {
     similarListings = await Listing.aggregate([
       {
