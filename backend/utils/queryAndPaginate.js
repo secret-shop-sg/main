@@ -3,7 +3,8 @@ const queryAndPaginate = async (
   query,
   documentLimit,
   page = 1,
-  additionalQueries = { $match: {} } // default param does nothing
+  additionalQueries = { $match: {} }, // default param does nothing
+  sortBy = { dateListed: -1 } // ascending order by default
 ) => {
   // always first page by default
 
@@ -20,6 +21,7 @@ const queryAndPaginate = async (
             { $skip: startIndex },
             { $limit: documentLimit },
             additionalQueries,
+            { $sort: sortBy },
           ],
           pageData: [{ $count: "count" }],
         },

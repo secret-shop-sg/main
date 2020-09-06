@@ -3,12 +3,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const fs = require("fs");
 const cookieParser = require("cookie-parser");
-const getChats = require("./utils/chat");
+const getChat = require("./utils/getChat");
 
 // set up socket.io for live chat
 const app = express();
-const server = require("http").createServer(app);
-const io = require("socket.io")(server);
+//const server = require("http").createServer(app);
+const server = app.listen(5000);
+const io = require("socket.io").listen(server);
 let usersOnChatPage = [];
 
 const searchRoutes = require("./routes/search-routes");
@@ -17,19 +18,21 @@ const userRoutes = require("./routes/user-routes");
 const gameRoutes = require("./routes/game-routes");
 const chatRoutes = require("./routes/chat-routes");
 
+/* Todo: Learn how to deal with cookies in socket.io
 io.on("connection", function (socket) {
   // runs when the user goes to the chat page
-  socket.on("pageLoad", function (data, callback) {
-    // render all messages
-    //const access_token = socket.handshakre.headers.cookie
-    //const userName = getChats("hi");
-    //usersOnChatPage.username = socket
-    io.emit("connected", data);
-  });
+  const socketHeader = socket.handshake.headers.cookie;
+  // emit something if no socketHeader to stimulate error?
+  const tokenIndex = socketHeader.indexOf("access_token=") + 13;
+  const accessToken = socketHeader.slice(tokenIndex);
+  const chats = getChat(accessToken);
+  socket.emit("connected", chats);
+
+  /*
   socket.on("newMessage", function (data, callback) {
     io.emit("newMessage", data);
-  });
-});
+  }); 
+});*/
 
 app.use(bodyParser.json());
 
@@ -103,7 +106,6 @@ mongoose
       useFindAndModify: false,
     }
   )
-  .then(() => app.listen(5000))
   .catch((err) => {
     console.log(err);
   });

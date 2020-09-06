@@ -55,6 +55,13 @@ const getSearches = async (req, res, next) => {
     listingtypeQuery = { $or: listingtypeQuery };
   }
 
+  let sortBy;
+  if (queries.sortby) {
+    if (queries.sortby === "popularity") {
+      sortBy = { bookmarkCount: -1 };
+    }
+  }
+
   const listingPerPage = 5;
   // query to retrieve owner's profile pic by performing a left join
   const ownerPicQuery = {
@@ -76,7 +83,8 @@ const getSearches = async (req, res, next) => {
       [phraseQuery, platformQuery, listingtypeQuery],
       listingPerPage,
       queries.page,
-      ownerPicQuery
+      ownerPicQuery,
+      sortBy
     );
   } catch (err) {
     // error handling alr included in queryAndPaginate function

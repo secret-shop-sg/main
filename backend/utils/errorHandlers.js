@@ -11,7 +11,6 @@ const searchControllerErrorHandler = (queries) => {
   if (hasError) {
     return hasError;
   }
-
   hasError = checkUnknownLabelsError(queries);
   if (hasError) {
     return hasError;
@@ -30,28 +29,7 @@ const checkUnknownLabelsError = (queries) => {
       return error;
     }
 
-    if (key === "listingtype") {
-      for (value of queries[key].split("%")) {
-        if (!details.LISTING_TYPES.includes(value)) {
-          const error = new Error(
-            "You have entered labels that are not recorded on the backend. Check your URL"
-          );
-          error.status = 400;
-          return error;
-        }
-      }
-    } else if (key === "platform") {
-      for (value of queries[key].split("%")) {
-        value = value.replace(/-/g, " ");
-        if (!details.PLATFORMS_SUPPORTED.includes(value)) {
-          const error = new Error(
-            "You have entered labels that are not recorded on the backend. Check your URL"
-          );
-          error.status = 400;
-          return error;
-        }
-      }
-    } else if (key === "page") {
+    if (key === "page") {
       // checks that the page property contains a valid value
       if (!Number.isInteger(parseInt(queries.page))) {
         const error = new Error(
@@ -59,6 +37,24 @@ const checkUnknownLabelsError = (queries) => {
         );
         error.status = 400;
         return error;
+      }
+    } else if (key !== "phrase") {
+      let labels;
+      if (key === "platform") {
+        labels = details.PLATFORMS_SUPPORTED;
+      } else if (key === "listingtype") {
+        labels = details.LISTING_TYPES;
+      } else if (key === "sortby") {
+        labels = details.SORTBY_DROPDOWN;
+      }
+      for (value of queries[key].split("%")) {
+        if (!labels.includes(value)) {
+          const error = new Error(
+            "You have entered labels that are not recorded on the backend. Check your URL"
+          );
+          error.status = 400;
+          return error;
+        }
       }
     }
   }

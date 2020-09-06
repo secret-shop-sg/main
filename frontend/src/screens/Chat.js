@@ -15,13 +15,8 @@ const Chat = () => {
 
   useEffect(() => {
     //socket.emit("connect", { hi: "hi" });
-
-    /*socket.on("connected", (data) => {
+    socket.on("connected", (data) => {
       console.log("data", data);
-    }); */
-
-    socket.on("connect", () => {
-      console.log("connected");
     });
   }, []);
 
