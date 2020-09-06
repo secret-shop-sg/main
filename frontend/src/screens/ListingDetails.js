@@ -15,6 +15,7 @@ const ListingDetails = (props) => {
   const [liked, setliked] = useState(false);
   // listingToDisplay = Main listing
   const [listingToDisplay, setListingToDisplay] = useState();
+  console.log(listingToDisplay);
   // similarListings = An array of max 3 listings on the same platform as main listing
   const [similarListings, setSimilarListings] = useState();
 
@@ -32,7 +33,7 @@ const ListingDetails = (props) => {
       }
     };
     getListing();
-  }, [listingToSearch, sendRequest]);
+  }, [listingToSearch]);
 
   useEffect(() => {
     if (listingToDisplay && listingToDisplay.wasBookmarked) {
@@ -43,16 +44,15 @@ const ListingDetails = (props) => {
   const likehandler = async (event) => {
     event.preventDefault();
     const listingID = listingToDisplay._id;
-    setliked(!liked);
-    const responseData = await sendRequest(
-      `/api/user/bookmark/add`,
+    // currently no way to confirm if bookmark is saved to improve UI
+    // using default fetch method to prevent page reload when sendRequest changes
+    sendRequest(
+      "/api/user/bookmark",
       "POST",
-      { bookmark: listingID },
+      { bookmark: listingID, newBookmark: !liked },
       true
     );
-    if (responseData && responseData.bookmarkSaved) {
-      alert("liked");
-    }
+    setliked(!liked);
   };
 
   return (

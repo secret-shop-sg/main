@@ -3,29 +3,33 @@ const express = require("express");
 const mongoose = require("mongoose");
 const fs = require("fs");
 const cookieParser = require("cookie-parser");
+const getChats = require("./utils/chat");
 
 // set up socket.io for live chat
 const app = express();
 const server = require("http").createServer(app);
-/*const io = require("socket.io").listen(server);
-let usersOnChatPage = []; */
+const io = require("socket.io")(server);
+let usersOnChatPage = [];
 
 const searchRoutes = require("./routes/search-routes");
 const listingRoutes = require("./routes/listing-routes");
 const userRoutes = require("./routes/user-routes");
 const gameRoutes = require("./routes/game-routes");
 const chatRoutes = require("./routes/chat-routes");
-/*
-io.sockets.on("connection", function (socket) {
+
+io.on("connection", function (socket) {
   // runs when the user goes to the chat page
   socket.on("pageLoad", function (data, callback) {
+    // render all messages
+    //const access_token = socket.handshakre.headers.cookie
+    //const userName = getChats("hi");
     //usersOnChatPage.username = socket
+    io.emit("connected", data);
   });
   socket.on("newMessage", function (data, callback) {
-    //
+    io.emit("newMessage", data);
   });
 });
-*/
 
 app.use(bodyParser.json());
 

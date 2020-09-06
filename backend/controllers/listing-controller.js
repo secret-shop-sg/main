@@ -7,10 +7,8 @@ const DatabaseError = require("../models/databaseError");
 // const updateListing
 
 const getListing = async (req, res, next) => {
-  //const listingID = req.params.listingID;
-  const listingID = "5f3a7a9834597ec054fa0046";
-  const userID = "5f33ad3f2e507a110615b5f2";
-  //const userID = req.userID;
+  const listingID = req.params.listingID;
+  const userID = req.userID;
   const similarListingsCount = 3;
   let listingToDisplay;
   let platform;

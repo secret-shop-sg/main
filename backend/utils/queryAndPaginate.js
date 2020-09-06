@@ -13,10 +13,7 @@ const queryAndPaginate = async (
 
   try {
     [queryData] = await model.aggregate([
-      {
-        // queries database for matched results
-        $match: { $and: query },
-      },
+      { $match: { $and: query } },
       {
         $facet: {
           matchedData: [
