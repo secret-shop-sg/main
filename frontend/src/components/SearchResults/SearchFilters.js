@@ -14,12 +14,14 @@ import {
 } from "react-bootstrap";
 import "./SearchFilters.css";
 import { PLATFORMS_SUPPORTED, LISTINGS_TYPE } from "../../constants/Details";
+import useQuery from "../../utils/useQuery";
 
 const SearchFilters = (props) => {
   const [platformFilters, setPlatformFilters] = useState([]);
   const [typeFilters, setTypeFilters] = useState([]);
   const [sortKey, setSortKey] = useState("1");
   const history = useHistory();
+  const query = useQuery();
 
   // function to set label of sort by dropdown
   const sortLabel = () => {
@@ -46,38 +48,16 @@ const SearchFilters = (props) => {
     setPlatformFilters([]);
     setTypeFilters([]);
 
-    // substring(8) because path starts with /search?
-    let query = window.location.search.substring(1);
+    // get query params
+    const platformParams = query.get("platform");
+    const typeParams = query.get("listingtype");
 
-    // populate filters
-    while (query.includes("=")) {
-      const equalsIndex = query.indexOf("=");
-      const keyword = query.substring(0, equalsIndex);
-      query = query.substring(equalsIndex + 1);
+    if (platformParams) {
+      setPlatformFilters(platformParams.split("%"));
+    }
 
-      // filtervalues is an array containing values of checked checkboxes
-      let filterValues;
-      const andIndex = query.indexOf("&");
-      // index is -1 if character cannot be found
-      if (andIndex > -1) {
-        filterValues = query.substring(0, andIndex);
-        query = query.substring(andIndex + 1);
-      } else {
-        filterValues = query;
-      }
-      filterValues = filterValues.split("%");
-
-      // assign to correct filter label
-      switch (keyword) {
-        case "platform":
-          setPlatformFilters(filterValues);
-          break;
-        case "listingtype":
-          setTypeFilters(filterValues);
-          break;
-        default:
-          break;
-      }
+    if (typeParams) {
+      setTypeFilters(typeParams.split("%"));
     }
   };
 
