@@ -42,8 +42,8 @@ const SearchFilters = (props) => {
     setSortKey(key);
   };
 
-  // function for setting filters
-  const setFilters = () => {
+  // set filters on mount
+  useEffect(() => {
     // set both to zero
     setPlatformFilters([]);
     setTypeFilters([]);
@@ -59,61 +59,53 @@ const SearchFilters = (props) => {
     if (typeParams) {
       setTypeFilters(typeParams.split("%"));
     }
-  };
-
-  // set filters on mount
-  useEffect(() => {
-    setFilters();
   }, []);
 
   // handler if checkbox is changed
   const checkChangeHandler = (label, event) => {
-    let newPlatformFilters = platformFilters;
-    let newTypeFilters = typeFilters;
-
     switch (event.target.name) {
       case "platform":
-        if (newPlatformFilters.includes(label)) {
+        if (platformFilters.includes(label)) {
           // remove
-          newPlatformFilters = newPlatformFilters.filter(
-            (value) => value !== label
+          setPlatformFilters(
+            platformFilters.filter((value) => value !== label)
           );
         } else {
           // add
-          newPlatformFilters = [...newPlatformFilters, label];
+          setPlatformFilters([...platformFilters, label]);
         }
         break;
       case "listingtype":
-        if (newTypeFilters.includes(label)) {
+        if (typeFilters.includes(label)) {
           // remove
-          newTypeFilters = newTypeFilters.filter((value) => value !== label);
+          setTypeFilters(typeFilters.filter((value) => value !== label));
         } else {
           // add
-          newTypeFilters = [...newTypeFilters, label];
+          setTypeFilters([...typeFilters, label]);
         }
         break;
       default:
         break;
     }
+  };
 
-    // generate new path
+  // generate new path
+  useEffect(() => {
     const queryParams = [];
 
-    if (newPlatformFilters) {
-      queryParams.push(`platform=${newPlatformFilters.join("%")}`);
+    if (platformFilters.length > 0) {
+      queryParams.push(`platform=${platformFilters.join("%")}`);
     }
 
-    if (newTypeFilters) {
-      queryParams.push(`listingtype=${newTypeFilters.join("%")}`);
+    if (typeFilters.length > 0) {
+      queryParams.push(`listingtype=${typeFilters.join("%")}`);
     }
 
     history.replace({
       pathname: window.location.pathname,
       search: `?${queryParams.join("&")}`,
     });
-
-    setFilters();
-  };
+  }, [platformFilters, typeFilters]);
 
   return (
     <Navbar
