@@ -89,7 +89,7 @@ const SearchFilters = (props) => {
     }
   };
 
-  // generate new path
+  // generate new path when states are changed
   useEffect(() => {
     const queryParams = [];
 
@@ -101,11 +101,15 @@ const SearchFilters = (props) => {
       queryParams.push(`listingtype=${typeFilters.join("%")}`);
     }
 
+    if (sortKey !== "1") {
+      queryParams.push("sortby=popularity");
+    }
+
     history.replace({
       pathname: window.location.pathname,
       search: `?${queryParams.join("&")}`,
     });
-  }, [platformFilters, typeFilters]);
+  }, [platformFilters, typeFilters, sortKey]);
 
   return (
     <Navbar
