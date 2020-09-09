@@ -97,19 +97,21 @@ const SearchFilters = (props) => {
     }
 
     // generate new path
-    const platformPath =
-      newPlatformFilters.length > 0
-        ? `platform=${newPlatformFilters.join("%")}`
-        : "";
-    const typePath =
-      newTypeFilters.length > 0
-        ? `listingtype=${newTypeFilters.join("%")}`
-        : "";
-    const newPath = `${window.location.pathname}?${platformPath}${
-      platformPath && typePath ? "&" : ""
-    }${typePath}`;
+    const queryParams = [];
 
-    history.replace(newPath);
+    if (newPlatformFilters) {
+      queryParams.push(`platform=${newPlatformFilters.join("%")}`);
+    }
+
+    if (newTypeFilters) {
+      queryParams.push(`listingtype=${newTypeFilters.join("%")}`);
+    }
+
+    history.replace({
+      pathname: window.location.pathname,
+      search: `?${queryParams.join("&")}`,
+    });
+
     setFilters();
   };
 
