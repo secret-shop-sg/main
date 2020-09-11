@@ -30,24 +30,29 @@ const getListing = async (req, res, next) => {
     return next(new DatabaseError(err.message));
   }
 
-  try {
-    const data = await User.findById(userID, { bookmarks: 1 });
-    userBookmarks = data.toObject().bookmarks;
-  } catch (err) {
-    return next(new DatabaseError(err.message));
+  if (userID) {
+    try {
+      // looks through user's bookmarks if user is logged in
+      const data = await User.findById(userID, { bookmarks: 1 });
+      userBookmarks = data.toObject().bookmarks;
+    } catch (err) {
+      return next(new DatabaseError(err.message));
+    }
+
+    const owner = listingToDisplay.ownerID;
+    // indicates if current listing belongs to user so he has the option to edit it
+    if (userID === owner._id.toString()) {
+      listingToDisplay.userIsOwner = true;
+    }
+    delete owner._id;
+
+    // indicates if current listing has been bookmarked by the user in the past
+    if (userBookmarks.some((bookmark) => bookmark == listingID)) {
+      listingToDisplay.wasBookmarked = true;
+    }
   }
 
-  const owner = listingToDisplay.ownerID;
-  // indicates if current listing belongs to user so he has the option to edit it
-  if (userID === owner._id.toString()) {
-    listingToDisplay.userIsOwner = true;
-  }
-  delete owner._id;
-
-  if (userBookmarks.some((bookmark) => bookmark == listingID)) {
-    listingToDisplay.wasBookmarked = true;
-  }
-
+  // find similar listings to be displayed at the side
   try {
     similarListings = await Listing.aggregate([
       {
