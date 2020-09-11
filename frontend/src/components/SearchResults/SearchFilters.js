@@ -14,12 +14,14 @@ import {
 } from "react-bootstrap";
 import "./SearchFilters.css";
 import { PLATFORMS_SUPPORTED, LISTINGS_TYPE } from "../../constants/Details";
+import useQuery from "../../utils/useQuery";
 
 const SearchFilters = (props) => {
   const [platformFilters, setPlatformFilters] = useState([]);
   const [typeFilters, setTypeFilters] = useState([]);
   const [sortKey, setSortKey] = useState("1");
   const history = useHistory();
+  const query = useQuery();
 
   // function to set label of sort by dropdown
   const sortLabel = () => {
@@ -40,98 +42,74 @@ const SearchFilters = (props) => {
     setSortKey(key);
   };
 
-  // function for setting filters
-  const setFilters = () => {
+  // set filters on mount
+  useEffect(() => {
     // set both to zero
     setPlatformFilters([]);
     setTypeFilters([]);
 
-    // substring(8) because path starts with /search?
-    let query = window.location.search.substring(1);
+    // get query params
+    const platformParams = query.get("platform");
+    const typeParams = query.get("listingtype");
 
-    // populate filters
-    while (query.includes("=")) {
-      const equalsIndex = query.indexOf("=");
-      const keyword = query.substring(0, equalsIndex);
-      query = query.substring(equalsIndex + 1);
-
-      // filtervalues is an array containing values of checked checkboxes
-      let filterValues;
-      const andIndex = query.indexOf("&");
-      // index is -1 if character cannot be found
-      if (andIndex > -1) {
-        filterValues = query.substring(0, andIndex);
-        query = query.substring(andIndex + 1);
-      } else {
-        filterValues = query;
-      }
-      filterValues = filterValues.split("%");
-
-      // assign to correct filter label
-      switch (keyword) {
-        case "platform":
-          setPlatformFilters(filterValues);
-          break;
-        case "listingtype":
-          setTypeFilters(filterValues);
-          break;
-        default:
-          break;
-      }
+    if (platformParams) {
+      setPlatformFilters(platformParams.split("%"));
     }
-  };
 
-  // set filters on mount
-  useEffect(() => {
-    setFilters();
+    if (typeParams) {
+      setTypeFilters(typeParams.split("%"));
+    }
   }, []);
 
   // handler if checkbox is changed
   const checkChangeHandler = (label, event) => {
-    let newPlatformFilters = platformFilters;
-    let newTypeFilters = typeFilters;
-
     switch (event.target.name) {
       case "platform":
-        if (newPlatformFilters.includes(label)) {
+        if (platformFilters.includes(label)) {
           // remove
-          newPlatformFilters = newPlatformFilters.filter(
-            (value) => value !== label
+          setPlatformFilters(
+            platformFilters.filter((value) => value !== label)
           );
         } else {
           // add
-          newPlatformFilters = [...newPlatformFilters, label];
+          setPlatformFilters([...platformFilters, label]);
         }
         break;
       case "listingtype":
-        if (newTypeFilters.includes(label)) {
+        if (typeFilters.includes(label)) {
           // remove
-          newTypeFilters = newTypeFilters.filter((value) => value !== label);
+          setTypeFilters(typeFilters.filter((value) => value !== label));
         } else {
           // add
-          newTypeFilters = [...newTypeFilters, label];
+          setTypeFilters([...typeFilters, label]);
         }
         break;
       default:
         break;
     }
-
-    // generate new path
-    const platformPath =
-      newPlatformFilters.length > 0
-        ? `platform=${newPlatformFilters.join("%")}`
-        : "";
-    const typePath =
-      newTypeFilters.length > 0
-        ? `listingtype=${newTypeFilters.join("%")}`
-        : "";
-    const newPath = `${window.location.pathname}?${platformPath}${
-      platformPath && typePath ? "&" : ""
-    }${typePath}`;
-
-    history.replace(newPath);
-    setFilters();
   };
+
+  // generate new path when states are changed
+  useEffect(() => {
+    const queryParams = [];
+
+    if (platformFilters.length > 0) {
+      queryParams.push(`platform=${platformFilters.join("%")}`);
+    }
+
+    if (typeFilters.length > 0) {
+      queryParams.push(`listingtype=${typeFilters.join("%")}`);
+    }
+
+    if (sortKey !== "1") {
+      queryParams.push("sortby=popularity");
+    }
+
+    history.replace({
+      pathname: window.location.pathname,
+      search: `?${queryParams.join("&")}`,
+    });
+  }, [platformFilters, typeFilters, sortKey]);
 
   return (
     <Navbar
