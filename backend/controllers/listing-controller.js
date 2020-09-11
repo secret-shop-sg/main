@@ -7,15 +7,16 @@ const DatabaseError = require("../models/databaseError");
 // const updateListing
 
 const getListing = async (req, res, next) => {
+  // can make it even more efficient if similar listings and listing fetched in a single request from db
   const listingID = req.params.listingID;
   const userID = req.userID;
   const similarListingsCount = 3;
   let listingToDisplay;
-  let platform;
   let similarListings;
   let userBookmarks;
 
   try {
+    // retrieve listing from database
     listingToDisplay = (
       await Listing.findById(listingID, { __v: 0 }).populate(
         "ownerID",
@@ -26,49 +27,65 @@ const getListing = async (req, res, next) => {
     if (!listingToDisplay) {
       throw new DatabaseError();
     }
+
+    // formatting so data looks better
+    listingToDisplay.ownerProfilePic = listingToDisplay.ownerID.profilePicURL;
   } catch (err) {
     return next(new DatabaseError(err.message));
   }
 
+  const owner = listingToDisplay.ownerID;
   if (userID) {
+    // additional features if user is logged in
     try {
-      // looks through user's bookmarks if user is logged in
+      // retrieve user's bookmarks
       const data = await User.findById(userID, { bookmarks: 1 });
       userBookmarks = data.toObject().bookmarks;
     } catch (err) {
       return next(new DatabaseError(err.message));
     }
 
-    const owner = listingToDisplay.ownerID;
     // indicates if current listing belongs to user so he has the option to edit it
     if (userID === owner._id.toString()) {
       listingToDisplay.userIsOwner = true;
     }
-    delete owner._id;
 
     // indicates if current listing has been bookmarked by the user in the past
     if (userBookmarks.some((bookmark) => bookmark == listingID)) {
       listingToDisplay.wasBookmarked = true;
     }
   }
+  // owner id should not be exposed to the frontend
+  delete listingToDisplay.ownerID;
 
-  // find similar listings to be displayed at the side
+  // find listings on the same platform to be displayed at the side
+  // todo: randomly select a fixed number
   try {
     similarListings = await Listing.aggregate([
+      { $sample: { size: similarListingsCount } },
       {
         $match: {
           $and: [
-            { "hasItem.platform": platform },
+            { "hasItem.platform": listingToDisplay.hasItem.platform },
             { _id: { $ne: mongoose.Types.ObjectId(listingID) } },
           ],
         },
       },
-      { $sample: { size: similarListingsCount } },
+      {
+        $lookup: {
+          from: "users",
+          let: { ownerID: "$ownerID" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$_id", "$$ownerID"] } } },
+            { $project: { profilePicURL: 1, _id: 0 } },
+          ],
+          as: "ownerProfilePic",
+        },
+      },
+      { $unwind: "$ownerProfilePic" },
+      { $unset: "ownerID" },
+      { $set: { ownerProfilePic: "$ownerProfilePic.profilePicURL" } },
     ]);
-    await User.populate(similarListings, {
-      path: "ownerID",
-      select: "profilePicURL",
-    });
   } catch (err) {
     return next(new DatabaseError(err.message));
   }

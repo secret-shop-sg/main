@@ -17,6 +17,8 @@ const ListingDetails = (props) => {
   const [listingToDisplay, setListingToDisplay] = useState();
   // similarListings = An array of max 3 listings on the same platform as main listing
   const [similarListings, setSimilarListings] = useState();
+  console.log("similar", similarListings);
+  console.log("listingToDisplay", listingToDisplay);
 
   useEffect(() => {
     const getListing = async () => {
@@ -77,7 +79,7 @@ const ListingDetails = (props) => {
               <img
                 className="userpicture"
                 alt="User"
-                src={BACKEND_ADDRESS + listingToDisplay.ownerID.profilePicURL}
+                src={BACKEND_ADDRESS + listingToDisplay.ownerProfilePic}
               />
             </span>
             <Link to={`/user/${listingToDisplay.owner}`}>
@@ -142,9 +144,7 @@ const ListingDetails = (props) => {
                           <h5>{listing.hasItem.title}</h5>
                           <img
                             className="similarlistinguserdp"
-                            src={
-                              BACKEND_ADDRESS + listing.ownerID.profilePicURL
-                            }
+                            src={BACKEND_ADDRESS + listing.ownerProfilePic}
                             alt={listing.owner}
                           />
                         </div>
