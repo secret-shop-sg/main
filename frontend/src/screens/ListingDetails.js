@@ -7,6 +7,7 @@ import { BsChatFill, BsHeartFill } from "react-icons/bs";
 import { useAPI } from "../utils/useAPI";
 import ListingDoesNotExist from "../components/ListingDetails/ListingDoesNotExist";
 import { BACKEND_ADDRESS } from "../constants/Details";
+import LikeButton from "../components/ListingDetails/LikeButton";
 
 const ListingDetails = (props) => {
   // todo: Check listing title
@@ -35,29 +36,6 @@ const ListingDetails = (props) => {
     };
     getListing();
   }, [listingToSearch]);
-
-  useEffect(() => {
-    if (listingToDisplay && listingToDisplay.wasBookmarked) {
-      setliked(true);
-    }
-  }, [listingToDisplay]);
-
-  const likehandler = async (event) => {
-    event.preventDefault();
-    const listingID = listingToDisplay._id;
-    // currently no way to confirm if bookmark is saved to improve UI
-    // using default fetch method to prevent page reload when sendRequest changes
-    setliked(!liked);
-    const responseData = await sendRequest(
-      "/api/user/bookmark",
-      "POST",
-      { bookmark: listingID, newBookmark: !liked },
-      true
-    );
-    if (responseData) {
-      console.log(responseData);
-    }
-  };
 
   return (
     <div>
@@ -96,13 +74,10 @@ const ListingDetails = (props) => {
             <span>
               {/*Small white box if user is logged in + he is the one who posted the listing */}
               {listingToDisplay.userIsOwner && <button value="edit" />}
-              <button
-                onClick={likehandler}
-                className={liked ? "btn-liked" : "btn-like"}
-              >
-                <BsHeartFill />
-                <span> </span>Like!
-              </button>
+              <LikeButton
+                liked={listingToDisplay && listingToDisplay.wasBookmarked}
+                id={listingToDisplay._id}
+              />
             </span>
             <hr></hr>
             <p className="datelisted">
