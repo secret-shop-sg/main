@@ -19,6 +19,7 @@ import useQuery from "../../utils/useQuery";
 const SearchFilters = (props) => {
   const [platformFilters, setPlatformFilters] = useState([]);
   const [typeFilters, setTypeFilters] = useState([]);
+  const [searchPhrase, setSearchPhrase] = useState("");
   const [sortKey, setSortKey] = useState("1");
   const history = useHistory();
   const query = useQuery();
@@ -51,6 +52,7 @@ const SearchFilters = (props) => {
     // get query params
     const platformParams = query.get("platform");
     const typeParams = query.get("listingtype");
+    const phraseParams = query.get("phrase");
 
     if (platformParams) {
       setPlatformFilters(platformParams.split("%"));
@@ -58,6 +60,10 @@ const SearchFilters = (props) => {
 
     if (typeParams) {
       setTypeFilters(typeParams.split("%"));
+    }
+
+    if (phraseParams) {
+      setSearchPhrase(phraseParams);
     }
   }, []);
 
@@ -105,11 +111,15 @@ const SearchFilters = (props) => {
       queryParams.push("sortby=popularity");
     }
 
+    if (searchPhrase) {
+      queryParams.push(`phrase=${searchPhrase}`);
+    }
+
     history.replace({
       pathname: window.location.pathname,
       search: `?${queryParams.join("&")}`,
     });
-  }, [platformFilters, typeFilters, sortKey]);
+  }, [platformFilters, typeFilters, sortKey, searchPhrase]);
 
   return (
     <Navbar
