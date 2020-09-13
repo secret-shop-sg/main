@@ -18,21 +18,45 @@ const userRoutes = require("./routes/user-routes");
 const gameRoutes = require("./routes/game-routes");
 const chatRoutes = require("./routes/chat-routes");
 
-/* Todo: Learn how to deal with cookies in socket.io
 io.on("connection", function (socket) {
-  // runs when the user goes to the chat page
+  // runs when the connection is first established at the chat page
   const socketHeader = socket.handshake.headers.cookie;
-  // emit something if no socketHeader to stimulate error?
-  const tokenIndex = socketHeader.indexOf("access_token=") + 13;
-  const accessToken = socketHeader.slice(tokenIndex);
-  const chats = getChat(accessToken);
-  socket.emit("connected", chats);
+  if (!socketHeader.includes("access_token")) {
+    socket.emit("loggedIn", false);
+  } else {
+    socket.emit("loggedIn", true);
+    let userID;
+    try {
+      userID = getChat.decodeHeader(socketHeader);
+    } catch (err) {
+      socket.emit("Error");
+    }
 
+    getChat
+      .getChatLogsOverview(userID)
+      .then((chats) => socket.emit("chatOverview", chats));
+  }
   /*
+  socket.on("getChatSpecific", function(data,callback){
+    const socketHeader = socket.handshake.headers.cookie;
+    if (!socketHeader.includes("access_token")) {
+      socket.emit("loggedIn", false);
+    } else {
+      socket.emit("loggedIn", true);
+      let userID;
+      try {
+        userID = getChat.decodeHeader(socketHeader);
+      } catch (err) {
+        socket.emit("Error");
+      }
+
+      getChat.getChatLogSpecific(userID)
+  }});
+
   socket.on("newMessage", function (data, callback) {
-    io.emit("newMessage", data);
-  }); 
-});*/
+    console.log("newMessage", data);
+  }); */
+});
 
 app.use(bodyParser.json());
 

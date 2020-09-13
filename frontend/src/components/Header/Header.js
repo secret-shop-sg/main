@@ -94,7 +94,11 @@ const Header = () => {
   // execute search after search button is pressed
   const executeSearch = (event) => {
     event.preventDefault();
-    history.push(`/search?phrase=${searchText.replace(/ /g, "-")}`);
+    if (searchText) {
+      history.push(`/search?phrase=${searchText.replace(/ /g, "-")}`);
+    } else {
+      history.push("/search");
+    }
     setSearchText("");
   };
 

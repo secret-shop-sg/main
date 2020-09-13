@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./ChatMessages.css";
 import { BACKEND_ADDRESS } from "../../constants/Details";
+import SocketContext from "../../utils/socketContext";
 import { useAPI } from "../../utils/useAPI";
 import { Spinner, Alert, Container } from "react-bootstrap";
 import MessageSend from "./MessageSend";
 
-const ChatMessages = (props) => {
-  const [sendRequest] = useAPI();
+const ChatMessagesWithSocket = (props) => {
+  //const [sendRequest] = useAPI();
+  const socket = props.socket;
   const [chatData, setChatData] = useState();
   const [chatIsLoading, setChatIsLoading] = useState(false);
 
@@ -45,12 +47,12 @@ const ChatMessages = (props) => {
       );
     }
   };
-
+  /*
   // get chat data if user/recipient changes or on page load
   useEffect(() => {
     if (recipientID) {
       setChatIsLoading(true);
-
+      
       sendRequest(
         "/api/chat/specific",
         "PATCH",
@@ -65,8 +67,19 @@ const ChatMessages = (props) => {
         // scroll to bottom
         latestMessage.current.scrollIntoView({ behavior: "auto" });
       });
+    
+
     }
-  }, [recipientID, sentMessage]);
+  }, [recipientID, sentMessage]); */
+
+  socket.emit("getChatSpecific", {
+    recipientID: "5f2ffb54eea9c2180a732afa",
+    page: 1,
+  });
+
+  socket.on("chatSpecific", (data) => {
+    console.log("printed from ChatSpecific.js", data);
+  });
 
   // return no chat selected if no recipientID
   if (!chatData) {
@@ -99,5 +112,11 @@ const ChatMessages = (props) => {
     </div>
   );
 };
+
+const ChatMessages = (props) => (
+  <SocketContext.Consumer>
+    {(socket) => <ChatMessagesWithSocket {...props} socket={socket} />}
+  </SocketContext.Consumer>
+);
 
 export default ChatMessages;

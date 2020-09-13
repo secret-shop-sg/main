@@ -182,7 +182,7 @@ const getChatLogsOverview = async (req, res, next) => {
 // todo: look into it to see if you can optimize
 const getSpecificChat = async (req, res, next) => {
   const recipientID = req.body.recipientID;
-  const userID = "5f2faf5ad18a76073729f475"; //req.userID;
+  const userID = req.userID;
   const page = req.body.page || 1;
   // limit on how many messages are loaded at once
   const messagesToLoad = 10;

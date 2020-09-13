@@ -17,8 +17,6 @@ const ListingDetails = (props) => {
   const [listingToDisplay, setListingToDisplay] = useState();
   // similarListings = An array of max 3 listings on the same platform as main listing
   const [similarListings, setSimilarListings] = useState();
-  console.log("similar", similarListings);
-  console.log("listingToDisplay", listingToDisplay);
 
   useEffect(() => {
     const getListing = async () => {
@@ -118,8 +116,8 @@ const ListingDetails = (props) => {
             {similarListings.length === 0
               ? null
               : similarListings.map((listing) => (
-                  <React.Fragment>
-                    <div className="similarlistingholder" key={listing._id}>
+                  <React.Fragment key={listing._id}>
+                    <div className="similarlistingholder">
                       <div className="similarlistingimageholder">
                         <Link
                           to={{

@@ -1,27 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./ChatOverview.css";
+import SocketContext from "../../utils/socketContext";
 import { useAPI } from "../../utils/useAPI";
 import ChatSummary from "./ChatSummary";
 import { ButtonGroup } from "react-bootstrap";
 
-const ChatOverview = (props) => {
-  const [sendRequest] = useAPI();
+const ChatOverviewWithSocket = (props) => {
   const [chats, setChats] = useState([]);
+  const socket = props.socket;
 
-  useEffect(() => {
-    const getData = async () => {
-      const responseData = await sendRequest(
-        `/api/chat/overview`,
-        undefined,
-        undefined,
-        true
-      );
-      if (responseData && responseData.matchedChats) {
-        setChats(responseData.matchedChats);
-      }
-    };
-    getData();
-  }, [sendRequest]);
+  socket.on("chatOverview", (data) => {
+    console.log("printed from ChatOverview.js", data);
+  });
 
   return (
     <div className="chats">
@@ -40,5 +30,11 @@ const ChatOverview = (props) => {
     </div>
   );
 };
+
+const ChatOverview = (props) => (
+  <SocketContext.Consumer>
+    {(socket) => <ChatOverviewWithSocket {...props} socket={socket} />}
+  </SocketContext.Consumer>
+);
 
 export default ChatOverview;
