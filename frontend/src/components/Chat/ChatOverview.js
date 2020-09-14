@@ -11,6 +11,7 @@ const ChatOverviewWithSocket = (props) => {
 
   socket.on("chatOverview", (data) => {
     console.log("printed from ChatOverview.js", data);
+    setChats(data.chatLogs);
   });
 
   return (
@@ -22,7 +23,7 @@ const ChatOverviewWithSocket = (props) => {
             <ChatSummary
               chatData={chatData}
               onChatSelect={props.onChatSelect}
-              key={chatData.recipient._id}
+              key={chatData._id}
             />
           ))}
         </ButtonGroup>

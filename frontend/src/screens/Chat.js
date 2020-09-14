@@ -26,6 +26,7 @@ const Chat = () => {
     error.status = 503;
     history.replace("/error/500", error);
   });
+
   // handler for selecting chat
   const onChatSelect = (recipient, name) => {
     setSelectedChatRecipient(recipient);
