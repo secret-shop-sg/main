@@ -25,17 +25,14 @@ io.on("connection", function (socket) {
     socket.emit("loggedIn", false);
   } else {
     socket.emit("loggedIn", true);
-    let userID;
-    try {
-      userID = getChat.decodeHeader(socketHeader);
-    } catch (err) {
-      socket.emit("Error");
-    }
+    const userID = getChat.decodeHeader(socketHeader);
+    socket.emit("Error");
 
     getChat
       .getChatLogsOverview(userID)
       .then((chats) => socket.emit("chatOverview", chats));
   }
+
   /*
   socket.on("getChatSpecific", function(data,callback){
     const socketHeader = socket.handshake.headers.cookie;
@@ -56,6 +53,13 @@ io.on("connection", function (socket) {
   socket.on("newMessage", function (data, callback) {
     console.log("newMessage", data);
   }); */
+
+  socket.on("error", () => {
+    socket.emit(
+      "serverError",
+      "There are some issues with the chat server right now"
+    );
+  });
 });
 
 app.use(bodyParser.json());
