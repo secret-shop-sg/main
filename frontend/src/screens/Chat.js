@@ -21,8 +21,10 @@ const Chat = () => {
     if (!loggedIn) history.push("/login=false");
   });
 
-  socket.on("Error", () => {
-    const error = new Error("Server Error");
+  // custom error handler if something goes wrong
+  socket.on("serverError", (errorMessage) => {
+    let error;
+    error.message = errorMessage;
     error.status = 503;
     history.replace("/error/500", error);
   });
