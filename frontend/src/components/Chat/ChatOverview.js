@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./ChatOverview.css";
 import SocketContext from "../../utils/socketContext";
-import { useAPI } from "../../utils/useAPI";
 import ChatSummary from "./ChatSummary";
 import { ButtonGroup } from "react-bootstrap";
 
@@ -11,7 +10,9 @@ const ChatOverviewWithSocket = (props) => {
 
   socket.on("chatOverview", (data) => {
     console.log("printed from ChatOverview.js", data);
-    setChats(data.chatLogs);
+    if (data) {
+      setChats(data.chatLogs);
+    }
   });
 
   return (

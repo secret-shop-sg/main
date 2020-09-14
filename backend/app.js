@@ -18,19 +18,24 @@ const userRoutes = require("./routes/user-routes");
 const gameRoutes = require("./routes/game-routes");
 const chatRoutes = require("./routes/chat-routes");
 
+// runs when the connection is first established at the chat page
 io.on("connection", function (socket) {
-  // runs when the connection is first established at the chat page
-  const socketHeader = socket.handshake.headers.cookie;
-  if (!socketHeader.includes("access_token")) {
+  // ToDo: Test error messages
+
+  let userID;
+  try {
+    userID = getChat.decodeHeader(socket.handshake.headers.cookie);
+  } catch (err) {
+    socket.emit("serverError", err.message);
+  }
+
+  if (!userID) {
     socket.emit("loggedIn", false);
   } else {
-    socket.emit("loggedIn", true);
-    const userID = getChat.decodeHeader(socketHeader);
-    socket.emit("Error");
-
     getChat
       .getChatLogsOverview(userID)
-      .then((chats) => socket.emit("chatOverview", chats));
+      .then((chats) => socket.emit("chatOverview", chats))
+      .catch((err) => socket.emit("serverError", err.message));
   }
 
   /*

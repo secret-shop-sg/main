@@ -5,8 +5,20 @@ const mongoose = require("mongoose");
 const User = require("../models/users");
 
 const decodeHeader = (socketHeader) => {
+  const startingPos = socketHeader.indexOf("access_token=");
+  if (startingPos === -1) {
+    // returns false if there are no access token included in connection request
+    return false;
+  }
+  // shortens the string to the beginning of the jwt
+  socketHeader = socketHeader.slice(startingPos + 13);
+  const endingPos = socketHeader.indexOf(";");
+  let accessToken;
+  if (endingPos === -1) {
+    accessToken = socketHeader;
+  } else accessToken = socketHeader.substring(0, endingPos);
+
   let userID;
-  const accessToken = socketHeader.split("; ")[1].slice(13);
   // decode userID stored in jwt
   jwt.verify(accessToken, SECRET_JWT_HASH, (err, data) => {
     if (err) {
@@ -37,7 +49,7 @@ const getChatLogsOverview = async (userID) => {
             {
               $match: { $expr: { $eq: ["$_id", "$$recipientID"] } },
             },
-            { $project: { profilePicURL: 1 } },
+            { $project: { profilePicURL: 1, username: 1 } },
           ],
           as: "chatLogs.recipientID",
         },
