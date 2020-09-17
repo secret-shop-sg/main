@@ -47,37 +47,14 @@ const ChatMessagesWithSocket = (props) => {
       );
     }
   };
-  /*
-  // get chat data if user/recipient changes or on page load
-  useEffect(() => {
-    if (recipientID) {
-      setChatIsLoading(true);
-      
-      sendRequest(
-        "/api/chat/specific",
-        "PATCH",
-        {
-          recipientID,
-        },
-        true
-      ).then((responseData) => {
-        setChatData(responseData.chatData);
-        setChatIsLoading(false);
 
-        // scroll to bottom
-        latestMessage.current.scrollIntoView({ behavior: "auto" });
-      });
-    
-
-    }
-  }, [recipientID, sentMessage]); */
-
+  // TODO: make it only emit if there are already data
   socket.emit("getChatSpecific", {
-    recipientID: "5f2ffb54eea9c2180a732afa",
+    recipientID: "5f2faf5ad18a76073729f475",
     page: 1,
   });
 
-  socket.on("chatSpecific", (data) => {
+  socket.on("setChatSpecific", (data) => {
     console.log("printed from ChatSpecific.js", data);
   });
 

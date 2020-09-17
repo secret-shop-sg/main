@@ -8,10 +8,10 @@ const ChatOverviewWithSocket = (props) => {
   const [chats, setChats] = useState([]);
   const socket = props.socket;
 
-  socket.on("chatOverview", (data) => {
+  socket.on("setChatOverview", (data) => {
     console.log("printed from ChatOverview.js", data);
     if (data) {
-      setChats(data.chatLogs);
+      setChats(data);
     }
   });
 
@@ -24,7 +24,7 @@ const ChatOverviewWithSocket = (props) => {
             <ChatSummary
               chatData={chatData}
               onChatSelect={props.onChatSelect}
-              key={chatData._id}
+              key={chatData.recipientID}
             />
           ))}
         </ButtonGroup>

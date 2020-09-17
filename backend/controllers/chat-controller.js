@@ -63,7 +63,7 @@ const sendNewMessage = async (req, res, next) => {
 };
 
 const getChatLogsOverview = async (req, res, next) => {
-  let userID = req.userID;
+  let userID = "5f33ad3f2e507a110615b5f2";
   let chatData;
 
   // Error handler in the event that id sent is not 24 chars
@@ -76,7 +76,7 @@ const getChatLogsOverview = async (req, res, next) => {
       // find existing user in database and retrieve relevant information
       { $match: { _id: mongoose.Types.ObjectId(userID) } },
       {
-        $project: { chatLogs: 1, username: 1, profilePicURL: 1 },
+        $project: { chatLogs: 1 },
       },
       { $unwind: "$chatLogs" },
       // search recipient to obtain recipient profile pic
@@ -88,7 +88,7 @@ const getChatLogsOverview = async (req, res, next) => {
             {
               $match: { $expr: { $eq: ["$_id", "$$recipientID"] } },
             },
-            { $project: { profilePicURL: 1 } },
+            { $project: { profilePicURL: 1, username: 1 } },
           ],
           as: "chatLogs.recipientID",
         },
@@ -145,22 +145,22 @@ const getChatLogsOverview = async (req, res, next) => {
         $group: {
           _id: "$_id",
           chatLogs: { $push: "$chatLogs" },
-          username: { $first: "$username" },
-          profilePicURL: { $first: "$profilePicURL" },
         },
       },
     ]);
   } catch (err) {
     return next(new DatabaseError(err.message));
   }
-
   const chats = chatData.chatLogs;
+  //const recipient =
 
   // loops through senderID to determine who sent the msg + number of new msgs
   for (index = 0; index < chats.length; index++) {
     // reformatting documents collected from mongodb so frontend has an easier time
     const chat = chats[index];
     chat.recipientProfilePic = chat.recipientID.profilePicURL;
+
+    chat.recipient = chat.recipientID.username;
     chat.recipientID = chat.recipientID._id;
 
     chat.latestMessage = chat.chat.latestMessage.messages;
@@ -176,13 +176,13 @@ const getChatLogsOverview = async (req, res, next) => {
     delete latestMessage.senderID;
   }
 
-  res.json({ chatData });
+  res.json({ chats });
 };
 
 // todo: look into it to see if you can optimize
 const getSpecificChat = async (req, res, next) => {
-  const recipientID = req.body.recipientID;
-  const userID = req.userID;
+  const recipientID = "5f2faf5ad18a76073729f475";
+  const userID = "5f33ad3f2e507a110615b5f2";
   const page = req.body.page || 1;
   // limit on how many messages are loaded at once
   const messagesToLoad = 10;

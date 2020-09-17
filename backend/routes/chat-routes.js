@@ -6,9 +6,9 @@ const checkAuth = require("../utils/checkAuth");
 router.post("/add", checkAuth.auth, chatController.sendNewMessage);
 
 // gets latest message to each recipient
-router.get("/overview", checkAuth.auth, chatController.getChatLogsOverview);
+router.get("/overview", chatController.getChatLogsOverview);
 
 // get entire chat log with another user
-router.patch("/specific", checkAuth.auth, chatController.getSpecificChat);
+router.patch("/specific", chatController.getSpecificChat);
 
 module.exports = router;

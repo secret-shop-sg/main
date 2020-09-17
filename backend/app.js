@@ -20,7 +20,7 @@ const chatRoutes = require("./routes/chat-routes");
 
 // runs when the connection is first established at the chat page
 io.on("connection", function (socket) {
-  // ToDo: Test error messages
+  // ToDo: Fix error handling
 
   let userID;
   try {
@@ -34,37 +34,38 @@ io.on("connection", function (socket) {
   } else {
     getChat
       .getChatLogsOverview(userID)
-      .then((chats) => socket.emit("chatOverview", chats))
+      .then((chats) => socket.emit("setChatOverview", chats))
       .catch((err) => socket.emit("serverError", err.message));
   }
 
-  /*
-  socket.on("getChatSpecific", function(data,callback){
-    const socketHeader = socket.handshake.headers.cookie;
-    if (!socketHeader.includes("access_token")) {
+  socket.on("getChatSpecific", function (data, callback) {
+    let userID;
+    try {
+      userID = getChat.decodeHeader(socket.handshake.headers.cookie);
+    } catch (err) {
+      socket.emit("serverError", err.message);
+    }
+
+    if (!userID) {
       socket.emit("loggedIn", false);
     } else {
-      socket.emit("loggedIn", true);
-      let userID;
-      try {
-        userID = getChat.decodeHeader(socketHeader);
-      } catch (err) {
-        socket.emit("Error");
-      }
-
-      getChat.getChatLogSpecific(userID)
-  }});
+      getChat
+        .getChatLogSpecific(userID, data.recipientID, data.page)
+        .then((chats) => socket.emit("setChatSpecific", chats));
+      //.catch((err) => socket.emit("serverError", err.message));
+    }
+  });
 
   socket.on("newMessage", function (data, callback) {
     console.log("newMessage", data);
-  }); */
-
+  });
+  /*
   socket.on("error", () => {
     socket.emit(
       "serverError",
       "There are some issues with the chat server right now"
     );
-  });
+  }); */
 });
 
 app.use(bodyParser.json());

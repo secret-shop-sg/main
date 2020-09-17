@@ -3,7 +3,9 @@ const jwt = require("jsonwebtoken");
 const DatabaseError = require("../models/databaseError");
 const mongoose = require("mongoose");
 const User = require("../models/users");
+const Chat = require("../models/chats");
 
+// TODO: FIX error statements for whole page. next is not defined
 const decodeHeader = (socketHeader) => {
   const startingPos = socketHeader.indexOf("access_token=");
   if (startingPos === -1) {
@@ -37,7 +39,7 @@ const getChatLogsOverview = async (userID) => {
       // find existing user in database and retrieve relevant information
       { $match: { _id: mongoose.Types.ObjectId(userID) } },
       {
-        $project: { chatLogs: 1, username: 1, profilePicURL: 1 },
+        $project: { chatLogs: 1 },
       },
       { $unwind: "$chatLogs" },
       // search recipient to obtain recipient profile pic
@@ -106,16 +108,37 @@ const getChatLogsOverview = async (userID) => {
         $group: {
           _id: "$_id",
           chatLogs: { $push: "$chatLogs" },
-          username: { $first: "$username" },
-          profilePicURL: { $first: "$profilePicURL" },
         },
       },
     ]);
   } catch (err) {
-    throw new DatabaseError(err.message);
+    return next(new DatabaseError(err.message));
+  }
+  const chats = chatData.chatLogs;
+
+  // loops through senderID to determine who sent the msg + number of new msgs
+  for (index = 0; index < chats.length; index++) {
+    // reformatting documents collected from mongodb so frontend has an easier time
+    const chat = chats[index];
+
+    chat.recipientProfilePic = chat.recipientID.profilePicURL;
+    chat.recipient = chat.recipientID.username;
+    chat.recipientID = chat.recipientID._id;
+
+    chat.latestMessage = chat.chat.latestMessage.messages;
+
+    chat.newMessageCount = chat.chat.newMessageCount.newMsgCount;
+    delete chat.chat;
+
+    // checks if user is the one who send the message
+    const latestMessage = chat.latestMessage;
+    if (latestMessage.senderID == userID) {
+      latestMessage.sentBySelf = true;
+    } else latestMessage.sentBySelf = false;
+    delete latestMessage.senderID;
   }
 
-  return chatData;
+  return chats;
 };
 
 const getChatLogSpecific = async (userID, recipientID, page = 1) => {
@@ -134,7 +157,7 @@ const getChatLogSpecific = async (userID, recipientID, page = 1) => {
       populate: { path: "recipientID", model: User, select: "profilePicURL" },
     });
   } catch (err) {
-    throw new DatabaseError(err.message);
+    return next(new DatabaseError(err.message));
   }
 
   chatData.userProfilePic = existingUserData.profilePicURL;
@@ -155,7 +178,7 @@ const getChatLogSpecific = async (userID, recipientID, page = 1) => {
       // searches and loads entire chat log into memory
       chatLogs = (await Chat.findById(correctRecipient.chat)).toObject();
     } catch (err) {
-      return next(new DatabaseError(err.message));
+      console.log(err.message);
     }
 
     // returns all remaining documents if number of documents left is less than messagesToLoad

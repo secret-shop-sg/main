@@ -4,17 +4,17 @@ import { BACKEND_ADDRESS } from "../../constants/Details";
 import { Button } from "react-bootstrap";
 
 const ChatSummary = (props) => {
-  const { recipientID, chat } = props.chatData;
+  const { recipientID, latestMessage, recipient } = props.chatData;
 
   const clickChatHandler = () => {
-    const recipientID = props.chatData.recipientID._id;
-    const name = props.chatData.recipientID._id;
-    props.onChatSelect(recipientID, name);
+    //const recipientID = props.chatData.recipientID;
+    //const name = props.chatData.recipient;
+    props.onChatSelect(recipientID, recipient);
   };
 
   // cuts off last message if too long
   const previewMessage = () => {
-    const message = chat.latestMessage.messages.content;
+    const message = latestMessage.content;
     return message;
   };
 
@@ -23,12 +23,12 @@ const ChatSummary = (props) => {
       <div className="chat-summary-box">
         <img
           className="chat-summary-img"
-          src={BACKEND_ADDRESS + recipientID.profilePicURL}
+          src={BACKEND_ADDRESS + props.recipientProfilePic}
           width="20%"
           alt="recipient profile"
         />
         <div className="chat-summary-details">
-          <div className="recipient-label">{recipientID._id}</div>
+          <div className="recipient-label">{recipient}</div>
           <div className="message-preview">{previewMessage()}</div>
         </div>
       </div>

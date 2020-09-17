@@ -23,7 +23,7 @@ const Chat = () => {
 
   // custom error handler if something goes wrong
   socket.on("serverError", (errorMessage) => {
-    let error;
+    let error = {};
     error.message = errorMessage;
     error.status = 503;
     history.replace("/error/500", error);
