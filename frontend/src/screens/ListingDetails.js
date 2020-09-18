@@ -8,6 +8,7 @@ import { useAPI } from "../utils/useAPI";
 import ListingDoesNotExist from "../components/ListingDetails/ListingDoesNotExist";
 import { BACKEND_ADDRESS } from "../constants/Details";
 import LikeButton from "../components/ListingDetails/LikeButton";
+import SimilarListingDisplay from "../components/ListingDetails/SimilarListingDisplay";
 
 const ListingDetails = (props) => {
   // todo: Check listing title
@@ -91,48 +92,10 @@ const ListingDetails = (props) => {
             {similarListings.length === 0
               ? null
               : similarListings.map((listing) => (
-                  <React.Fragment key={listing._id}>
-                    <div className="similarlistingholder">
-                      <div className="similarlistingimageholder">
-                        <Link
-                          to={{
-                            pathname: `/listing/${listing.hasItem.title}`,
-                            search: `${listing._id}`,
-                          }}
-                        >
-                          <img
-                            className="similarlistingimage"
-                            src={BACKEND_ADDRESS + listing.hasItem.imageURL}
-                            alt="similar listing"
-                          />
-                        </Link>
-                      </div>
-                      <Link
-                        to={{
-                          pathname: `/listing/${listing.hasItem.title}`,
-                          search: `${listing._id}`,
-                        }}
-                      >
-                        <div className="similarlistingdetailholder">
-                          <h5>{listing.hasItem.title}</h5>
-                          <img
-                            className="similarlistinguserdp"
-                            src={BACKEND_ADDRESS + listing.ownerProfilePic}
-                            alt={listing.owner}
-                          />
-                        </div>
-                      </Link>
-                      <Link to={`/user/${listingToDisplay.owner}`}>
-                        <p>{listing.owner} | Rating</p>
-                      </Link>
-                      <p className="similarlistingdescription">
-                        {listing.description.length > 50
-                          ? listing.description.slice(0, 51) + "..."
-                          : listing.description}
-                      </p>
-                    </div>
-                    <hr />
-                  </React.Fragment>
+                  <SimilarListingDisplay
+                    listingData={listing}
+                    key={listing._id}
+                  />
                 ))}
           </div>
         </div>

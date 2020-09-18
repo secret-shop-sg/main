@@ -1,0 +1,27 @@
+.similarlistingimageholder {
+  width: 25%;
+  height: 20%;
+  margin-right: 2%;
+  display: inline-block;
+}
+.similarlistingimage {
+  width: 100%;
+  height: 100%;
+}
+.similarlistingdetailholder {
+  width: 70%;
+  float: right;
+}
+.similarlistinguserdp {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  float: left;
+  margin-right: 3%;
+}
+.similarlistingdescription {
+  color: gray;
+}
+.similarlistingholder {
+  height: 150px;
+}
