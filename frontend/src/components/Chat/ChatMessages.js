@@ -49,13 +49,18 @@ const ChatMessagesWithSocket = (props) => {
   };
 
   // TODO: make it only emit if there are already data
-  socket.emit("getChatSpecific", {
-    recipientID: "5f2faf5ad18a76073729f475",
-    page: 1,
-  });
+  useEffect(() => {
+    setChatIsLoading(true);
+    socket.emit("getChatSpecific", {
+      recipientID: recipientID,
+      page: 1,
+    });
+  }, [recipientID]);
 
   socket.on("setChatSpecific", (data) => {
-    console.log("printed from ChatSpecific.js", data);
+    setChatData(data);
+    setChatIsLoading(false);
+    latestMessage.current.scrollIntoView({ behavior: "auto" });
   });
 
   // return no chat selected if no recipientID
