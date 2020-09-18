@@ -4,7 +4,12 @@ import { BACKEND_ADDRESS } from "../../constants/Details";
 import { Button } from "react-bootstrap";
 
 const ChatSummary = (props) => {
-  const { recipientID, latestMessage, recipient } = props.chatData;
+  const {
+    recipientID,
+    latestMessage,
+    recipient,
+    recipientProfilePic,
+  } = props.chatData;
 
   const clickChatHandler = () => {
     //const recipientID = props.chatData.recipientID;
@@ -23,7 +28,7 @@ const ChatSummary = (props) => {
       <div className="chat-summary-box">
         <img
           className="chat-summary-img"
-          src={BACKEND_ADDRESS + props.recipientProfilePic}
+          src={BACKEND_ADDRESS + recipientProfilePic}
           width="20%"
           alt="recipient profile"
         />
