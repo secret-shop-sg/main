@@ -9,6 +9,7 @@ import ListingDoesNotExist from "../components/ListingDetails/ListingDoesNotExis
 import { BACKEND_ADDRESS } from "../constants/Details";
 import LikeButton from "../components/ListingDetails/LikeButton";
 import SimilarListingDisplay from "../components/ListingDetails/SimilarListingDisplay";
+import { Button } from "react-bootstrap";
 
 const ListingDetails = (props) => {
   // todo: Check listing title
@@ -52,32 +53,32 @@ const ListingDetails = (props) => {
             />
           </div>
           <div className="listingdetails">
-            <span>
-              <img
-                className="userpicture"
-                alt="User"
-                src={BACKEND_ADDRESS + listingToDisplay.ownerProfilePic}
-              />
-            </span>
-            <Link to={`/user/${listingToDisplay.owner}`}>
-              <span>{listingToDisplay.owner}</span>
-            </Link>
-            <span> | </span>
-            <span>Rating</span>
-            <span>
-              <button className="btn-cop">
-                <BsChatFill />
-                <span> </span>Make an Offer!
-              </button>
-            </span>
-            <span>
-              {/*Small white box if user is logged in + he is the one who posted the listing */}
-              {listingToDisplay.userIsOwner && <button value="edit" />}
-              <LikeButton
-                liked={listingToDisplay && listingToDisplay.wasBookmarked}
-                id={listingToDisplay._id}
-              />
-            </span>
+            <div className="d-flex flex-row justify-content-between">
+              <div className="d-flex flex-row align-items-center">
+                <img
+                  className="userpicture"
+                  alt="User"
+                  src={BACKEND_ADDRESS + listingToDisplay.ownerProfilePic}
+                />
+                <Link to={`/user/${listingToDisplay.owner}`}>
+                  {listingToDisplay.owner}
+                </Link>
+                <div>|Rating</div>
+              </div>
+              <div className="d-flex flex-row align-items-center">
+                {listingToDisplay.userIsOwner && (
+                  <Button variant="outline-secondary">Edit</Button>
+                )}
+                <LikeButton
+                  liked={listingToDisplay && listingToDisplay.wasBookmarked}
+                  id={listingToDisplay._id}
+                />
+                <button className="btn-cop">
+                  <BsChatFill />
+                  <span> </span>Make an Offer!
+                </button>
+              </div>
+            </div>
             <hr></hr>
             <p className="datelisted">
               Listed on {listingToDisplay.dateListed}

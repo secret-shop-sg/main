@@ -1,3 +1,7 @@
+.listingwrapper {
+  display: flex;
+}
+
 .listingimage {
   height: 80%;
   width: 80%;
@@ -13,8 +17,8 @@
 }
 .listingdetails {
   width: 45%;
-  display: inline-block;
-  float: left;
+  display: flex;
+  flex-direction: column;
   margin-top: 5%;
 }
 .datelisted {

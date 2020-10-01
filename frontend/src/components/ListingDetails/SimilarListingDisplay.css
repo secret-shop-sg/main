@@ -1,6 +1,5 @@
 .similarlistingimageholder {
   width: 25%;
-  height: 20%;
   margin-right: 2%;
   display: inline-block;
 }
@@ -23,5 +22,4 @@
   color: gray;
 }
 .similarlistingholder {
-  height: 150px;
 }
