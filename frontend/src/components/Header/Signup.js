@@ -171,6 +171,7 @@ const Signup = (props) => {
     });
 
     if (responseData) {
+      console.log(responseData);
       if (responseData.signedIn) {
         //sign in
 

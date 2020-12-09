@@ -1,36 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useAPI } from "../../utils/useAPI";
-import { InputGroup, FormControl, Button, Form } from "react-bootstrap";
+import React, { useState } from "react";
+import { InputGroup, FormControl, Button } from "react-bootstrap";
 import SocketContext from "../../utils/socketContext";
 
 const MessageSendWithSocket = (props) => {
   const recipientID = props.recipientID;
-  const socket = props.socket;
   const [messageContent, setMessageContent] = useState("");
-  const [sendRequest] = useAPI();
 
   const onMessageChangeHandler = (event) => {
     setMessageContent(event.target.value);
   };
 
-  /*const sendMessageHandler = () => {
-    sendRequest(
-      "/api/chat/add",
-      "POST",
-      {
-        recipientID,
-        content: messageContent,
-      },
-      true
-    ).then((response) => {
-      setMessageContent("");
-      //re render parent
-      props.setSentMessage(messageContent);
-    });
-  }; */
-
   const sendMessageHandler = () => {
-    props.socket.emit("newMessage", messageContent);
+    props.socket.emit("newMessage", { messageContent, recipientID });
   };
 
   const onKeyDown = (event) => {

@@ -57,8 +57,7 @@ const signup = async (req, res, next) => {
   } catch (err) {
     return next(new DatabaseError(err.message));
   }
-
-  newCookie(res, userID, username);
+  newCookie(res, newUser._id, username);
 
   res.status(201).json({ signedIn: true });
 };

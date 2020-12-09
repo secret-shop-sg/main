@@ -4,19 +4,19 @@ const mongoose = require("mongoose");
 const fs = require("fs");
 const cookieParser = require("cookie-parser");
 const getChat = require("./utils/getChat");
+const User = require("./models/users");
 
 // set up socket.io for live chat
 const app = express();
 //const server = require("http").createServer(app);
 const server = app.listen(5000);
 const io = require("socket.io").listen(server);
-let usersOnChatPage = [];
+let usersOnChatPage = {};
 
 const searchRoutes = require("./routes/search-routes");
 const listingRoutes = require("./routes/listing-routes");
 const userRoutes = require("./routes/user-routes");
 const gameRoutes = require("./routes/game-routes");
-const chatRoutes = require("./routes/chat-routes");
 
 // runs when the connection is first established at the chat page
 io.on("connection", function (socket) {
@@ -28,10 +28,10 @@ io.on("connection", function (socket) {
   } catch (err) {
     socket.emit("serverError", err.message);
   }
-
   if (!userID) {
     socket.emit("loggedIn", false);
   } else {
+    usersOnChatPage[userID] = socket.id;
     getChat
       .getChatLogsOverview(userID)
       .then((chats) => socket.emit("setChatOverview", chats))
@@ -56,16 +56,40 @@ io.on("connection", function (socket) {
     }
   });
 
-  socket.on("newMessage", function (data, callback) {
-    console.log("newMessage", data);
-  });
-  /*
-  socket.on("error", () => {
-    socket.emit(
-      "serverError",
-      "There are some issues with the chat server right now"
+  socket.on("newMessage", async function (data, callback) {
+    let userID;
+    try {
+      userID = getChat.decodeHeader(socket.handshake.headers.cookie);
+    } catch (err) {
+      socket.emit("serverError", err.message);
+    }
+
+    // if recipient is online, update their chat page
+    if (usersOnChatPage.hasOwnProperty(data.recipientID)) {
+      const recipientProfilePic = (
+        await User.findById(userID, {
+          profilePicURL: 1,
+        })
+      ).profilePicURL;
+      const messageData = {
+        recipientID: userID,
+        recipientProfilePic,
+        messageContent: data.messageContent,
+      };
+      io.to(usersOnChatPage[data.recipientID]).emit(
+        "messageReceived",
+        messageData
+      );
+    }
+
+    // save sent msg into mongodb
+    const newMessage = await getChat.saveNewMessage(
+      userID,
+      data.recipientID,
+      data.messageContent
     );
-  }); */
+    socket.emit("messageReceived", newMessage);
+  });
 });
 
 app.use(bodyParser.json());
@@ -97,8 +121,6 @@ app.use("/api/user", userRoutes);
 
 // api requests for images of games
 app.use("/api/game", gameRoutes);
-
-app.use("/api/chat", chatRoutes);
 
 // if api calls a wrong address
 app.use((req, res, next) => {

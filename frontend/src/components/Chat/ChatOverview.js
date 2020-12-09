@@ -9,11 +9,13 @@ const ChatOverviewWithSocket = (props) => {
   const socket = props.socket;
 
   socket.on("setChatOverview", (data) => {
-    console.log("printed from ChatOverview.js", data);
     if (data) {
+      console.log(data);
       setChats(data);
     }
   });
+
+  socket.on("messageReceived", (messageData) => console.log(messageData));
 
   return (
     <div className="chats">

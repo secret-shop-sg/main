@@ -50,11 +50,13 @@ const ChatMessagesWithSocket = (props) => {
 
   // TODO: make it only emit if there are already data
   useEffect(() => {
-    setChatIsLoading(true);
-    socket.emit("getChatSpecific", {
-      recipientID: recipientID,
-      page: 1,
-    });
+    if (recipientID) {
+      setChatIsLoading(true);
+      socket.emit("getChatSpecific", {
+        recipientID: recipientID,
+        page: 1,
+      });
+    }
   }, [recipientID]);
 
   socket.on("setChatSpecific", (data) => {

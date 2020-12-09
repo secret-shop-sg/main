@@ -112,7 +112,7 @@ const getChatLogsOverview = async (userID) => {
       },
     ]);
   } catch (err) {
-    return next(new DatabaseError(err.message));
+    throw new DatabaseError(err.message);
   }
   const chats = chatData.chatLogs;
 
@@ -157,82 +157,140 @@ const getChatLogSpecific = async (userID, recipientID, page = 1) => {
       populate: { path: "recipientID", model: User, select: "profilePicURL" },
     });
   } catch (err) {
-    return next(new DatabaseError(err.message));
+    throw new DatabaseError(err.message);
   }
-
   chatData.userProfilePic = existingUserData.profilePicURL;
-
   // finds the correct chatlog based on the recipient requested
-  const correctRecipient = existingUserData.chatLogs.find(
-    (chatlog) => chatlog.recipientID._id == recipientID
-  );
-  chatData.recipientProfilePic = correctRecipient.recipientID.profilePicURL;
+  if (existingUserData.chatLogs.length !== 0) {
+    const correctRecipient = existingUserData.chatLogs.find(
+      (chatlog) => chatlog.recipientID._id == recipientID
+    );
+    chatData.recipientProfilePic = correctRecipient.recipientID.profilePicURL;
 
-  // index are negative to retrieve latest messages
-  let startingIndex = -1 * page * messagesToLoad;
-  const endingIndex = -1 * (page - 1) * messagesToLoad;
-  if (existingUserData) {
-    let chatLogs; //
+    // index are negative to retrieve latest messages
+    let startingIndex = -1 * page * messagesToLoad;
+    const endingIndex = -1 * (page - 1) * messagesToLoad;
+    if (existingUserData) {
+      let chatLogs; //
 
-    try {
-      // searches and loads entire chat log into memory
-      chatLogs = (await Chat.findById(correctRecipient.chat)).toObject();
-    } catch (err) {
-      console.log(err.message);
-    }
-
-    // returns all remaining documents if number of documents left is less than messagesToLoad
-    if (endingIndex === 0) {
-      // pass by value because the original copy still has to be saved
-      chatData.messages = JSON.parse(JSON.stringify(chatLogs.messages))
-        .slice(startingIndex)
-        .reverse();
-      chatData.lastPage = true;
-    } else {
-      chatData.messages = JSON.parse(JSON.stringify(chatLogs.messages))
-        .slice(startingIndex, endingIndex)
-        .reverse();
-    }
-
-    const messageList = chatData.messages;
-    for (index = 0; index < messageList.length; index++) {
-      const message = messageList[index];
-      // curates message so a bool representing sender instead of a userID is sent to the frontend
-      if (message.senderID == userID) {
-        message.sentBySelf = true;
+      try {
+        // searches and loads entire chat log into memory
+        chatLogs = (await Chat.findById(correctRecipient.chat)).toObject();
+      } catch (err) {
+        console.log(err.message);
       }
-      delete message.senderID;
 
-      // if new message + not the first message, mark the previous msg
-      if (!message.read && index - 1 !== 0) {
-        messageList[index - 1].latestReadMessage = true;
+      // returns all remaining documents if number of documents left is less than messagesToLoad
+      if (endingIndex === 0) {
+        // pass by value because the original copy still has to be saved
+        chatData.messages = JSON.parse(JSON.stringify(chatLogs.messages))
+          .slice(startingIndex)
+          .reverse();
+        chatData.lastPage = true;
+      } else {
+        chatData.messages = JSON.parse(JSON.stringify(chatLogs.messages))
+          .slice(startingIndex, endingIndex)
+          .reverse();
+      }
+
+      const messageList = chatData.messages;
+      for (index = 0; index < messageList.length; index++) {
+        const message = messageList[index];
+        // curates message so a bool representing sender instead of a userID is sent to the frontend
+        if (message.senderID == userID) {
+          message.sentBySelf = true;
+        }
+        delete message.senderID;
+
+        // if new message + not the first message, mark the previous msg
+        if (!message.read && index - 1 !== 0) {
+          messageList[index - 1].latestReadMessage = true;
+        }
+      }
+
+      const numberOfMessages = chatLogs.messages.length;
+
+      if (startingIndex < -1 * numberOfMessages) {
+        startingIndex = -1 * numberOfMessages;
+      }
+
+      // all messages that were loaded to the frontend are saved to the backend as read
+      for (i = startingIndex; i < endingIndex; i++) {
+        let currentMessage = chatLogs.messages[numberOfMessages + i];
+        if (currentMessage.senderID != userID) {
+          currentMessage.read = true;
+        }
+      }
+
+      try {
+        await Chat.findByIdAndUpdate(correctRecipient.chat, chatLogs);
+      } catch (err) {
+        throw new DatabaseError(err.message);
       }
     }
-
-    const numberOfMessages = chatLogs.messages.length;
-
-    if (startingIndex < -1 * numberOfMessages) {
-      startingIndex = -1 * numberOfMessages;
-    }
-
-    // all messages that were loaded to the frontend are saved to the backend as read
-    for (i = startingIndex; i < endingIndex; i++) {
-      let currentMessage = chatLogs.messages[numberOfMessages + i];
-      if (currentMessage.senderID != userID) {
-        currentMessage.read = true;
-      }
-    }
-
-    try {
-      await Chat.findByIdAndUpdate(correctRecipient.chat, chatLogs);
-    } catch (err) {
-      return next(new DatabaseError(err.message));
-    }
-
-    return chatData;
   }
+  return chatData;
+};
+
+const saveNewMessage = async (userID, recipientID, content) => {
+  let sender;
+  let recipient;
+  let newChat;
+
+  const newMessage = {
+    timeSent: new Date(),
+    senderID: userID,
+    content,
+    read: false,
+  };
+
+  try {
+    sender = await User.findById(userID);
+    recipient = await User.findById(recipientID);
+  } catch (err) {
+    throw new DatabaseError(err.message);
+  }
+
+  // todo: add an erorr when user/sender is not found by ID. Although very unlikely because users have to first be logged in
+  if (sender && recipient) {
+    // checks if the current message is the first message between the pair
+    const existingChatLog = sender.chatLogs.find(
+      (chatElement) => chatElement.recipientID == recipientID
+    );
+
+    if (existingChatLog) {
+      // if this is not the first message sent between the pair
+      const existingChat = await Chat.findById(existingChatLog.chat);
+      existingChat.messages.push(newMessage);
+
+      try {
+        await existingChat.save();
+      } catch (err) {
+        return next(new DatabaseError(err.message));
+      }
+    } else {
+      // if it is a completely new message
+      newChat = Chat({ messages: [newMessage] });
+
+      try {
+        const session = await mongoose.startSession();
+        session.startTransaction();
+        await newChat.save({ session });
+        sender.chatLogs.push({ recipientID, chat: newChat._id });
+        await sender.save({ session });
+        recipient.chatLogs.push({ recipientID: userID, chat: newChat._id });
+        await recipient.save({ session });
+        await session.commitTransaction();
+      } catch (err) {
+        throw new DatabaseError(err.message);
+      }
+    }
+  }
+
+  return newMessage;
 };
 
 exports.decodeHeader = decodeHeader;
 exports.getChatLogsOverview = getChatLogsOverview;
 exports.getChatLogSpecific = getChatLogSpecific;
+exports.saveNewMessage = saveNewMessage;
